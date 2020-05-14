@@ -19,17 +19,16 @@
         <activity
             android:name=".ActBottom"
             android:label="@string/title_activity_act_bottom">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
+
         <activity android:name=".ActDBconect" />
         <activity android:name=".ActGps" />
         <activity android:name=".ActMain">
-
+            <intent-filter>  <!-- 起始 Activity (首頁) -->
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
