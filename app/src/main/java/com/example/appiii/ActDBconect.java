@@ -34,8 +34,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class ActDBconect extends AppCompatActivity  {
-    String myIP = "http://hhlc.ddnsking.com/";
-    final private URL urlAPI =  new URL(myIP+"page4.php");
+    public String myIP = "http://hhlc.ddnsking.com/";
+    public URL urlAPI =  new URL("http://hhlc.ddnsking.com/page4.php");
     InputStream inputStream = null;
 
     String urlWithParams = urlAPI.toString();
@@ -72,18 +72,19 @@ public class ActDBconect extends AppCompatActivity  {
     JSONObject jsonfromPhone, jsonfromPHP;
     Gson gson;
     String data;
-    myAsyncTask myAsyncTask;
+    myTask_TophpSQL myAsyncTask1;
     private void postDatatest(String input)  {
         try {
             //手機輸入字串(input)轉成 JSON格式
             jsonfromPhone = new JSONObject();
+
             jsonfromPhone.put("phoneDataJson", input);
             Log.i("JSON","JSON包裝成功");
             data = input;
-            myAsyncTask = new myAsyncTask(); //初始化非同步任務函數
-            myAsyncTask.execute(data);
+            myAsyncTask1 = new myTask_TophpSQL(); //初始化非同步任務函數
+            myAsyncTask1.execute(data);
             Log.i("JSON","myAsyncTask 執行緒開啟");
-        }catch(JSONException je) {
+        }catch(JSONException  je) {
             System.err.println(je);
             Log.i("JSON","JSON包裝失敗");
         }
@@ -98,24 +99,27 @@ public class ActDBconect extends AppCompatActivity  {
 
     String phoneDataJson;
     StringBuilder response, builder;
-    String re_id ,re_name, re_description;
+    String re_name;
+    String re_lat,re_long;
     HttpURLConnection urlConnection = null;
     InputStream getinputStream = null;
     OutputStream out = null;
     DataOutputStream writer = null;
-    class myAsyncTask extends AsyncTask<String, Integer, Void> {
+    class myTask_TophpSQL extends AsyncTask<String, Integer, Void> {
         @Override
         protected Void doInBackground(String... strings) {
 
             try {
+
                 urlConnection = (HttpURLConnection) urlAPI.openConnection();  // STEP 1
                 Log.i("JSON","urlConnection :"+ urlConnection);
                 /* optional request header */
-                urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");   // STEP 2 : 連線設定 /  設定檔案型別:
+                urlConnection.setRequestProperty("Content-Type", "application/json");   // STEP 2 : 連線設定 /  設定檔案型別:
+                urlConnection.setRequestProperty("Charset", "UTF-8");
                 /* optional request header */
                 urlConnection.setRequestProperty("Accept", "application/json");
                 /* for Get request */
-                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestMethod("GET");
                 urlConnection.setConnectTimeout(10000);
                 urlConnection.setReadTimeout(10000);
                 urlConnection.setDoInput(true);    //允許輸入流，即允許下載
@@ -147,24 +151,25 @@ public class ActDBconect extends AppCompatActivity  {
                 response = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
                     builder.append(line);
+//                    response.append(line);
                     System.err.println(line);
-//                        response.append('\r');
+//                    response.append('\r');
                 }
                 Log.i("JSON", "builder >>>>>>" + builder.toString());
                 jsonfromPHP = new JSONObject(builder.toString());
-                re_id =jsonfromPHP.getString("ID");
-                Log.i("JSON","name : " + re_id);
-                re_name =jsonfromPHP.getString("Name");
-                Log.i("JSON","age : " + re_name);
-                re_description =jsonfromPHP.getString("description");
-                Log.i("JSON","age : " + re_description);
+                re_name =jsonfromPHP.getString("name");
+                Log.i("JSON","name : " + re_name);
+                re_lat =jsonfromPHP.getString("lat");
+                Log.i("JSON","lat : " + re_lat);
+                re_long =jsonfromPHP.getString("long");
+                Log.i("JSON","long : " + re_long);
                 reader.close();
                 urlConnection.disconnect();
                 Log.i("JSON", "disconnect urlConnection");
             }catch (Exception e){
-                System.err.println(e );
+                System.err.println(e);
             }
-            phoneshowdata.setText(re_id +", " +re_name+", "+re_description);
+            phoneshowdata.setText(re_name +", " +re_lat+", "+re_long);
             return null;
         }
     }
@@ -181,7 +186,7 @@ public class ActDBconect extends AppCompatActivity  {
 
     private void webView_all() {
         webView = findViewById(R.id.webView);
-        webView.loadUrl(myIP+"page5.php");
+//        webView.loadUrl(myIP+"page5.php");
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);   // 取得網頁JS效果
         webSettings.setDefaultTextEncodingName("utf-8");
