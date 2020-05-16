@@ -23,6 +23,13 @@ public class ActMain extends AppCompatActivity {
             startActivity(intent);   //沒有回傳值得呼叫新 Activity
         }
     };
+    private View.OnClickListener btn_Gmap_click = new  View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(ActMain.this,ActGoogleMaps.class);
+            startActivity(intent);   //沒有回傳值得呼叫新 Activity
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +43,11 @@ public class ActMain extends AppCompatActivity {
         btn_Gps.setOnClickListener(btn_Gps_click);
         btn_DBconect = findViewById(R.id.btn_DBconect);
         btn_DBconect.setOnClickListener(btn_DBconect_click);
+        btn_Gmap = findViewById(R.id.btn_Gmap);
+        btn_Gmap.setOnClickListener(btn_Gmap_click);
     }
 
-
+    Button btn_Gmap;
     Button btn_Gps;
     Button btn_DBconect;
 }

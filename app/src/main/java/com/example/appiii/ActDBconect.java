@@ -28,14 +28,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class ActDBconect extends AppCompatActivity  {
-    public String myIP = "http://hhlc.ddnsking.com/";
-    public URL urlAPI =  new URL("http://hhlc.ddnsking.com/page4.php");
+//    public String myIP = "http://hhlc.ddnsking.com/";
+    public URL urlAPI =  new URL("http://hhlc.ddnsking.com/getAndroid.php");
     InputStream inputStream = null;
 
     String urlWithParams = urlAPI.toString();
@@ -71,20 +73,21 @@ public class ActDBconect extends AppCompatActivity  {
     }
     JSONObject jsonfromPhone, jsonfromPHP;
     Gson gson;
-    String data;
+    String data ;
     myTask_TophpSQL myAsyncTask1;
     private void postDatatest(String input)  {
         try {
             //手機輸入字串(input)轉成 JSON格式
             jsonfromPhone = new JSONObject();
-
+            input =  URLEncoder.encode(input,"UTF-8");  //避免中文亂碼而暫時避掉中文
             jsonfromPhone.put("phoneDataJson", input);
-            Log.i("JSON","JSON包裝成功");
-            data = input;
+            Log.i("JSON","JSON包裝成功 : "+jsonfromPhone);
+            data =  input;
+            Log.i("JSON","data包裝 : "+data);
             myAsyncTask1 = new myTask_TophpSQL(); //初始化非同步任務函數
-            myAsyncTask1.execute(data);
+            myAsyncTask1.execute(input);
             Log.i("JSON","myAsyncTask 執行緒開啟");
-        }catch(JSONException  je) {
+        }catch(JSONException | UnsupportedEncodingException je) {
             System.err.println(je);
             Log.i("JSON","JSON包裝失敗");
         }
