@@ -20,10 +20,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
-public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback {
+public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback{
 
     String str_Attraction;
     private GoogleMap mMap;
+
 
 
     private View.OnClickListener btn_searchView_click = new View.OnClickListener(){
@@ -36,10 +37,14 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
 //                Log.i("JSON","str_Attraction:" + str_Attraction);
 //                dbconectTask.execute(str_Attraction);
                 //
-                new C_dbconectTask(new Interface_AsyncDBTask(){
+                new C_dbconectTask(new Interface_AsyncDBTask() {
                     @Override
-                    public void AsyncTaskFinish(String output) {
-                        txt_getAttraction.setText(output);
+                    public void AsyncTaskFinish(String Attraction,Double Lat_output, Double Long_output) {    //Double output1, Double output2 String output
+                        txt_getAttraction.setText(String.valueOf(Lat_output) +", "+ String.valueOf(Long_output));
+//                        txt_getAttraction.setText(output);
+                        LatLng myHome = new LatLng(Lat_output, Long_output);
+                        mMap.addMarker(new MarkerOptions().position(myHome).title(Attraction));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
                     }
                 }).execute(str_Attraction);
                 Log.i("JSON","執行異步任務");

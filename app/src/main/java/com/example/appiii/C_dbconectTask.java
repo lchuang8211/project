@@ -2,7 +2,6 @@ package com.example.appiii;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,16 +21,18 @@ public class C_dbconectTask extends AsyncTask<String, Integer, String> {
 
     public Interface_AsyncDBTask taskCompleted = null;
 
-    public C_dbconectTask(Interface_AsyncDBTask taskCompleted) {
-        this.taskCompleted = taskCompleted;   //Assigning call back interfacethrough constructor
+    public C_dbconectTask(Interface_AsyncDBTask task_Completed) {
+        this.taskCompleted = task_Completed;   //Assigning call back interfacethrough constructor
         Log.d("JSON","進來 C_dbconectTask(Interface_AsyncDBTask asyncResponse) taskCompleted  : "+ taskCompleted);
     }
 
     private JSONObject jsonfromPhone, jsonfromPHP;
-    private String Stringinput,StringOutput;
+    private String Stringinput, StringOutput;
+    private Double[] LocationOutput = new Double[2];
     private String phoneDataJson;
-    private StringBuilder response, builder;
-    private String re_name, re_lat, re_long;
+    private StringBuilder builder;
+    private String re_name;
+    double re_lat, re_long;
     private HttpURLConnection urlConnection = null;
     private InputStream getinputStream = null;
     private OutputStream out = null;
@@ -45,7 +46,6 @@ public class C_dbconectTask extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
     }
-
     @Override
     protected void onPreExecute()
     {
@@ -101,42 +101,44 @@ public class C_dbconectTask extends AsyncTask<String, Integer, String> {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(getinputStream));
                 String line;
                 builder = new StringBuilder();
-                response = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
                     builder.append(line);
-//                    response.append(line);
-                    System.err.println(line);
-//                    response.append('\r');
                 }
                 Log.i("JSON", "respone builder :" + builder.toString());
                 jsonfromPHP = new JSONObject(builder.toString());
-                re_name = jsonfromPHP.getString("name");
-                Log.i("JSON", "name : " + re_name);
-                re_lat = jsonfromPHP.getString("lat");
-                Log.i("JSON", "lat : " + re_lat);
-                re_long = jsonfromPHP.getString("long");
-                Log.i("JSON", "long : " + re_long);
+                Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
+
+
                 reader.close();
                 urlConnection.disconnect();
                 Log.i("JSON", "disconnect urlConnection");
-                StringOutput = re_name+re_lat+re_long;
+
+                LocationOutput[0] = re_lat;
+                LocationOutput[1] = re_long;
             }catch(JSONException | UnsupportedEncodingException je) {
                 System.err.println(je);
             }catch (Exception e){
                 System.err.println(e);
             }
-        return StringOutput;
+        return jsonfromPHP.toString();
     }
     @Override
     protected void onPostExecute(String result)
     {
         super.onPostExecute(result);
         Log.i("JSON","進入 onPostExecute : "+result);
+        try {
+            re_name = jsonfromPHP.getString("name");
+            Log.i("JSON", "name : " + re_name);
+            re_lat = jsonfromPHP.getDouble("lat");
+            Log.i("JSON", "lat : " + re_lat);
+            re_long = jsonfromPHP.getDouble("long");
+            Log.i("JSON", "long : " + re_long);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 //        ActGoogleMaps.txt_getAttraction.setText(result);
-        taskCompleted.AsyncTaskFinish(result);
+        taskCompleted.AsyncTaskFinish(re_name,re_lat,re_long);   //Call function
         Log.i("JSON","進入 onPostExecute 呼叫介面 taskCompleted" + taskCompleted);
-
     }
-
-
 }
