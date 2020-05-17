@@ -20,16 +20,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
-public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback, C_dbconectTask.Interface_AsyncDBTask {
+public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback {
 
     String str_Attraction;
     private GoogleMap mMap;
 
-    @Override
-    public void AsyncTaskFinish(String output) {
-        Log.i("JSON","進入 processFinish"+ output);
-        txt_getAttraction.setText(output);
-    }
+
     private View.OnClickListener btn_searchView_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
@@ -39,7 +35,13 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
                 str_Attraction = edTxt_Attraction.getText().toString();
 //                Log.i("JSON","str_Attraction:" + str_Attraction);
 //                dbconectTask.execute(str_Attraction);
-                new C_dbconectTask().execute(str_Attraction);
+                //
+                new C_dbconectTask(new Interface_AsyncDBTask(){
+                    @Override
+                    public void AsyncTaskFinish(String output) {
+                        txt_getAttraction.setText(output);
+                    }
+                }).execute(str_Attraction);
                 Log.i("JSON","執行異步任務");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -57,6 +59,7 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         InitialComponent();
+//        txt_getAttraction.setText(trd);
     }
 
 
@@ -93,5 +96,6 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
     Button btn_searchView;
     EditText edTxt_Attraction;
     TextView txt_getAttraction;
+
 
 }

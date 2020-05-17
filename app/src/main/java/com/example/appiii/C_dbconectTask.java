@@ -134,7 +134,7 @@ public class C_dbconectTask extends AsyncTask<String, Integer, String> {
         Log.i("JSON","進入 onPostExecute : "+result);
 //        ActGoogleMaps.txt_getAttraction.setText(result);
         taskCompleted.AsyncTaskFinish(result);
-        Log.i("JSON","進入 onPostExecute 呼叫介面 delegate"+ taskCompleted);
+        Log.i("JSON","進入 onPostExecute 呼叫介面 taskCompleted" + taskCompleted);
 
     }
 
