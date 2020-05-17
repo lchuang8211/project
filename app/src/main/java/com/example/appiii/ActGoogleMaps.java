@@ -16,13 +16,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URLEncoder;
-
 public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback{
 
-    String str_Attraction;
+    String str_Spot;
     private GoogleMap mMap;
 
 
@@ -33,20 +29,20 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
             try {
 //                C_dbconectTask dbconectTask = new C_dbconectTask();
 //                Log.i("JSON","建立異步任務"+dbconectTask);
-                str_Attraction = edTxt_Attraction.getText().toString();
+                str_Spot = edTxt_Spot.getText().toString();
 //                Log.i("JSON","str_Attraction:" + str_Attraction);
 //                dbconectTask.execute(str_Attraction);
                 //
                 new C_dbconectTask(new Interface_AsyncDBTask() {
                     @Override
-                    public void AsyncTaskFinish(String Attraction,Double Lat_output, Double Long_output) {    //Double output1, Double output2 String output
+                    public void AsyncTaskFinish(String Spot, Double Lat_output, Double Long_output) {    //Double output1, Double output2 String output
                         txt_getAttraction.setText(String.valueOf(Lat_output) +", "+ String.valueOf(Long_output));
 //                        txt_getAttraction.setText(output);
-                        LatLng myHome = new LatLng(Lat_output, Long_output);
-                        mMap.addMarker(new MarkerOptions().position(myHome).title(Attraction));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
+                        LatLng SearchAttraction = new LatLng(Lat_output, Long_output);
+                        mMap.addMarker(new MarkerOptions().position(SearchAttraction).title(Spot));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SearchAttraction,14));
                     }
-                }).execute(str_Attraction);
+                }).execute(str_Spot);
                 Log.i("JSON","執行異步任務");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -87,19 +83,19 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng myHome = new LatLng(22.9951915, 120.2325259);
-        mMap.addMarker(new MarkerOptions().position(myHome).title("myHome"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
+//        LatLng myHome = new LatLng(22.9951915, 120.2325259);
+//        mMap.addMarker(new MarkerOptions().position(myHome).title("myHome"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
     }
     private void InitialComponent() {
         btn_searchView = findViewById(R.id.btn_searchView);
-
         btn_searchView.setOnClickListener(btn_searchView_click);
-        edTxt_Attraction = findViewById(R.id.edTxt_Attraction);
-        txt_getAttraction = findViewById(R.id.txt_getAttraction);
+        edTxt_Spot = findViewById(R.id.edTxt_StartSpot);
+        edTxt_EndSpot = findViewById(R.id.edTxt_EndSpot);
+        txt_getAttraction = findViewById(R.id.txt_getSpot);
     }
     Button btn_searchView;
-    EditText edTxt_Attraction;
+    EditText edTxt_Spot, edTxt_EndSpot;
     TextView txt_getAttraction;
 
 
