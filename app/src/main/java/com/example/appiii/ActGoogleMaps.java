@@ -3,6 +3,11 @@ package com.example.appiii;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,9 +16,37 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback {
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
 
+public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback, C_dbconectTask.Interface_AsyncDBTask {
+
+    String str_Attraction;
     private GoogleMap mMap;
+
+    @Override
+    public void AsyncTaskFinish(String output) {
+        Log.i("JSON","進入 processFinish"+ output);
+        txt_getAttraction.setText(output);
+    }
+    private View.OnClickListener btn_searchView_click = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            try {
+//                C_dbconectTask dbconectTask = new C_dbconectTask();
+//                Log.i("JSON","建立異步任務"+dbconectTask);
+                str_Attraction = edTxt_Attraction.getText().toString();
+//                Log.i("JSON","str_Attraction:" + str_Attraction);
+//                dbconectTask.execute(str_Attraction);
+                new C_dbconectTask().execute(str_Attraction);
+                Log.i("JSON","執行異步任務");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +56,10 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        InitialComponent();
     }
+
+
 
 
     /**
@@ -36,6 +72,8 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
      * installed Google Play services and returned to the app.
      */
 
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -45,5 +83,15 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(myHome).title("myHome"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
     }
+    private void InitialComponent() {
+        btn_searchView = findViewById(R.id.btn_searchView);
+
+        btn_searchView.setOnClickListener(btn_searchView_click);
+        edTxt_Attraction = findViewById(R.id.edTxt_Attraction);
+        txt_getAttraction = findViewById(R.id.txt_getAttraction);
+    }
+    Button btn_searchView;
+    EditText edTxt_Attraction;
+    TextView txt_getAttraction;
 
 }
