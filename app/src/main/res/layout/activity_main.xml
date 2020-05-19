@@ -3,17 +3,19 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout android:orientation="vertical"
-        android:layout_height="wrap_content"
+    android:id="@+id/Linear_lay"
+        android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-    <Button
-        android:id="@+id/btn_Gps"
-        android:text="GPS DEMO"
-        android:textSize="35px"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/btn_Gps"
+            android:text="GPS DEMO"
+            android:textSize="35px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
         <Button
             android:id="@+id/btn_DBconect"
             android:text="DBconect DEMO"
@@ -26,6 +28,13 @@
         android:textSize="35px"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/btn_app"
+            android:text="APP DEMO"
+            android:textSize="35px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 
     </LinearLayout>
 </ScrollView>
