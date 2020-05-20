@@ -8,12 +8,14 @@
     android:paddingTop="?attr/actionBarSize"
     android:orientation="vertical">
     <fragment
+        android:layout_weight="1"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation" />
+        app:navGraph="@navigation/mobile_navigation"
+        />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

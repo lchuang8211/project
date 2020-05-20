@@ -7,6 +7,7 @@
     android:gravity="center">
 
     <TextView
+        android:gravity="center"
         android:text="App iii"
         android:textSize="40sp"
         android:layout_width="match_parent"
@@ -16,17 +17,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        android:gravity="center"
         android:id="@+id/txt_account"
         android:text="帳號"
         android:textSize="30sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
+        android:gravity="center"
         android:id="@+id/edtxt_account"
         android:textSize="30sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        android:gravity="center"
         android:id="@+id/txt_passwd"
         android:text="密碼"
         android:textSize="30sp"
@@ -35,7 +39,8 @@
     <EditText
         android:id="@+id/edtxt_passwd"
         android:textSize="30sp"
-
+        android:gravity="center"
+        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

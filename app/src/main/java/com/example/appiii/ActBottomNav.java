@@ -3,7 +3,7 @@ package com.example.appiii;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.appiii.ui.mMember.FrgmMember;
+import com.example.appiii.ui.Member.FrgmMember;
 import com.example.appiii.ui.Gmap.FrgGmap;
 import com.example.appiii.ui.Hot.FrgHot;
 import com.example.appiii.ui.Search.FrgSearch;
@@ -24,7 +24,7 @@ public class ActBottomNav extends AppCompatActivity {
                 case R.id.navigation_hotspot:
                     myfragmentselected = new FrgHot();
                     break;
-                case R.id.navigation_Search:
+                case R.id.navigation_search:
                     myfragmentselected = new FrgSearch();
                     break;
                 case R.id.navigation_travel:
@@ -33,11 +33,10 @@ public class ActBottomNav extends AppCompatActivity {
                 case R.id.navigation_gmap:
                     myfragmentselected = new FrgGmap();
                     break;
-                case R.id.navigation_member1:
+                case R.id.navigation_member:
                     myfragmentselected = new FrgmMember();
                     break;
             }
-            assert myfragmentselected != null;
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, myfragmentselected ).commit();
             return true;
         }

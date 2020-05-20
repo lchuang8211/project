@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:id="@+id/navigation_hotspot"
+        android:icon="@drawable/hotairballoon_24px"
+        android:title="@string/hotspot" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/search_24px"
+        android:title="@string/search" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_travel"
+        android:icon="@drawable/travel_24px"
+        android:title="@string/travel" />
     <item
-        android:id="@+id/navigation_gps"
-        android:icon="@drawable/gps"
-        android:title="GPS" />
+        android:id="@+id/navigation_gmap"
+        android:icon="@drawable/gmap_24px"
+        android:title="@string/gmap" />
     <item
-        android:id="@+id/navigation_dbconnect"
-        android:icon="@drawable/database"
-        android:title="DBconnect" />
+        android:id="@+id/navigation_member"
+        android:icon="@drawable/member_24px"
+        android:title="@string/member" />
 </menu>

@@ -1,4 +1,4 @@
-package com.example.appiii.ui.mMember;
+package com.example.appiii.ui.Member;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ public class FrgmMember extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflatedView_Member = inflater.inflate(R.layout.frg_mmember,container,false);
+        inflatedView_Member = inflater.inflate(R.layout.frg_member,container,false);
         InitialComponent();
         return inflatedView_Member;
     }

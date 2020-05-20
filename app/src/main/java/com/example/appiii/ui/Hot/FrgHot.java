@@ -25,7 +25,7 @@ public class FrgHot extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflatedView = inflater.inflate(R.layout.frg_home,container,false);
+        inflatedView = inflater.inflate(R.layout.frg_hot,container,false);
         InitialComponent();
         return inflatedView;
     }
@@ -33,7 +33,7 @@ public class FrgHot extends Fragment {
     private void InitialComponent() {
         btn_home = inflatedView.findViewById(R.id.btn_hot);
         btn_home.setOnClickListener(btn_home_click);
-        txt_home = inflatedView.findViewById(R.id.txt_home);
+        txt_home = inflatedView.findViewById(R.id.txt_hotspot);
     }
 
     Button btn_home;

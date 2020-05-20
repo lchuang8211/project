@@ -3,33 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_hotspot">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.appiii.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_hotspot"
+        android:name="com.example.appiii.ui.Hot.FrgHot"
+        android:label="@string/hotspot"
+        tools:layout="@layout/frg_hot" />
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.appiii.ui.Search.FrgSearch"
+        android:label="@string/search"
+        tools:layout="@layout/frg_search" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.appiii.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        android:id="@+id/navigation_travel"
+        android:name="com.example.appiii.ui.Travel.FrgTravel"
+        android:label="@string/travel"
+        tools:layout="@layout/frg_travel" />
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.appiii.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_gmap"
+        android:name="com.example.appiii.ui.Gmap.FrgGmap"
+        android:label="@string/gmap"
+        tools:layout="@layout/frg_gmap" />
     <fragment
-        android:id="@+id/navigation_gps"
-        android:name="com.example.appiii.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/act_gps" />
-    <fragment
-        android:id="@+id/navigation_dbconnect"
-        android:name="com.example.appiii.ActDBconect"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/act_dbconect" />
+        android:id="@+id/navigation_member"
+        android:name="com.example.appiii.ui.Member.FrgmMember"
+        android:label="@string/member"
+        tools:layout="@layout/frg_member" />
 </navigation>

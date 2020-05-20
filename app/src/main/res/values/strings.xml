@@ -1,15 +1,11 @@
 <resources>
     <string name="app_name">Appiii v0.1</string>
 <!--    <string name="title_activity_act_bottom">Appiii v0.1</string>-->
-    <string name="title_hotspot">熱門景點</string>
-    <string name="title_search">景點瀏覽</string>
-    <string name="title_gmaps">地圖</string>
-    <string name="title_member">會員中心</string>
-    <string name="title_travel">行程表</string>
+
     <string name="travel">行程表</string>
     <string name="search">景點導覽</string>
     <string name="hotspot">熱門</string>
     <string name="gmap">導航</string>
-    <string name="mamber">會員中心</string>
+    <string name="member">會員中心</string>
 
 </resources>
