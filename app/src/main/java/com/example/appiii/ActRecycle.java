@@ -12,9 +12,8 @@ import java.util.ArrayList;
 
 public class ActRecycle extends AppCompatActivity {
     private static final String TAG = "ActRecycle";
-    //varlues
-    private ArrayList<String> mName = new ArrayList<>();
-    private ArrayList<String> myImageUrl = new ArrayList<>();
+    private ArrayList<String> mName = new ArrayList<>();    // 要載入的資料型態 , 視 Database 而定
+    private ArrayList<String> myImageUrl = new ArrayList<>(); // 要載入的資料型態 , 視 Database 而定
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +25,12 @@ public class ActRecycle extends AppCompatActivity {
     }
 
     private void InitialComponent() {
-//        txt_click = findViewById(R.id.txt_click);
+
     }
+
     TextView txt_click;
-    private  void InitialImageBitmaps(){
+
+    private  void InitialImageBitmaps(){   // 人為載入資料庫
         Log.i(TAG, "initialImageUrl: preparing bitmaps");
         myImageUrl.add("https://i1.kknews.cc/SIG=1pp30fg/ctp-vzntr/37ps6r6qsp114rss99503s2oqo600548.jpg");
         mName.add("pig1");
@@ -55,15 +56,15 @@ public class ActRecycle extends AppCompatActivity {
         mName.add("cat4");
         myImageUrl.add("https://miro.medium.com/max/1352/1*XEgA1TTwXa5AvAdw40GFow.png");
         mName.add("dora4");
-        initRecyclerView();
+        InitRecyclerView();
     }
-
-    private void initRecyclerView(){
-        Log.i(TAG, "initRecyclerView: init recyclerview");
-        RecyclerView recyclerView = findViewById(R.id.recycle_view);
-        RecycleViewAdapter adapter =new RecycleViewAdapter(this, mName, myImageUrl);
+    //  RecyclerView : 大樓 , RecycleViewAdapter : 管理員 , ArrayList 載入的資料 : 住戶
+    private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
+        Log.i(TAG, "InitRecyclerView: init recyclerview");
+        RecyclerView recyclerView = findViewById(R.id.recycle_view);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID
+        C_RecycleViewAdapter adapter = new C_RecycleViewAdapter(this, mName, myImageUrl);  // 建立 Adapter 來載入資料
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
     }
     
 }

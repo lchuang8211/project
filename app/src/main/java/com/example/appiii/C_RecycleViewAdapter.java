@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>{
+/**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
+public class C_RecycleViewAdapter extends RecyclerView.Adapter<C_RecycleViewAdapter.ViewHolder>{
 
     View itemView;
     private static final  String TAG = "RecyclerViewAdapter";
@@ -28,7 +29,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private Context mContext;
 
 
-    public RecycleViewAdapter( Context context, ArrayList<String> myImageNames, ArrayList<String> myImage) {
+    public C_RecycleViewAdapter(Context context, ArrayList<String> myImageNames, ArrayList<String> myImage) {
         this.myImageNames = myImageNames;
         this.myImage = myImage;
         this.mContext = context;
@@ -36,42 +37,32 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_item, parent, false);  //嵌入 RecycleView 的 list item XML
+        ViewHolder holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }
     int getposition = 0;
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {  // part 2 : 複製 RecyclerView 的 XML && 定義 XML 的設定
         Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
         getposition=holder.getAdapterPosition();
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
         myImageNames.get(position);
-        Glide.with(mContext).asBitmap().load( myImage.get(position) ).into(holder.getItem_image);
+        Glide.with(mContext).asBitmap().load( myImage.get(position) ).into(holder.getItem_image);  // Gilde : 圖片 library
         holder.btn_getItem.setText(myImageNames.get(position));
 //        holder.getItem_txt.setText(myImageNames.get(position));
         Log.i(TAG, "onBindViewHolder: myImageNames.get(position): " + myImageNames.get(position));
-//        getposition = position;
-
-//        holder.getParentLayout.setOnClickListener(new View.OnClickListener(){
-////            @Override
-////            public void onClick(View v) {
-////                Log.i(TAG, "onClick: click on: "+ myImageNames.get(getposition));
-////                Log.i(TAG, "onClick: click on getposition :"+ getposition);
-////                Toast.makeText(mContext,  myImageNames.get(getposition), Toast.LENGTH_SHORT).show();
-////            }
-////        });
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount() { // part 3 :
         return myImageNames.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         CircleImageView getItem_image;
         TextView getItem_txt, txt_click;
         Button btn_getItem;
@@ -90,12 +81,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
             getParentLayout = itemView.findViewById(R.id.getParent_Layout);
-//            InitialComponent();
+
         }
     }
-
-//    private void InitialComponent() {
-//
-//    }
 
 }
