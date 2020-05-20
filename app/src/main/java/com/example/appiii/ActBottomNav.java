@@ -21,7 +21,7 @@ public class ActBottomNav extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment myfragmentselected = null;
             switch (item.getItemId()){
-                case R.id.navigation_hotspot:
+                case R.id.navigation_home:
                     myfragmentselected = new FrgHot();
                     break;
                 case R.id.navigation_search:
@@ -41,6 +41,7 @@ public class ActBottomNav extends AppCompatActivity {
             return true;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -45,8 +45,15 @@ public class ActMain extends AppCompatActivity {
     private View.OnClickListener btn_app_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Intent intent1 = new Intent(ActMain.this,ActBottomNav.class);
-            startActivity(intent1);
+            Intent intent = new Intent(ActMain.this,ActBottomNav.class);
+            startActivity(intent);
+        }
+    };
+    private View.OnClickListener btn_recycle_click = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(ActMain.this, ActRecycle.class);
+            startActivity(intent);
         }
     };
 
@@ -68,8 +75,11 @@ public class ActMain extends AppCompatActivity {
         btn_Gmap.setOnClickListener(btn_Gmap_click);
         btn_app = findViewById(R.id.btn_app);
         btn_app.setOnClickListener(btn_app_click);
+        btn_recycle = findViewById(R.id.btn_recycle);
+        btn_recycle.setOnClickListener(btn_recycle_click);
 
     }
+    Button btn_recycle;
     Button btn_app;
     Button btn_Gmap;
     Button btn_Gps;
