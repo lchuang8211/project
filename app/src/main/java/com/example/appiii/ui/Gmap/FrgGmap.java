@@ -61,8 +61,8 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflatedView_Gmap = inflater.inflate(R.layout.frg_gmap,container,false);
-//        mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-//        mMapFragment.getMapAsync(this);
+        mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
 
 //        mapFragment.getMapAsync(this);
         InitialComponent();

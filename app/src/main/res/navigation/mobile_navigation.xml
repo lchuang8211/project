@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_hotspot"
         android:name="com.example.appiii.ui.Hot.FrgHot"
-        android:label="@string/hotspot"
+        android:label="hotspot"
         tools:layout="@layout/frg_hot" />
     <fragment
         android:id="@+id/navigation_search"
