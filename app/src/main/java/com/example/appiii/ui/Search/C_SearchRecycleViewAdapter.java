@@ -1,6 +1,7 @@
 package com.example.appiii.ui.Search;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,12 +39,12 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         this.mySpotAddress = mySpotAddress;
         this.mContext = context;
     }
-
+    ViewHolder holder;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_search, parent, false);  //嵌入 RecycleView 的 list item XML
-        ViewHolder holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
+        holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }
     int getposition = 0;
@@ -52,11 +53,12 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {  // part 2 : 複製 RecyclerView 的 XML && 定義 XML 的設定
         Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
-
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
-        holder.txt_Name_Address.setText(mySpotName.get(position)+"\n\r"+mySpotAddress.get(position));
-        Log.i(TAG, "onBindViewHolder: myImageNames.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
+        holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
+        Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
+
+
     }
 
     @Override
@@ -67,17 +69,17 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         CircleImageView getItem_image;
         TextView txt_Name_Address;
-        Button btn_getItem;
+//        Button btn_getItem;
         RelativeLayout getParentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
-            btn_getItem = itemView.findViewById(R.id.btn_getItem);
-            btn_getItem.setOnClickListener(new View.OnClickListener(){
+//            btn_getItem = itemView.findViewById(R.id.btn_getItem);
+            txt_Name_Address.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(v.getContext(),
-//                            "click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(v.getContext(),"click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();
 //                    Log.i(TAG, "onClick: ViewHolder on getAdapterPosition() :"+ getAdapterPosition());
                 }
             });
