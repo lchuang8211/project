@@ -27,10 +27,8 @@ public class C_Ggps  implements LocationListener {
 
     C_Ggps(Context context) {
         this.context = context;
-        getCurrentLocation(context);
-        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        this.mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
-
 
     private void getCurrentLocation(Context context) {
         boolean isGPSEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

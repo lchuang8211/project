@@ -24,8 +24,7 @@ public class ActEntrance extends AppCompatActivity {
             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_VISITORS);
             intent.putExtras(bundle);
             startActivity(intent);
-            Toast toast = Toast.makeText(ActEntrance.this, "訪客登入成功", Toast.LENGTH_LONG);
-            toast.show();
+
         }
     };
     private View.OnClickListener btn_Member_Signin_click = new View.OnClickListener(){

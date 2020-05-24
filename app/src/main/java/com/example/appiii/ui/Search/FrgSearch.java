@@ -33,6 +33,7 @@ public class FrgSearch extends Fragment {
     private ArrayList<Integer> database_ID = new ArrayList<>();
     private ArrayList<String> database_Name = new ArrayList<>();
     private ArrayList<String> database_address = new ArrayList<>();
+    private ArrayList<String> mySpotToldescribe = new ArrayList<>();
     private ArrayList<Double> database_lat = new ArrayList<>();
     private ArrayList<Double> database_long = new ArrayList<>();
     private ArrayList<String> database_cityNumber = new ArrayList<>();
@@ -55,19 +56,13 @@ public class FrgSearch extends Fragment {
             new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
-                    public void GetDBTaskFinish(String Name, String address){
-//                        for(int i = 0 ; i < arraysize ; i++) {
-//                            database_ID.add(ID);
-
-                            database_Name.add(Name.trim());
-                            database_address.add(address.trim());
-
-                            Log.i("JSon","here:::" + Name + "＝" + address);
-//                            database_cityNumber.add(cityNumber);
-//                            database_lat.add(Lcation_lat);
-//                            database_long.add(Lcation_long);
-//                        }
-                    InitRecyclerView();
+                    public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
+                        database_Name.add(Name.trim());
+                        database_address.add(address.trim());
+                        mySpotToldescribe.add(Toldescribe);
+                        database_lat.add(Lcation_lat);
+                        database_long.add(Lcation_long);
+                        InitRecyclerView();
                 }
             }).execute(bundle);
             if (database_Name.size()>0 || database_address.size()>0 ){   // 如果有上一筆資料 即刪除
@@ -194,7 +189,7 @@ public class FrgSearch extends Fragment {
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = inflatedView_Search.findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_SearchRecycleViewAdapter(getActivity(), database_Name, database_address);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        adapter = new C_SearchRecycleViewAdapter(getActivity(), database_Name, database_address, mySpotToldescribe, database_lat, database_long);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();

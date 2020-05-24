@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,14 @@ import com.example.appiii.R;
 public class FrgmMember extends Fragment {
     View inflatedView_Member;
     Bundle budle;
+
+    private View.OnClickListener btn_mySchedule_click = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,9 +45,11 @@ public class FrgmMember extends Fragment {
 
     private void InitialComponent() {
         memberStatus = inflatedView_Member.findViewById(R.id.memberStatus);
-
+        btn_mySchedule = inflatedView_Member.findViewById(R.id.btn_mySchedule);
+        btn_mySchedule.setOnClickListener(btn_mySchedule_click);
 
 
     }
     TextView memberStatus;
+    Button btn_mySchedule;
 }

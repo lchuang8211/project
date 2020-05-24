@@ -1,7 +1,16 @@
 package com.example.appiii;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,14 +22,98 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallback{
 
+    private static final String TAG = "ActGoogleMaps";
     String str_Spot;
     private GoogleMap mMap;
+    private double currentLatitude;
+    private double currentLongitude;
+    private LocationManager mLocationManager;
+    private static final int LOCATION_UPDATE_MIN_DISTANCE = 5000;
+    private static final int LOCATION_UPDATE_MIN_TIME = 50;
+    private Location location;
+    Double My_LATITUDE;
+    Double My_LONGITUDE;
 
+    private void getCurrentLocation() {
+
+        boolean isGPSEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        location = null;
+        if (!(isGPSEnabled || isNetworkEnabled)) {
+            Log.i("location", "GPS NET都沒有");
+            return;
+        } else {
+            if (isNetworkEnabled) {
+                Log.i("location", "NET 定位");
+                if (ActivityCompat.checkSelfPermission(ActGoogleMaps.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActGoogleMaps.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_UPDATE_MIN_DISTANCE, LOCATION_UPDATE_MIN_TIME, locationListener);  //更新GPS頻率
+                location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                Log.i("location", "NET 定位1" + location);
+            }
+            if (isGPSEnabled) {
+                if (ActivityCompat.checkSelfPermission(ActGoogleMaps.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActGoogleMaps.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                Log.i("location", "GPS 定位");
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_MIN_DISTANCE, LOCATION_UPDATE_MIN_TIME, locationListener);
+                location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+        }
+        updateLocation(location);
+    }
+
+    // 位置監聽器
+    LocationListener locationListener = new LocationListener() {
+        // 當位置改變時觸發
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.i("location", location.toString());
+            updateLocation(location);
+        }
+        // Provider失效時觸發
+        @Override
+        public void onProviderDisabled(String arg0) {
+            Log.i("location", arg0);
+        }
+        // Provider可用時觸發
+        @Override
+        public void onProviderEnabled(String arg0) {
+            Log.i("location", arg0);
+        }
+        // Provider狀態改變時觸發
+        @Override
+        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+            Log.i("location", "onStatusChanged");
+        }
+    };
+
+    private void updateLocation(Location location) {
+        Log.i("location", "updateLocation + text");
+        if (location != null) {
+            My_LONGITUDE= location.getLatitude();
+            My_LATITUDE=location.getLongitude();
+            Log.i("location", "成功取得經緯度");
+        } else {
+            Log.i("location", "沒有獲取到定位物件Location");
+        }
+    }
+
+    public double getLatitude() {
+        return currentLatitude;
+    }
+
+    public double getLongitude() {
+        return currentLongitude;
+    }
 
 
     private View.OnClickListener btn_searchView_click = new View.OnClickListener(){
@@ -50,20 +143,27 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
 
         }
     };
-
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_google_maps);
+        bundle = getIntent().getExtras();
+        Log.i(TAG, "onCreate: bundle :" + bundle);
+        setContentView(R.layout.act_google_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         InitialComponent();
-//        txt_getAttraction.setText(trd);
+        myCriteria();
+        checkMyPermission();
+        getCurrentLocation();
     }
 
+    private void queryMap() {
 
+    }
 
 
     /**
@@ -76,16 +176,27 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
      * installed Google Play services and returned to the app.
      */
 
-
-
+    String SpotName;
+    Double LOCATION_LATITUDE;
+    Double LOCATION_LONGITUDE;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-//        LatLng myHome = new LatLng(22.9951915, 120.2325259);
-//        mMap.addMarker(new MarkerOptions().position(myHome).title("myHome"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome,14));
+        UiSettings ui_set = mMap.getUiSettings();
+        ui_set.setZoomControlsEnabled(true);
+        ui_set.setCompassEnabled(true);
+        LatLng My_Location = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(My_Location).title("My Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(My_Location,14));
+        if(bundle!=null){
+             LOCATION_LATITUDE = bundle.getDouble(C_Dictionary.LOCATION_LATITUDE);
+             LOCATION_LONGITUDE = bundle.getDouble(C_Dictionary.LOCATION_LONGITUDE);
+            SpotName = bundle.getString(C_Dictionary.SPOT_NAME);
+            Log.i(TAG, "onCreate: bundle :"+ LOCATION_LONGITUDE + "," +LOCATION_LATITUDE);
+            LatLng SearchAttraction = new LatLng(LOCATION_LATITUDE, LOCATION_LONGITUDE);
+            mMap.addMarker(new MarkerOptions().position(SearchAttraction).title(SpotName).snippet(SpotName) );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SearchAttraction,14));
+        }
     }
     private void InitialComponent() {
         btn_searchView = findViewById(R.id.btn_searchView);
@@ -93,6 +204,27 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         edTxt_Spot = findViewById(R.id.edTxt_StartSpot);
         edTxt_EndSpot = findViewById(R.id.edTxt_EndSpot);
         txt_getAttraction = findViewById(R.id.txt_getSpot);
+    }
+    private void myCriteria() {  // 精確度函式
+        // 定義Criteria物件
+        Criteria criteria = new Criteria();
+        // 設定定位精確度 Criteria.ACCURACY_COARSE 比較粗略， Criteria.ACCURACY_FINE則比較精細
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        // 設定是否需要海拔資訊 Altitude
+        criteria.setAltitudeRequired(true);
+        // 設定是否需要方位資訊 Bearing
+        criteria.setBearingRequired(true);
+        // 設定對電源的需求
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        //獲取LocationManager物件
+        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    }
+    private void checkMyPermission() {
+        //取得現在的權限狀態
+        int permissionCheck = ContextCompat.checkSelfPermission(ActGoogleMaps.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        //如果沒有權限則請求權限
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(ActGoogleMaps.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);  //識別碼自訂
     }
     Button btn_searchView;
     EditText edTxt_Spot, edTxt_EndSpot;

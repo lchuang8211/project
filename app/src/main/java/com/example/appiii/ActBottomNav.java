@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.appiii.ui.Member.FrgmMember;
 import com.example.appiii.ui.Gmap.FrgGmap;
@@ -75,6 +76,8 @@ public class ActBottomNav extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.act_bottom_nav);
+
         bundle = this.getIntent().getExtras();  //取得資料
         bot_bundle = new Bundle();
         getUserStatus = bundle.getString(C_Dictionary.USER_STATUS);
@@ -83,7 +86,10 @@ public class ActBottomNav extends AppCompatActivity {
 //        System.out.println(R.string.hotspot);
         setTitle(R.string.hotspot);
         checkMyPermission();
-        setContentView(R.layout.act_bottom_nav);
+        if( getUserStatus == C_Dictionary.USER_STATUS_VISITORS){
+//            Toast toast = Toast.makeText(getApplicationContext(), "訪客登入成功", Toast.LENGTH_LONG);
+//            toast.show();
+        }
         InitialComponent();
     }
     static String USER;

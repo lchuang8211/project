@@ -24,6 +24,7 @@ public class C_Dictionary {
     public final static String CITY_NAME_KINMEN = "CITY_NAME_KINMEN";  //金門
     public final static String CITY_NAME_LIENCHIANG = "CITY_NAME_LIENCHIANG";  //連江
 
+    public final static String SPOT_NAME = "SPOT_NAME";
     public final static String SPOT_TYPE_REQUEST = "SPOT_TYPE_REQUEST";
     public final static String SPOT_TYPE_HOTEL = "SPOT_TYPE_HOTEL";  //住宿
     public final static String SPOT_TYPE_VIEW = "SPOT_TYPE_VIEW";  //風景
@@ -38,5 +39,8 @@ public class C_Dictionary {
     public final static String USER_STATUS_VISITORS = "USER_STATUS_VISITORS";
     public final static String USER_SIGNUP_ACCOUNT = "USER_SIGNUP_ACCOUNT";
     public final static String USER_SIGNUP_PASSWORD = "USER_SIGNUP_PASSWORD";
+
+    public final static String LOCATION_LONGITUDE = "LOCATION_LONGITUDE";
+    public final static String LOCATION_LATITUDE = "LOCATION_LATITUDE";
 
 }

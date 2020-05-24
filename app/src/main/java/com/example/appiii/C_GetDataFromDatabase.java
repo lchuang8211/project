@@ -131,7 +131,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
         return jsonArrayfromPHP.toString();
 //        return null;
     }
-    private String ctiyName, SpotAddress;
+    private String ctiyName, SpotAddress, SpotToldescribe, SpotLocation_latitude, SpotLocation_longitude;
     double re_lat, re_long;
     @Override
     protected void onPostExecute(String result)
@@ -145,8 +145,12 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
                 Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
                 ctiyName = jsonfromPHP.getString("Name");
                 SpotAddress = jsonfromPHP.getString("Add");
+                SpotToldescribe = jsonfromPHP.getString("Toldescribe");
+                SpotLocation_latitude = jsonfromPHP.getString("Py");
+                SpotLocation_longitude = jsonfromPHP.getString("Px");
                 Log.i("JSON",ctiyName+":"+SpotAddress);
-                getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(),SpotAddress.trim());   //Call function
+                getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(),SpotAddress.trim(),SpotToldescribe.trim(),
+                        Double.parseDouble(SpotLocation_latitude.trim()),Double.parseDouble(SpotLocation_longitude.trim()));   //Call function
             }
 //            re_name = jsonfromPHP.getString("name");
 //            Log.i("JSON", "name : " + re_name);
