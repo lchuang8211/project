@@ -43,4 +43,19 @@ public class C_Dictionary {
     public final static String LOCATION_LONGITUDE = "LOCATION_LONGITUDE";
     public final static String LOCATION_LATITUDE = "LOCATION_LATITUDE";
 
+    public final static String SEARCH_SPOT_INFO_COPY = "SEARCH_SPOT_INFO_COPY";
+
+
+    public static final String MY_Table_Name = "MY_Table_Name";
+    public static final String TABLE_SCHEMA_DATE = "COLUMN_NAME_DATE";
+    public static final String TABLE_SCHEMA_QUEUE = "COLUMN_NAME_QUEUE";
+    public static final String TABLE_SCHEMA_NODE_NAME = "TABLE_SCHEMA_NODE_NAME";
+    public static final String TABLE_SCHEMA_NODE_LONGITUDE = "TABLE_SCHEMA_NODE_LONGITUDE";
+    public static final String TABLE_SCHEMA_NODE_LATITUDE = "TABLE_SCHEMA_NODE_LATITUDE";
+    public static final String VALUE_TYPE_DOUBLE = " REAL";
+    public static final String VALUE_TYPE_INT = " INT";
+    public static final String VALUE_TYPE_STRING = " VARCHAR(30)";
+    public static final String VALUE_TYPE_TEXT = " TEXT NOT NULL";
+    public static final String VALUE_COMMA_SEP = ",";
+
 }
