@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +25,10 @@ import com.example.appiii.C_GetDataFromDatabase;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -71,18 +75,26 @@ public class FrgSearch extends Fragment {
             }
         }
     };
+    private View.OnClickListener btn_addTravel_click = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Toast toast = Toast.makeText(getContext(),"ok",Toast.LENGTH_LONG);
+            toast.show();
+        }
+    };
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         inflatedView_Search = inflater.inflate(R.layout.frg_search,container,false);
 //        txt_cityNumber = inflatedView_Search.findViewById(R.id.txt_cityNumber);
         txt_gps = inflatedView_Search.findViewById(R.id.txt_gps);
+
         btn_searchDB = inflatedView_Search.findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
+
 //        InitRecyclerView();
 //        C_Ggps appLocationManager = new C_Ggps(getContext());
 //        txt_gps.setText(String.valueOf(appLocationManager.getLatitude()) +"\n"+ appLocationManager.getLongitude());
@@ -93,7 +105,9 @@ public class FrgSearch extends Fragment {
     }
     Spinner spinner_cityName,spinner_spotType;
     TextView txt_gps;
+
     Button btn_searchDB;
+
     Bundle bundle = new Bundle();
     private void InitialCitySpinner() {
 

@@ -12,7 +12,7 @@ import com.example.appiii.C_Dictionary;
 
 public class C_Member_SQLite extends SQLiteOpenHelper {
 
-    public static final String MY_Table_Name = "MY_Table_Name";
+//    public static final String MY_Table_Name = "MY_Table_Name";
 //    public static final String TABLE_SCHEMA_DATE = "COLUMN_NAME_DATE";
 //    public static final String TABLE_SCHEMA_QUEUE = "COLUMN_NAME_QUEUE";
 //    public static final String TABLE_SCHEMA_NODE_NAME = "TABLE_SCHEMA_NODE_NAME";
@@ -26,30 +26,33 @@ public class C_Member_SQLite extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     int _id;
     private SQLiteDatabase db;
-    private String SQL_CREATE_ENTRIES = "CREATE TABLE " + C_Dictionary.MY_Table_Name+
-            " ("+"_id"+C_Dictionary.VALUE_TYPE_INT+" PRIMARY KEY AUTOINCREMENT"+C_Dictionary.VALUE_COMMA_SEP
-            +C_Dictionary.TABLE_SCHEMA_DATE+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
-            +C_Dictionary.TABLE_SCHEMA_QUEUE+C_Dictionary.VALUE_TYPE_INT + C_Dictionary.VALUE_COMMA_SEP
-            +C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
-            +C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + C_Dictionary.VALUE_COMMA_SEP
-            +C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE
+    private String SQL_CREATE_ENTRIES = C_Dictionary.CREATE_TABLE_if_not_exists + C_Dictionary.MY_Table_Name
+            +" ("+"_id"+C_Dictionary.VALUE_TYPE_INT + C_Dictionary.INTEGER_PRIMARY_KEY_AUTOINCREMENT + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_DATE+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_QUEUE+C_Dictionary.VALUE_TYPE_INT + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE
             +")";
+    private String SQL_CREATE_TRAVEL_LIST = C_Dictionary.CREATE_TABLE_if_not_exists + C_Dictionary.TRAVEL_LIST_Table_Name
+            +" ("+"_id"+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.INTEGER_PRIMARY_KEY_AUTOINCREMENT +C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TRAVEL_TABLE_VISIBILITY+C_Dictionary.VALUE_TYPE_BLOB +")";
 
     public C_Member_SQLite(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
     public C_Member_SQLite (Context context){
         super(context, DATABASE_NAME,null, DATABASE_VERSION );
+
         Log.i("C_Member_SQLite ", "C_Member_SQLite 建構子:"+context);
 //        db = this.getWritableDatabase();
     };
 
-
-
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_TRAVEL_LIST);
         Log.i("C_Member_SQLite ", "C_Member_SQLite onCreate :"+ db);
         Log.i("C_Member_SQLite ", "Version number is :"+db.getVersion());
 //        Log.i("C_Member_SQLite ", "Version this db is :"+this.db.getVersion());
@@ -57,6 +60,8 @@ public class C_Member_SQLite extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_TRAVEL_LIST);
+        onCreate(db);
     }
 }

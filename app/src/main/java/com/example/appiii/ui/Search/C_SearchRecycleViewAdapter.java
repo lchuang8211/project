@@ -1,9 +1,12 @@
 package com.example.appiii.ui.Search;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import com.example.appiii.ActEntrance;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
+import com.example.appiii.ui.Member.C_Member_SQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -84,11 +88,13 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         CircleImageView getItem_image;
         TextView txt_Name_Address;
+        Button getbtn_addTravel;
 
 //        Button btn_getItem;
         RelativeLayout getParentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
             txt_Name_Address.setOnClickListener(new View.OnClickListener(){
@@ -117,12 +123,35 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 //                    Log.i(TAG, "onClick: ViewHolder on getAdapterPosition() :"+ getAdapterPosition());
                 }
             });
+
+            getbtn_addTravel.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
+                    ContentValues values = new ContentValues();
+                    C_Member_SQLite SQLite_helper = new C_Member_SQLite(mContext);  // helper
+
+                    SQLiteDatabase sqLiteDatabase = SQLite_helper.getReadableDatabase();
+                    Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
+                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.MY_Table_Name+";",null);
+                    Log.i("getbtn_addTravel","TRAVEL_LIST_Table_Name:"+cursor.getCount());
+                    Log.i("getbtn_addTravel","MY_Table_Name"+cursor.getCount());
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("選擇要加入行程");
+                    builder.setPositiveButton("ok",null);
+
+                    Dialog dialog = builder.create();
+                    dialog.show();
+                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
             getParentLayout = itemView.findViewById(R.id.getSearchForParent_Layout);
 
         }
     }
-
-
 }
