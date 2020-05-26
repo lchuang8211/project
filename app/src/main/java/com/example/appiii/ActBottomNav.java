@@ -27,9 +27,6 @@ public class ActBottomNav extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener bottimNavigation_Listener = new BottomNavigationView.OnNavigationItemSelectedListener(){
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment myfragmentselected = null;
-
-            Bundle bundle_bottomTofrg = new Bundle();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle(R.string.hotspot);
@@ -71,28 +68,26 @@ public class ActBottomNav extends AppCompatActivity {
         }
     };
 
-    Bundle bundle,bot_bundle;
-    String getUserStatus;
+    Bundle bundle;
+    private String TAG = "ActBottomNav";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_bottom_nav);
-
         bundle = this.getIntent().getExtras();  //取得資料
-        bot_bundle = new Bundle();
-        getUserStatus = bundle.getString(C_Dictionary.USER_STATUS);
-        bot_bundle.putString(C_Dictionary.USER_STATUS,getUserStatus);
-        Log.i("bot_bundle","bot_bundle tostring :"+bot_bundle.toString());
-//        System.out.println(R.string.hotspot);
+        String userstatus = bundle.getString(C_Dictionary.USER_STATUS);
+        Log.i("bot_bundle","bot_bundle tostring :"+bundle.toString());
         setTitle(R.string.hotspot);
         checkMyPermission();
-        if( getUserStatus == C_Dictionary.USER_STATUS_VISITORS){
-//            Toast toast = Toast.makeText(getApplicationContext(), "訪客登入成功", Toast.LENGTH_LONG);
-//            toast.show();
-        }
         InitialComponent();
+        if(userstatus == "USER_STATUS_VISITORS") {
+            Log.i(TAG, "onCreate: inin" + userstatus);
+            System.out.println("inininin");
+
+        }
     }
-    static String USER;
+
     private void InitialComponent() {
 
         bottimNavigation = findViewById(R.id.bottom_Navigation);     //new 底部導航
@@ -103,11 +98,11 @@ public class ActBottomNav extends AppCompatActivity {
         fragment_gmap = new FrgGmap();
         fragment_member = new FrgmMember();
 
-        fragment_home.setArguments(bot_bundle);
-        fragment_search.setArguments(bot_bundle);
-        fragment_travel.setArguments(bot_bundle);
-        fragment_gmap.setArguments(bot_bundle);
-        fragment_member.setArguments(bot_bundle);
+        fragment_home.setArguments(bundle);
+        fragment_search.setArguments(bundle);
+        fragment_travel.setArguments(bundle);
+        fragment_gmap.setArguments(bundle);
+        fragment_member.setArguments(bundle);
         //* 第一次建立畫面 *//
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.nav_host_fragment, fragment_search)

@@ -42,17 +42,16 @@ public class C_Dictionary {
 
     public final static String LOCATION_LONGITUDE = "LOCATION_LONGITUDE";
     public final static String LOCATION_LATITUDE = "LOCATION_LATITUDE";
-
     public final static String SEARCH_SPOT_INFO_COPY = "SEARCH_SPOT_INFO_COPY";
 
 
 
     //NULL、INTEGER、REAL（浮點數）、TEXT(字串)和 BLOB(布林)
-    public static final String TRAVEL_LIST_Table_Name = "MY_Table_Name";
+    public static final String TRAVEL_LIST_Table_Name = "TRAVEL_LIST_Table_Name";
     public static final String TRAVEL_LIST_SCHEMA_PLAN_NAME = "TRAVEL_LIST_SCHEMA_PLAN_NAME";
-    public static final String CREATE_TABLE_if_not_exists = "CREATE TABLE if not exists ";
+    public static final String CREATE_TABLE_if_not_exists = "CREATE TABLE IF NOT EXISTS ";
     public static final String INTEGER_PRIMARY_KEY_AUTOINCREMENT = " INTEGER_PRIMARY_KEY_AUTOINCREMENT ";
-    public static final String MY_Table_Name = "MY_Table_Name";
+    public static final String TRAVEL_Table_Name = "TRAVEL_Table_Name";
     public static final String TABLE_SCHEMA_DATE = "COLUMN_NAME_DATE";
     public static final String TABLE_SCHEMA_DATE_END = "TABLE_SCHEMA_DATE_END";
     public static final String TABLE_SCHEMA_DATE_START = "TABLE_SCHEMA_DATE_START";
@@ -64,8 +63,9 @@ public class C_Dictionary {
     public static final String VALUE_TYPE_INT = " INT NOT NULL";
     public static final String VALUE_TYPE_STRING = " TEXT NOT NULL";
     public static final String VALUE_TYPE_BLOB = " BLOB NOT NULL";
-    public static final String VALUE_COMMA_SEP = ",";
+    public static final String VALUE_COMMA_SEP = ", ";
 
     public static final String TRAVEL_TABLE_VISIBILITY = "TRAVEL_TABLE_VISIBILITY";
 
+    public static final String TABLE_SCHEMA_id = "_id";
 }

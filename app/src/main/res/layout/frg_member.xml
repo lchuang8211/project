@@ -22,7 +22,7 @@
         android:text="customer"
         android:textSize="35sp"/>
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/windowBackground"
@@ -33,6 +33,21 @@
             android:text="我的行程表"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_myInsertSchedule"
+            android:text="建立行程表"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edtxt_createTableName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/show_sqlite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show_sqlite"
+            />
 
     </LinearLayout>
 </LinearLayout>

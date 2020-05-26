@@ -162,41 +162,7 @@ public class FrgSearch extends Fragment {
         return spotType;
     }
 
-    private  void InitialDatabase(){   // 人為載入資料庫
-//        new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
-//            @Override
-////                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
-//            public void GetDBTaskFinish(String Name, String address){
-////                        for(int i = 0 ; i < arraysize ; i++) {
-////                            database_ID.add(ID);
-//
-//                database_Name.add(Name.trim());
-//                database_address.add(address.trim());
-//
-//                Log.i("JSon","here:::" + Name + "＝" + address);
-////                            database_cityNumber.add(cityNumber);
-////                            database_lat.add(Lcation_lat);
-////                            database_long.add(Lcation_long);
-////                        }
-//                InitRecyclerView();
-//            }
-//        }).execute(bundle);
-
-        //        Log.i(TAG, "initialImageUrl: preparing bitmaps");
-//        database_Name.add("第一個景點");
-//        database_address.add("高雄市");
-//        database_Name.add("第二個景點");
-//        database_address.add("台南市");
-//        database_Name.add("第三個景點");
-//        database_address.add("南投縣");
-//        database_Name.add("第四個景點");
-//        database_address.add("花蓮縣");
-//        database_Name.add("第五個景點");
-//        database_address.add("嘉義縣");
-//        database_Name.add("第六個景點");
-//        database_address.add("新竹縣");
-
-//        InitRecyclerView();
+    private  void InitialDatabase(){
     }
     //  RecyclerView : 大樓 , RecycleViewAdapter : 管理員 , ArrayList 載入的資料 : 住戶
     C_SearchRecycleViewAdapter adapter;

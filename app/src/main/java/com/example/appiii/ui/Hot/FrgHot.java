@@ -27,28 +27,17 @@ public class FrgHot extends Fragment {
         }
     };
     static String getUserStatus_home;
+    Bundle bundle;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflatedView = inflater.inflate(R.layout.frg_hot,container,false);
-
-        Bundle bundle = this.getArguments();
-
-
-//        Bundle args = getArguments();
+        bundle = this.getArguments();  // get bundle in fragment;
         InitialComponent();
         if(bundle!=null){
             getUserStatus_home = bundle.getString(C_Dictionary.USER_STATUS);
             txt_home.setText(getUserStatus_home);
-        }else {
-            Toast toast = Toast.makeText(getContext(), getUserStatus_home, Toast.LENGTH_LONG);
-            toast.show();
         }
-
-
-//        String myValue = this.getArguments().getString("message");
-//        txt_home.setText(myValue);
-
         return inflatedView;
     }
 

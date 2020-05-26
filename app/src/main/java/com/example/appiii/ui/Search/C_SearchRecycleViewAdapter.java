@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +21,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.appiii.ActEntrance;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Travel.ActAddTravelPlan;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +47,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     private Context mContext;
     File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\tedros.png");  // 開啟本地檔案
     Uri uri = Uri.fromFile(file);  //建立超連結
+
 
 
     public C_SearchRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
@@ -125,29 +124,82 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
             });
 
             getbtn_addTravel.setOnClickListener(new View.OnClickListener(){
+                Cursor cursor;
+                ContentValues values;
+                C_Member_SQLite SQLite_helper;
+                SQLiteDatabase sqLiteDatabase;
+                String[] planName;
                 @Override
                 public void onClick(View v) {
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
-                    ContentValues values = new ContentValues();
-                    C_Member_SQLite SQLite_helper = new C_Member_SQLite(mContext);  // helper
-
-                    SQLiteDatabase sqLiteDatabase = SQLite_helper.getReadableDatabase();
-                    Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
-                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.MY_Table_Name+";",null);
+                    values = new ContentValues();  // insert 用
+                    SQLite_helper = new C_Member_SQLite(mContext);  // helper
+                    sqLiteDatabase = SQLite_helper.getReadableDatabase();
+                    cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
+//                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);
                     Log.i("getbtn_addTravel","TRAVEL_LIST_Table_Name:"+cursor.getCount());
                     Log.i("getbtn_addTravel","MY_Table_Name"+cursor.getCount());
-
+                    planName=new String[(int)DatabaseUtils.queryNumEntries(sqLiteDatabase,C_Dictionary.TRAVEL_LIST_Table_Name)];
+                    int count = 0 ;
+                    while (cursor.moveToNext()){
+                        planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
+                        count++;
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("選擇要加入行程");
-                    builder.setPositiveButton("ok",null);
-
+                    builder.setItems(planName, new DialogInterface.OnClickListener(){    // addItemToSchedule_selected 點擊加入
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // select exists (select 1 from TRAvel_list_table_name);  // 檢查表是否為 empty
+                            // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
+                            // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
+                            Log.i("maxdate","exists getAdapterPosition :"+which);
+                            Log.i("maxdate","exists planName getAdapterPosition :"+planName[which]);
+                            cursor=sqLiteDatabase.rawQuery("select exists (select 1 from "+ planName[which] +" )",null);
+                            cursor.moveToLast();
+                            int empty = cursor.getInt(0);
+                            Log.i("maxdate","exists empty :"+empty);
+                            if (empty==0){   // 如果 TABLE 是空 TABLE
+//                                values.put( C_Dictionary.TABLE_SCHEMA_id, DatabaseUtils.queryNumEntries(sqLiteDatabase,planName[getAdapterPosition()]) );
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
+                                values.put(C_Dictionary.TABLE_SCHEMA_DATE,1);
+                                values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,1);
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
+                                sqLiteDatabase.insert(planName[which],null,values);
+                            }else if(empty==1){ // 如果 TABLE 不為空 TABLE
+                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from "+planName[which]+" group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
+                            cursor.moveToLast();
+                            int maxdate = cursor.getInt(0);
+                            Log.i("maxdate","maxdate:"+maxdate);
+                            cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+planName[which]+" Where COLUMN_NAME_DATE = "+maxdate+" group by COLUMN_NAME_DATE",null);
+                            cursor.moveToLast();
+                            int maxQueue = cursor.getInt(0);
+                            Log.i("maxQueue","maxQueue:"+maxQueue);
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
+                                values.put(C_Dictionary.TABLE_SCHEMA_DATE,maxdate);
+                                values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
+                                sqLiteDatabase.insert(planName[which],null,values);
+                            }
+//                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
+//                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
+//                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
+                            Toast.makeText(mContext,which+":"+planName[which],Toast.LENGTH_LONG).show();
+                        }
+                    });
+//                    builder.setPositiveButton("ok",null);
                     Dialog dialog = builder.create();
                     dialog.show();
-                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
-                    toast.show();
+//                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
+//                    toast.show();
                 }
             });
+
+
+
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
             getParentLayout = itemView.findViewById(R.id.getSearchForParent_Layout);

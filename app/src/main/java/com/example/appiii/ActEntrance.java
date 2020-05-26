@@ -24,6 +24,8 @@ public class ActEntrance extends AppCompatActivity {
             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_VISITORS);
             intent.putExtras(bundle);
             startActivity(intent);
+            Toast toast = Toast.makeText(ActEntrance.this,"訪客登入",Toast.LENGTH_LONG);
+            toast.show();
 
         }
     };

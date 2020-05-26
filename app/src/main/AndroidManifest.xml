@@ -32,19 +32,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ActRecycle"></activity>
+        <activity android:name=".ActRecycle" />
+        <activity android:name=".ui.Travel.ActAddTravelPlan"/>
         <activity
             android:name=".ActEntrance"
-            android:exported="true">   <!-- android:name = ".xxxx"  Activity name  -->
+            android:exported="true"> <!-- android:name = ".xxxx"  Activity name -->
             <intent-filter> <!-- 起始 Activity (首頁) -->
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ActBottomNav"
             android:exported="true"
-            android:label="bottom_nav"></activity>
+            android:label="bottom_nav" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,7 +67,7 @@
             android:label="google_maps" />
         <activity android:name=".ActDBconect" />
         <activity android:name=".ActGps" />
-        <activity android:name=".ActMain"></activity>
+        <activity android:name=".ActMain" />
     </application>
 
 </manifest>

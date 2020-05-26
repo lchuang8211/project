@@ -1,11 +1,20 @@
 <resources>
     <string name="app_name">Appiii v0.1</string>
-<!--        <string name="title_activity_act_bottom">Appiii v0.1</string>-->
+    <!--        <string name="title_activity_act_bottom">Appiii v0.1</string>-->
 
     <string name="travel">行程表</string>
     <string name="search">景點導覽</string>
     <string name="hotspot">熱門</string>
     <string name="gmap">導航</string>
     <string name="member">會員中心</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>

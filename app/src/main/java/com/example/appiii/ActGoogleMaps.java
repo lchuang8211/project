@@ -147,7 +147,7 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();   // ACTIVITY 的 getIntent
         Log.i(TAG, "onCreate: bundle :" + bundle);
         setContentView(R.layout.act_google_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
