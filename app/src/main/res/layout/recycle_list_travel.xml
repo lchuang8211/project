@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RecyclerView 的 list 配置 -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_alignBottom="@+id/getCirlceImage"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/getSearchForParent_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="10sp">
+    <!-- CircleImageView 圓形元件 -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:id="@+id/getCirlceImage"
+        android:src="@drawable/tedros"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
+
+    <TextView
+        android:id="@+id/txt_Name_Address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10sp"
+        android:layout_toRightOf="@+id/getCirlceImage"
+        android:textSize="15sp" />
+
+</RelativeLayout>
+    <Button
+        android:id="@+id/getbtn_addTravel"
+        android:text="加入行程"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"/>
+
+
+</LinearLayout>
