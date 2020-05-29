@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Search;
+package com.example.appiii.ui.Hot;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -27,7 +27,6 @@ import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 import com.example.appiii.ui.Member.C_Member_SQLite;
-import com.example.appiii.ui.Travel.ActAddTravelPlan;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
-public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRecycleViewAdapter.ViewHolder>{
+public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleViewAdapter.ViewHolder>{
 
     View itemView;
     private static final  String TAG = "RecyclerViewAdapter";
@@ -50,7 +49,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 
 
 
-    public C_SearchRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
+    public C_HotRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
         this.mySpotName = mySpotName;
         this.mySpotAddress = mySpotAddress;
         this.mySpotToldescribe = mySpotToldescribe;
@@ -62,7 +61,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_search, parent, false);  //嵌入 RecycleView 的 list item XML
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_hot, parent, false);  //嵌入 RecycleView 的 list item XML
         holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }
@@ -88,9 +87,9 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         CircleImageView getItem_image;
         TextView txt_Name_Address;
         Button getbtn_addTravel;
-
+        RelativeLayout getParentLayout;   // recyclerView 的 使用的 RelativeLayout 排版
 //        Button btn_getItem;
-        RelativeLayout getParentLayout;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
@@ -202,7 +201,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getSearchForParent_Layout);
+            getParentLayout = itemView.findViewById(R.id.getHotParent_Layout);
 
         }
     }

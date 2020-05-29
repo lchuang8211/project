@@ -3,6 +3,7 @@ package com.example.appiii;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
         Log.d("JSON","進來 C_dbconectTask(Interface_AsyncDBTask asyncResponse) taskCompleted  : "+ getDBTaskCompleted);
     }
 
-    private JSONObject jsonfromPhone, jsonfromPHP;
+    private JSONObject jsonfromPhone, jsonfromPHP,emptyfromPHP;
     private JSONArray jsonArrayfromPHP;
     private String Stringinput, StringOutput;
     private String postTophp_CityName;
@@ -142,15 +143,22 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
         try {
             for (int i = 0; i < jsonArrayfromPHP.length(); i++) {
                 jsonfromPHP = jsonArrayfromPHP.getJSONObject(i);
-                Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
-                ctiyName = jsonfromPHP.getString("Name");
-                SpotAddress = jsonfromPHP.getString("Add");
-                SpotToldescribe = jsonfromPHP.getString("Toldescribe");
-                SpotLocation_latitude = jsonfromPHP.getString("Py");
-                SpotLocation_longitude = jsonfromPHP.getString("Px");
-                Log.i("JSON",ctiyName+":"+SpotAddress);
-                getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(),SpotAddress.trim(),SpotToldescribe.trim(),
-                        Double.parseDouble(SpotLocation_latitude.trim()),Double.parseDouble(SpotLocation_longitude.trim()));   //Call function
+//                Boolean yesNo =jsonfromPHP.getBoolean("empty");
+//                if(yesNo != null){
+//                    Log.i("C_GetDataFromDatabase","empty 沒有資料 :"+jsonfromPHP.getBoolean("empty"));
+//                    return;
+//                }
+                    Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
+                    ctiyName = jsonfromPHP.getString("Name");
+                    SpotAddress = jsonfromPHP.getString("Add");
+                    SpotToldescribe = jsonfromPHP.getString("Toldescribe");
+                    SpotLocation_latitude = jsonfromPHP.getString("Py");
+                    SpotLocation_longitude = jsonfromPHP.getString("Px");
+                    Log.i("JSON", ctiyName + ":" + SpotAddress);
+
+                    getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(), SpotAddress.trim(), SpotToldescribe.trim(),
+                            Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()));   //Call function
+
             }
 //            re_name = jsonfromPHP.getString("name");
 //            Log.i("JSON", "name : " + re_name);

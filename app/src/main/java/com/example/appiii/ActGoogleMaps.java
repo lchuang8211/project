@@ -199,10 +199,6 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         }
     }
     private void InitialComponent() {
-        btn_searchView = findViewById(R.id.btn_searchView);
-        btn_searchView.setOnClickListener(btn_searchView_click);
-        edTxt_Spot = findViewById(R.id.edTxt_StartSpot);
-        edTxt_EndSpot = findViewById(R.id.edTxt_EndSpot);
         txt_getAttraction = findViewById(R.id.txt_getSpot);
     }
     private void myCriteria() {  // 精確度函式

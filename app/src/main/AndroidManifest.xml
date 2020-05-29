@@ -32,14 +32,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.Travel.Act_addSpotInShowTravelPlan"/>
         <activity android:name=".ActRecycle" />
         <activity android:name=".ui.Travel.ActAddTravelPlan"/>
+        <activity android:name=".ui.Travel.ActShowTravelPlan"/>
         <activity
             android:name=".ActEntrance"
             android:exported="true"> <!-- android:name = ".xxxx"  Activity name -->
             <intent-filter> <!-- 起始 Activity (首頁) -->
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

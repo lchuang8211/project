@@ -39,9 +39,10 @@ public class ActGps extends Activity {
     public LocationManager locationManager;
     private LocationManager lm;
     private Location location;
+    private int MIN_TIME_BW_UPDATES =5000, MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 判斷GPS更新的最小時間建閣與忽略距離
     private Criteria criteria;
     private String myLocation_horizontal,myLocation_latitude ;  //記錄我的裝置的GPS位置
-    private int MIN_TIME_BW_UPDATES =5000, MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 判斷GPS更新的最小時間建閣與忽略距離
+
     ////  google map(先緯, 後經) 表示
     private View.OnClickListener btn_101_location_click= new View.OnClickListener() {
         @Override
@@ -83,41 +84,10 @@ public class ActGps extends Activity {
         }
     };
     // 位置監聽器
-    LocationListener locationListener = new LocationListener() {
-        // 當位置改變時觸發
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.i("location", location.toString());
-            updateLocation(location);
-        }
-        // Provider失效時觸發
-        @Override
-        public void onProviderDisabled(String arg0) {
-            Log.i("location", arg0);
-        }
-        // Provider可用時觸發
-        @Override
-        public void onProviderEnabled(String arg0) {
-            Log.i("location", arg0);
-        }
-        // Provider狀態改變時觸發
-        @Override
-        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-            Log.i("location", "onStatusChanged");
-        }
-    };
 
 
-    private void updateLocation(Location location) {
-        Log.i("location", "updateLocation + text");
-        if (location != null) {
-            myLocation_horizontal= String.valueOf(location.getLatitude());
-            myLocation_latitude= String.valueOf(location.getLongitude());
-            Log.i("location", "成功取得經緯度");
-        } else {
-            Log.i("location", "沒有獲取到定位物件Location");
-        }
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +128,46 @@ public class ActGps extends Activity {
         }
         updateLocation(location);
     }
+
+    LocationListener locationListener = new LocationListener() {
+        // 當位置改變時觸發
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.i("location", location.toString());
+            updateLocation(location);
+        }
+        // Provider失效時觸發
+        @Override
+        public void onProviderDisabled(String arg0) {
+            Log.i("location", arg0);
+        }
+        // Provider可用時觸發
+        @Override
+        public void onProviderEnabled(String arg0) {
+            Log.i("location", arg0);
+        }
+        // Provider狀態改變時觸發
+        @Override
+        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+            Log.i("location", "onStatusChanged");
+        }
+    };
+
+    private void updateLocation(Location location) {
+        Log.i("location", "updateLocation + text");
+        if (location != null) {
+            myLocation_horizontal= String.valueOf(location.getLatitude());
+            myLocation_latitude= String.valueOf(location.getLongitude());
+            Log.i("location", "成功取得經緯度");
+        } else {
+            Log.i("location", "沒有獲取到定位物件Location");
+        }
+    }
+
+
+
+
+
 
     private void checkMyPermission() {
         //取得現在的權限狀態

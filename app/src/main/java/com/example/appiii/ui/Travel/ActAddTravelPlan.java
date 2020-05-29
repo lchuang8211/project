@@ -2,6 +2,7 @@ package com.example.appiii.ui.Travel;
 
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -93,8 +94,8 @@ public class ActAddTravelPlan extends AppCompatActivity {
             }
 
                 try {
-                    str_startdate = start_year+"-"+(start_month+1)+"-"+start_day;
-                    str_enddate = end_year+"-"+(end_month+1)+"-"+end_day;
+                    str_startdate = start_year+"-"+start_month+"-"+start_day;
+                    str_enddate = end_year+"-"+end_month+"-"+end_day;
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     startdate  = df.parse(str_startdate);
                     enddate =  df.parse(str_enddate);
@@ -107,11 +108,11 @@ public class ActAddTravelPlan extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            String rowTableName = edtxt_PlanName.getText().toString().trim();
-            String TableName = "["+ rowTableName +"]";
+            String rawTableName = edtxt_PlanName.getText().toString().trim();
+            String TableName = "plan_"+ rawTableName;
             SQLite_helper = new C_Member_SQLite(ActAddTravelPlan.this);
             sqLiteDatabase = SQLite_helper.getReadableDatabase();
-            String[] checkPlanName = {rowTableName};
+            String[] checkPlanName = {TableName};
             Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",checkPlanName);
             if (cursor.moveToNext()){
                 Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單已存在" );
@@ -123,24 +124,26 @@ public class ActAddTravelPlan extends AppCompatActivity {
                 // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
                 // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,rowTableName);
+                contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,rawTableName);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,str_startdate);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,str_enddate);
                 contentValues.put(C_Dictionary.TRAVEL_TABLE_VISIBILITY,0);
                 sqLiteDatabase.insert(C_Dictionary.TRAVEL_LIST_Table_Name,null,contentValues);
             }
-            String newPlanTable = C_Dictionary.CREATE_TABLE_if_not_exists + TableName + " ("
+            String newPlanTable = C_Dictionary.CREATE_TABLE_if_not_exists +"["+TableName + "] ("
                     + C_Dictionary.TABLE_SCHEMA_DATE+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.VALUE_COMMA_SEP
                     + C_Dictionary.TABLE_SCHEMA_QUEUE+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.VALUE_COMMA_SEP
                     + C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
                     + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE+C_Dictionary.VALUE_COMMA_SEP
-                    + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + " )";
+                    + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE +C_Dictionary.VALUE_COMMA_SEP
+                    + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING +" )";
 
             sqLiteDatabase.execSQL( newPlanTable );
-//
-
-
             Toast.makeText(ActAddTravelPlan.this,"建立完成 "+edtxt_PlanName.getText().toString().trim(),Toast.LENGTH_LONG).show();
+            int maxplanDay = (int)Math.abs( enddate.getTime()-startdate.getTime() )/(60*60*1000*24);
+
+            setResult(RESULT_OK); // RESULT_OK 不回傳常數
+            finish();
         }
     };
 
@@ -149,6 +152,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_travellist_add);
+        setTitle("建立行程表");
         InitialComponent();
     }
 

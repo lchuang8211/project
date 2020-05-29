@@ -1,10 +1,8 @@
-package com.example.appiii.ui.Search;
+package com.example.appiii.ui.Travel;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,9 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,18 +24,17 @@ import java.util.ArrayList;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class FrgSearch extends Fragment {
-    View inflatedView_Search;
-    private ArrayList<Integer> database_ID = new ArrayList<>();
+public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
+
     private ArrayList<String> database_Name = new ArrayList<>();
     private ArrayList<String> database_address = new ArrayList<>();
     private ArrayList<String> mySpotToldescribe = new ArrayList<>();
     private ArrayList<Double> database_lat = new ArrayList<>();
     private ArrayList<Double> database_long = new ArrayList<>();
-    private ArrayList<String> database_cityNumber = new ArrayList<>();
     private String cityName = "" ;
     private int cityNameNumber = -1 ;
     private String spotType = "";
+
     static final String[] cityNameArray = {
             "基隆市","臺北市","新北市","桃園市","新竹縣","新竹市",
             "苗栗縣","臺中市","彰化縣","南投縣",
@@ -47,21 +43,21 @@ public class FrgSearch extends Fragment {
             "澎湖縣","金門縣","連江縣"
     };
     static final String[] cityTypeArray={
-      "住宿","風景","文化"
+            "住宿","風景","文化"
     };
+
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
-                    public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
+                public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
                     database_Name.add(Name.trim());
                     database_address.add(address.trim());
                     mySpotToldescribe.add(Toldescribe);
                     database_lat.add(Lcation_lat);
                     database_long.add(Lcation_long);
-                    txt_searchCount.setText(database_Name.size()+" 筆結果");
                     InitRecyclerView();
                 }
             }).execute(bundle);
@@ -74,40 +70,38 @@ public class FrgSearch extends Fragment {
     private View.OnClickListener btn_addTravel_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Toast toast = Toast.makeText(getContext(),"ok",Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(Act_addSpotInShowTravelPlan.this,"ok",Toast.LENGTH_LONG);
             toast.show();
         }
     };
 
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        inflatedView_Search = inflater.inflate(R.layout.frg_search,container,false);
-//        txt_cityNumber = inflatedView_Search.findViewById(R.id.txt_cityNumber);
-        txt_searchCount = inflatedView_Search.findViewById(R.id.txt_searchcount);
-
-        btn_searchDB = inflatedView_Search.findViewById(R.id.btn_searchDB);
-        btn_searchDB.setOnClickListener(btn_searchDB_click);
-
-//        InitRecyclerView();
-//        C_Ggps appLocationManager = new C_Ggps(getContext());
-//        txt_gps.setText(String.valueOf(appLocationManager.getLatitude()) +"\n"+ appLocationManager.getLongitude());
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.frg_search);
+        InitialComponent();
         InitialCitySpinner();
-        InitialDatabase();
-        return inflatedView_Search;
+    }
+    static int getDays;
+    static String Tablename;
+    private void InitialComponent() {
+        txt_gps = findViewById(R.id.txt_searchcount);
+        btn_searchDB = findViewById(R.id.btn_searchDB);
+        btn_searchDB.setOnClickListener(btn_searchDB_click);
+        Tablename = getIntent().getExtras().getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
+        Log.i("Act_addSpotInShowTravelPlan","onCreate Tablename :" + Tablename);
+        getDays = getIntent().getExtras().getInt("DAYS");
+        Log.i("Act_addSpotInShowTravelPlan","onCreate getDays :" + getDays);
     }
 
     Spinner spinner_cityName,spinner_spotType;
-    TextView txt_searchCount;
+    TextView txt_gps;
     Button btn_searchDB;
     Bundle bundle = new Bundle();
     private void InitialCitySpinner() {
 
-        spinner_cityName = (Spinner)inflatedView_Search.findViewById(R.id.spinner_cityName);
-        ArrayAdapter<String> citylist = new ArrayAdapter<>(getActivity(),
+        spinner_cityName = (Spinner)findViewById(R.id.spinner_cityName);
+        ArrayAdapter<String> citylist = new ArrayAdapter<>(Act_addSpotInShowTravelPlan.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 cityNameArray);
         spinner_cityName.setAdapter(citylist);
@@ -123,8 +117,8 @@ public class FrgSearch extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        spinner_spotType = (Spinner)inflatedView_Search.findViewById(R.id.spinner_spotType);
-        ArrayAdapter<String> cityTypelist = new ArrayAdapter<>(getActivity(),
+        spinner_spotType = (Spinner)findViewById(R.id.spinner_spotType);
+        ArrayAdapter<String> cityTypelist = new ArrayAdapter<>(Act_addSpotInShowTravelPlan.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 cityTypeArray);
         spinner_spotType.setAdapter(cityTypelist);
@@ -160,13 +154,14 @@ public class FrgSearch extends Fragment {
     private  void InitialDatabase(){
     }
     //  RecyclerView : 大樓 , RecycleViewAdapter : 管理員 , ArrayList 載入的資料 : 住戶
-    C_SearchRecycleViewAdapter adapter;
+    C_TravelAddSpotInShowRecycleViewAdapter adapter;
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
-        RecyclerView recyclerView = inflatedView_Search.findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_SearchRecycleViewAdapter(getActivity(), database_Name, database_address, mySpotToldescribe, database_lat, database_long);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        RecyclerView recyclerView = findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
+        adapter = new C_TravelAddSpotInShowRecycleViewAdapter(Act_addSpotInShowTravelPlan.this, database_Name, database_address, mySpotToldescribe, database_lat, database_long, getDays, Tablename);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
+        recyclerView.setLayoutManager(new LinearLayoutManager(Act_addSpotInShowTravelPlan.this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();
     }
+
 }

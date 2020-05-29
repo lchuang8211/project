@@ -20,7 +20,7 @@ public class C_Member_SQLite extends SQLiteOpenHelper {
 //    public static final String VALUE_TYPE_STRING = "VARCHAR(30) NOT NULL";
 //    public static final String VALUE_TYPE_TEXT = "TEXT NOT NULL";
     private static final String DATABASE_NAME = "userTableList.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     int _id;
     private SQLiteDatabase db;
     private String SQL_CREATE_ENTRIES = C_Dictionary.CREATE_TABLE_if_not_exists + C_Dictionary.TRAVEL_Table_Name

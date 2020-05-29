@@ -27,7 +27,6 @@ import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 import com.example.appiii.ui.Member.C_Member_SQLite;
-import com.example.appiii.ui.Travel.ActAddTravelPlan;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_search, parent, false);  //嵌入 RecycleView 的 list item XML
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_search_showinfo, parent, false);  //嵌入 RecycleView 的 list item XML
         holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }
@@ -118,8 +117,6 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                     });
                     Dialog dialog = builder.create();
                     dialog.show();
-//                    Toast.makeText(v.getContext(),"click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();
-//                    Log.i(TAG, "onClick: ViewHolder on getAdapterPosition() :"+ getAdapterPosition());
                 }
             });
 
@@ -140,13 +137,13 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 //                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);
                     Log.i("getbtn_addTravel","TRAVEL_LIST_Table_Name:"+cursor.getCount());
                     Log.i("getbtn_addTravel","MY_Table_Name"+cursor.getCount());
-                    planName=new String[(int)DatabaseUtils.queryNumEntries(sqLiteDatabase,C_Dictionary.TRAVEL_LIST_Table_Name)];
+                    planName = new String[(int)DatabaseUtils.queryNumEntries(sqLiteDatabase,C_Dictionary.TRAVEL_LIST_Table_Name)];
                     int count = 0 ;
                     while (cursor.moveToNext()){
-                        planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
+                        planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME)).trim();
                         count++;
                     }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("選擇要加入行程");
                     builder.setItems(planName, new DialogInterface.OnClickListener(){    // addItemToSchedule_selected 點擊加入
                         @Override
@@ -154,9 +151,10 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                             // select exists (select 1 from TRAvel_list_table_name);  // 檢查表是否為 empty
                             // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
                             // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
+                            String newTablename = "["+ C_Dictionary.CREATE_TABLE_HEADER+planName[which]+"]";
                             Log.i("maxdate","exists getAdapterPosition :"+which);
                             Log.i("maxdate","exists planName getAdapterPosition :"+planName[which]);
-                            cursor=sqLiteDatabase.rawQuery("select exists (select 1 from "+ planName[which] +" )",null);
+                            cursor = sqLiteDatabase.rawQuery("select exists (select 1 from "+ newTablename +" )",null);
                             cursor.moveToLast();
                             int empty = cursor.getInt(0);
                             Log.i("maxdate","exists empty :"+empty);
@@ -167,13 +165,14 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                                 values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,1);
                                 values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
                                 values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
-                                sqLiteDatabase.insert(planName[which],null,values);
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE,mySpotToldescribe.get(getAdapterPosition()));
+                                sqLiteDatabase.insert( newTablename,null,values);
                             }else if(empty==1){ // 如果 TABLE 不為空 TABLE
-                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from "+planName[which]+" group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
+                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from "+ newTablename +" group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
                             cursor.moveToLast();
                             int maxdate = cursor.getInt(0);
                             Log.i("maxdate","maxdate:"+maxdate);
-                            cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+planName[which]+" Where COLUMN_NAME_DATE = "+maxdate+" group by COLUMN_NAME_DATE",null);
+                            cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+ newTablename +" Where COLUMN_NAME_DATE = "+maxdate+" group by COLUMN_NAME_DATE",null);
                             cursor.moveToLast();
                             int maxQueue = cursor.getInt(0);
                             Log.i("maxQueue","maxQueue:"+maxQueue);
@@ -182,17 +181,30 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                                 values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
                                 values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
                                 values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
-                                sqLiteDatabase.insert(planName[which],null,values);
+                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE,mySpotToldescribe.get(getAdapterPosition()));
+                                sqLiteDatabase.insert( newTablename,null,values);
+
+                            AlertDialog.Builder builderDays = new AlertDialog.Builder(mContext);
+                            builderDays.setTitle("select a day");
+                            String[] Days=new String[maxdate];
+                            for(int i=1; i<=maxdate;i++){
+                                Days[i-1] = "第 "+ i +" 天的行程";
+                            }
+                            builderDays.setItems(Days,null).create().show();
+
+
                             }
 //                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
 //                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
 //                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
                             Toast.makeText(mContext,which+":"+planName[which],Toast.LENGTH_LONG).show();
                         }
-                    });
+                    })
+                    .create()
+                    .show();
 //                    builder.setPositiveButton("ok",null);
-                    Dialog dialog = builder.create();
-                    dialog.show();
+//                    Dialog dialog = builder.create();
+//                    dialog.show();
 //                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
 //                    toast.show();
                 }
@@ -202,7 +214,11 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getSearchForParent_Layout);
+            getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            // RelativeLayout.XML 的 layout 的 Layout ID
+            // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
+
 
         }
     }

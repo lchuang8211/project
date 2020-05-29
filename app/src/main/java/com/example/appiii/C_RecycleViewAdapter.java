@@ -80,7 +80,7 @@ public class C_RecycleViewAdapter extends RecyclerView.Adapter<C_RecycleViewAdap
             });
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getParent_Layout);
+//            getParentLayout = itemView.findViewById(R.id.getParent_Layout);  //
 
         }
     }

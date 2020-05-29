@@ -9,7 +9,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/getSearchInfoForParent_Layout"
+    android:id="@+id/getHotParent_Layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -20,7 +20,7 @@
         android:layout_width="80sp"
         android:layout_height="80sp"
         android:id="@+id/getCirlceImage"
-        android:src="@drawable/tedros"
+        android:src="@drawable/fire"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
 
@@ -34,12 +34,20 @@
         android:textSize="15sp" />
 
 </RelativeLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_alignBottom="@+id/getCirlceImage"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
     <Button
         android:id="@+id/getbtn_addTravel"
-        android:text="加入行程"
-        android:layout_width="wrap_content"
+        android:text="熱門景點"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"/>
-
+    </LinearLayout>
 
 </LinearLayout>

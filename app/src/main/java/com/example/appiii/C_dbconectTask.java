@@ -127,6 +127,7 @@ public class C_dbconectTask extends AsyncTask<String, Integer, String> {
     {
         super.onPostExecute(result);
         Log.i("JSON","進入 onPostExecute : "+result);
+
         try {
             re_name = jsonfromPHP.getString("name");
             Log.i("JSON", "name : " + re_name);

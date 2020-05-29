@@ -66,6 +66,8 @@ public class ActEntrance extends AppCompatActivity {
     private View.OnClickListener btn_SignupMember_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
+
+//            final View view = LayoutInflater.from(ActEntrance.this).inflate(R.layout.signup_member,null);
             LayoutInflater inflater = LayoutInflater.from(ActEntrance.this);
             final View view = inflater.inflate(R.layout.signup_member, null);
             final TextView txt_signupAccount = (TextView) view.findViewById(R.id.txt_signupAccount);
