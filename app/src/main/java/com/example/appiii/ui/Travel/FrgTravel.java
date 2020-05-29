@@ -21,8 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
-import com.example.appiii.ui.Search.C_SearchRecycleViewAdapter;
+import com.example.appiii.ui.Member.C_MySQLite;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
@@ -91,12 +90,12 @@ public class FrgTravel extends Fragment {
         btn_addPlan.setOnClickListener(btn_addPlan_click);
 
         values = new ContentValues();  // insert 用
-        SQLite_helper = new C_Member_SQLite(getContext());  // helper
+        SQLite_helper = new C_MySQLite(getContext());  // helper
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
     }
     Cursor cursor;
     ContentValues values;
-    C_Member_SQLite SQLite_helper;
+    C_MySQLite SQLite_helper;
     SQLiteDatabase sqLiteDatabase;
     FloatingActionButton fab;
     Button btn_addPlan;

@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         Cursor cursor;
-        C_Member_SQLite SQLite_helper;
+        C_MySQLite SQLite_helper;
         SQLiteDatabase sqLiteDatabase;
         LinearLayout layout;
         CircleImageView getItem_image;
@@ -106,7 +106,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
                     dialog.setPositiveButton("確定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SQLite_helper = new C_Member_SQLite(mContext);
+                            SQLite_helper = new C_MySQLite(mContext);
                             sqLiteDatabase = SQLite_helper.getReadableDatabase();
                             String newTablename = "["+ C_Dictionary.CREATE_TABLE_HEADER + myPlanName.get( getAdapterPosition())+"]";
                             sqLiteDatabase.delete(C_Dictionary.TRAVEL_LIST_Table_Name,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[] {myPlanName.get( getAdapterPosition())});
@@ -129,7 +129,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ActShowTravelPlan.class);
                     Bundle bundle = new Bundle();
-                    SQLite_helper = new C_Member_SQLite(mContext);
+                    SQLite_helper = new C_MySQLite(mContext);
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
 
                     String newTablename = "["+ C_Dictionary.CREATE_TABLE_HEADER+myPlanName.get( getAdapterPosition())+"]";

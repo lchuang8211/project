@@ -20,13 +20,15 @@
             android:textSize="80sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+
+            <TextView
             android:gravity="center"
             android:id="@+id/txt_account"
             android:text="帳號"
             android:textSize="30sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <EditText
             android:gravity="center"
             android:id="@+id/edtxt_account"
@@ -47,22 +49,58 @@
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
         <Button
             android:id="@+id/btn_Member_Signin"
             android:text="會員登入"
             android:textSize="30sp"
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
              />
-
+            <CheckBox
+                android:text="記住我"
+                android:id="@+id/cbox_rememberAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15sp"
+                android:layout_toRightOf="@+id/btn_Member_Signin"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
         <Button
             android:id="@+id/btn_Visitors_Signin"
+            android:layout_centerInParent="true"
             android:text="訪客登入"
             android:textSize="30sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="wrap_content"
+            />
+            <CheckBox
+                android:text="自動登入"
+                android:id="@+id/cbox_Autosignin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15sp"
+                android:layout_toRightOf="@+id/btn_Visitors_Signin"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+        </FrameLayout>
         <Button
             android:id="@+id/btn_SignupMember"
             android:text="加入會員"

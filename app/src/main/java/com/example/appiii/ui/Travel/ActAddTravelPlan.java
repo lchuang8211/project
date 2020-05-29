@@ -2,14 +2,11 @@ package com.example.appiii.ui.Travel;
 
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.app.DatePickerDialog;
-import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import android.icu.util.Calendar;
 import android.widget.Toast;
@@ -110,7 +107,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
                 }
             String rawTableName = edtxt_PlanName.getText().toString().trim();
             String TableName = "plan_"+ rawTableName;
-            SQLite_helper = new C_Member_SQLite(ActAddTravelPlan.this);
+            SQLite_helper = new C_MySQLite(ActAddTravelPlan.this);
             sqLiteDatabase = SQLite_helper.getReadableDatabase();
             String[] checkPlanName = {TableName};
             Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",checkPlanName);
@@ -127,7 +124,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
                 contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,rawTableName);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,str_startdate);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,str_enddate);
-                contentValues.put(C_Dictionary.TRAVEL_TABLE_VISIBILITY,0);
+                contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
                 sqLiteDatabase.insert(C_Dictionary.TRAVEL_LIST_Table_Name,null,contentValues);
             }
             String newPlanTable = C_Dictionary.CREATE_TABLE_if_not_exists +"["+TableName + "] ("
@@ -168,7 +165,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
 //        btn_endDate.setOnClickListener(btn_endDate_click);
 
     }
-    C_Member_SQLite SQLite_helper;  // helper
+    C_MySQLite SQLite_helper;  // helper
     SQLiteDatabase sqLiteDatabase;
     EditText edtxt_PlanName;
     TextView txt_startDate;

@@ -38,13 +38,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25sp" />
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/txt_Plan_info"
+            <RelativeLayout
                 android:layout_marginTop="8sp"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/txt_Plan_info"
+                    android:layout_width="220sp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="18sp" />
+                <CheckBox
+                    android:text="公開"
+                    android:id="@+id/cbox_pushToCloud"
+                    android:layout_toRightOf="@+id/txt_Plan_info"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="8sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"/>
+            </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

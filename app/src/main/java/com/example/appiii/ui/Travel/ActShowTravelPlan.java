@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
         ///// show day button /////
 
 
-        SQLite_helper = new C_Member_SQLite(ActShowTravelPlan.this);
+        SQLite_helper = new C_MySQLite(ActShowTravelPlan.this);
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
         String sql = "select "
                 +C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_COMMA_SEP
@@ -188,11 +189,12 @@ public class ActShowTravelPlan extends AppCompatActivity {
         setTitle(bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
 //        txt_showplan = findViewById(R.id.txt_showplan);
         values = new ContentValues();  // insert 用
-        SQLite_helper = new C_Member_SQLite(this);  // helper
+        SQLite_helper = new C_MySQLite(this);  // helper
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
         linearLayout = (LinearLayout)findViewById(R.id.linearlayout_showplan);
         btn_add_spot = findViewById(R.id.btn_add_spot);
         btn_add_spot.setOnClickListener(btn_add_spot_click);
+
         raw_planname = bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
         Log.i("shoePlan","raw_planname : " +raw_planname);
         table_planname = "["+C_Dictionary.CREATE_TABLE_HEADER + bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME)+"]";
@@ -229,7 +231,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
     Button btn_add_spot;
 
 //    TextView txt_showplan;
-    C_Member_SQLite SQLite_helper;
+    C_MySQLite SQLite_helper;
     SQLiteDatabase sqLiteDatabase;
     Bundle bundleFromCreate;
 

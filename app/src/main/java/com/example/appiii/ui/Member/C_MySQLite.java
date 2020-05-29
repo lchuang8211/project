@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.example.appiii.C_Dictionary;
 
-public class C_Member_SQLite extends SQLiteOpenHelper {
+public class C_MySQLite extends SQLiteOpenHelper {
 
 //    public static final String MY_Table_Name = "MY_Table_Name";
 //    public static final String TABLE_SCHEMA_DATE = "COLUMN_NAME_DATE";
@@ -36,28 +36,33 @@ public class C_Member_SQLite extends SQLiteOpenHelper {
             +" ( "+ C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TABLE_SCHEMA_DATE_END+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
-            + C_Dictionary.TRAVEL_TABLE_VISIBILITY+C_Dictionary.VALUE_TYPE_INT +")";
-
-    public C_Member_SQLite(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+            + C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY +C_Dictionary.VALUE_TYPE_INT +")";
+    private String RememberMyAccount = "CREATE TABLE IF NOT EXISTS "+ C_Dictionary.TABLE_NAME_ACCOUNT_INFORMATION
+            +"( "+ C_Dictionary.TABLE_SCHEMA_ACCOUNT +C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_PASSWORD+C_Dictionary.VALUE_TYPE_STRING+" )";
+    public C_MySQLite(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-    public C_Member_SQLite (Context context){
+    public C_MySQLite(Context context){
         super(context, DATABASE_NAME,null, DATABASE_VERSION );
 
-        Log.i("C_Member_SQLite ", "C_Member_SQLite 建構子:"+context);
+        Log.i("C_MySQLite ", "C_MySQLite 建構子:"+context);
 //        db = this.getWritableDatabase();
     };
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_TRAVEL_LIST);
-        Log.i("C_Member_SQLite ", "C_Member_SQLite onCreate :"+ db);
-//        Log.i("C_Member_SQLite ", "Version this db is :"+this.db.getVersion());
+        db.execSQL(RememberMyAccount);
+        Log.i("C_MySQLite onCreate ", "RememberMyAccount :"+ RememberMyAccount);
+        Log.i("C_MySQLite onCreate ", "SQL_CREATE_TRAVEL_LIST :"+ SQL_CREATE_TRAVEL_LIST);
+//        Log.i("C_MySQLite ", "Version this db is :"+this.db.getVersion());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_CREATE_TRAVEL_LIST);
+        db.execSQL(RememberMyAccount);
         onCreate(db);
     }
 }

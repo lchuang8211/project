@@ -11,7 +11,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="300sp"
         android:layout_height="300sp"
-        android:id="@+id/getCirlceImage"
+        android:id="@+id/myHeadShot"
         android:src="@drawable/tedros"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
@@ -34,8 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:id="@+id/btn_myInsertSchedule"
-            android:text="建立行程表"
+            android:id="@+id/btn_mySetting"
+            android:text="設定"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <EditText

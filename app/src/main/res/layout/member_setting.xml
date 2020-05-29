@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <TextView
+        android:id="@+id/txt_setting"
+        android:gravity="center"
+        android:text="設定"
+        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="200sp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:text="自動登入"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup
+            android:id="@+id/radioGroup_SignIn"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/button1"
+            android:layout_centerHorizontal="true">
+        <RadioButton
+            android:id="@+id/rdb_AgreeAutoSignIn"
+            android:text="同意"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            />
+        <RadioButton
+            android:id="@+id/rdb_notAgreeAutoSignIn"
+            android:text="不同意"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </RadioGroup>
+
+    </LinearLayout>
+
+</RelativeLayout>

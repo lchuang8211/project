@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
             getbtn_addTravel.setOnClickListener(new View.OnClickListener(){
                 Cursor cursor;
                 ContentValues values;
-                C_Member_SQLite SQLite_helper;
+                C_MySQLite SQLite_helper;
                 SQLiteDatabase sqLiteDatabase;
                 String[] planName;
                 @Override
@@ -131,7 +131,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
                     values = new ContentValues();  // insert 用
-                    SQLite_helper = new C_Member_SQLite(mContext);  // helper
+                    SQLite_helper = new C_MySQLite(mContext);  // helper
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
                     cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
 //                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);

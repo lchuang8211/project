@@ -67,7 +67,7 @@ public class C_Dictionary {
     public static final String CREATE_TABLE_HEADER = "plan_";  // 建 Plan 時附加的 Table 名稱
 
 
-    public static final String TRAVEL_TABLE_VISIBILITY = "TRAVEL_TABLE_VISIBILITY";
+    public static final String TRAVEL_SCHEMA_TABLE_VISIBILITY = "TRAVEL_SCHEMA_TABLE_VISIBILITY";
 
     public static final String TABLE_SCHEMA_id = "_id";
     public static final int TRAVEL_ADD_PLAN_REQUEST_CODE = 301;  // travel activity for add plan
@@ -76,4 +76,10 @@ public class C_Dictionary {
     public static final String TRAVEL_MAX_PLAN_DAY = "TRAVEL_MAX_PLAN_DAY";  // travel activity for show single plan
     public static final String TRAVEL_PLAN_IS_EMPTY = "TRAVEL_PLAN_IS_EMPTY";
     public static final String TABLE_SCHEMA_NODE_DESCRIBE = "TABLE_SCHEMA_NODE_DESCRIBE";
+
+    public static final String TABLE_SCHEMA_PASSWORD = "TABLE_SCHEMA_PASSWORD";
+
+    public static final String TABLE_SCHEMA_ACCOUNT = "TABLE_SCHEMA_ACCOUNT";
+    public static final String TABLE_NAME_ACCOUNT_INFORMATION = "TABLE_NAME_ACCOUNT_INFORMATION";
+
 }

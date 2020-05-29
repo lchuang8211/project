@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -26,12 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import javax.security.auth.login.LoginException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -131,7 +127,7 @@ public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
                 @Override
                 public void onClick(View v) {
                     Cursor cursor;
-                    C_Member_SQLite sqLiteHelper = new C_Member_SQLite(mContext);
+                    C_MySQLite sqLiteHelper = new C_MySQLite(mContext);
                     SQLiteDatabase sqLiteDatabase =sqLiteHelper.getReadableDatabase();
 
                     int maxQueue=0;

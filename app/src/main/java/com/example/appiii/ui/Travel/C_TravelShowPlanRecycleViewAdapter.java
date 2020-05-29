@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_Member_SQLite;
+import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,7 +73,6 @@ public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_T
         holder.setIsRecyclable(false);
         holder.txt_Spot_Name.setText("第 "+(position+1)+" 個行程 :\n "+ showSpotName.get(position));
 //        holder.txt_Plan_info.setText( String.valueOf(showSpotLatitude.get(position))+","+String.valueOf(showSpotLongitude.get(position)) );
-
 ////        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 
     }
@@ -85,21 +85,20 @@ public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_T
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         Cursor cursor;
-        C_Member_SQLite SQLite_helper;
+        C_MySQLite SQLite_helper;
         SQLiteDatabase sqLiteDatabase;
         LinearLayout layout;
         CircleImageView getItem_image;
         TextView txt_Spot_Name;
         Button btn_delete;
-
+        CheckBox cbox_pushToCloud;
         RelativeLayout getParentLayout;  // recyclerView 的 使用的 RelativeLayout 排版
 
         public ViewHolder(@NonNull View itemView) {   // 設置 item onclisk 定義 UI的動作
             super(itemView);
+            cbox_pushToCloud = itemView.findViewById(R.id.cbox_pushToCloud);
             btn_delete = itemView.findViewById(R.id.btn_delete);
-
             txt_Spot_Name = itemView.findViewById(R.id.txt_Spot_Name);
-
             layout = (LinearLayout) itemView.findViewById(R.id.layout_showPlan);
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
             getParentLayout = itemView.findViewById(R.id.getTravelShowPlanForParent_Layout);
@@ -116,7 +115,7 @@ public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_T
                     deleteDialog.setPositiveButton("確定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            C_Member_SQLite sqLitehelper = new C_Member_SQLite(mContext);
+                            C_MySQLite sqLitehelper = new C_MySQLite(mContext);
                             SQLiteDatabase sqLiteDatabase = sqLitehelper.getReadableDatabase();
                             sqLiteDatabase.delete("["+ C_Dictionary.CREATE_TABLE_HEADER+ planName +"]",
                                     C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=? AND "+C_Dictionary.TABLE_SCHEMA_DATE +"=? AND "+C_Dictionary.TABLE_SCHEMA_QUEUE +"=?",
