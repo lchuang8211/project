@@ -6,28 +6,12 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
     android:padding="15sp">
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="10sp">
+
     <Button
         android:id="@+id/btn_addPlan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="建立旅遊計畫"
+        android:text="搜尋旅遊計畫"
         android:textSize="20sp"/>
 
-    </LinearLayout>
-    <com.google.android.material.circularreveal.CircularRevealFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle_view_travel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.material.circularreveal.CircularRevealFrameLayout>
 </LinearLayout>

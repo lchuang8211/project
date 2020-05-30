@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -21,13 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ActShowTravelPlan extends AppCompatActivity {
+public class ActMemberShowTravelPlan extends AppCompatActivity {
     private ArrayList<Button> Btn_changDate_list = new ArrayList<>();
     private ArrayList<Integer> showSpotDate = new ArrayList<>();
     private ArrayList<Integer> showSpotQueue = new ArrayList<>();
@@ -46,9 +44,9 @@ public class ActShowTravelPlan extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putInt("DAYS",ButtonID);
             bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
-            Log.i("ActShowTravelPlan","我要的 "+ButtonID +" = days");
-            Log.i("ActShowTravelPlan","我要的 "+bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
-            Intent intent = new Intent(ActShowTravelPlan.this, Act_addSpotInShowTravelPlan.class);
+            Log.i("ActMemberShowTravelPlan","我要的 "+ButtonID +" = days");
+            Log.i("ActMemberShowTravelPlan","我要的 "+bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
+            Intent intent = new Intent(ActMemberShowTravelPlan.this, ActAddSpotInShowTravelPlan.class);
             intent.putExtras(bundle);
             startActivityForResult(intent,200);
         }
@@ -67,7 +65,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
             int empty = cursor.getInt(0);
             if (empty==0){
                 InitRecyclerView();
-                Toast.makeText(ActShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActMemberShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
             }
             if(empty==1){
                 cursor = sqLiteDatabase.rawQuery("select * from "+table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ ButtonID + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
@@ -93,7 +91,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_travelshowplan);
+        setContentView(R.layout.act_member_showtravelplan);
         InitialComponent();
         showPlan();
         InitRecyclerView();
@@ -104,7 +102,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
         ///// show day button /////
 
 
-        SQLite_helper = new C_MySQLite(ActShowTravelPlan.this);
+        SQLite_helper = new C_MySQLite(ActMemberShowTravelPlan.this);
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
         String sql = "select "
                 +C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_COMMA_SEP
@@ -151,7 +149,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
                         int empty = cursor.getInt(0);
                         if (empty==0){
                             InitRecyclerView();
-                            Toast.makeText(ActShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActMemberShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
                             ButtonID = getbuttonID;
                         }
                         if(empty==1){
@@ -173,7 +171,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
                             ButtonID = getbuttonID;
                             InitRecyclerView();
                         }
-//                        Toast.makeText(ActShowTravelPlan.this, Btn_changDate_list.get(getbuttonID).getText().toString(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ActMemberShowTravelPlan.this, Btn_changDate_list.get(getbuttonID).getText().toString(),Toast.LENGTH_SHORT).show();
 //                    }
                 }
             });
@@ -201,7 +199,7 @@ public class ActShowTravelPlan extends AppCompatActivity {
 
         if(bundleFromCreate.getBoolean(C_Dictionary.TRAVEL_PLAN_IS_EMPTY)) {  //有行程就秀行程
             Log.i("TAG", "in shoePlan: null");
-            Toast.makeText(ActShowTravelPlan.this,"尚未加入任何景點",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActMemberShowTravelPlan.this,"尚未加入任何景點",Toast.LENGTH_SHORT).show();
         }else{
             cursor = sqLiteDatabase.rawQuery("select * from " + table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ 1 + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
             while(cursor.moveToNext()){
@@ -235,12 +233,12 @@ public class ActShowTravelPlan extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     Bundle bundleFromCreate;
 
-    C_TravelShowPlanRecycleViewAdapter adapter;
+    C_MemberShowPlanRecycleViewAdapter adapter;
 
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i("TAG", "InitRecyclerView: init recyclerview");
-        RecyclerView recyclerView = findViewById(R.id.travel_planInfo_RecyclerView);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_TravelShowPlanRecycleViewAdapter(this, showSpotDate, showSpotQueue, showSpotName, showSpotLatitude, showSpotLongitude, showSpotDescribe, bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME), ButtonID);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        RecyclerView recyclerView = findViewById(R.id.mamber_actshowtravelplan_planInfo_RecyclerView);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
+        adapter = new C_MemberShowPlanRecycleViewAdapter(this, showSpotDate, showSpotQueue, showSpotName, showSpotLatitude, showSpotLongitude, showSpotDescribe, bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME), ButtonID);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();

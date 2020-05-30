@@ -3,12 +3,8 @@ package com.example.appiii.ui.Member;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.appiii.ActEntrance;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,6 +62,13 @@ public class FrgmMember extends Fragment {
             startActivity(intent);
         }
     };
+    private View.OnClickListener btn_myCollect_click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(),ActMyCollect.class);
+            startActivity(intent);
+        }
+    };
 
 
     @Nullable
@@ -97,6 +97,8 @@ public class FrgmMember extends Fragment {
         btn_mySetting.setOnClickListener(btn_mySetting_click);
         btn_mySchedule = inflatedView_Member.findViewById(R.id.btn_mySchedule);
         btn_mySchedule.setOnClickListener(btn_mySchedule_click);
+        btn_myCollect = inflatedView_Member.findViewById(R.id.btn_myCollect);
+        btn_myCollect.setOnClickListener(btn_myCollect_click);
     }
 
     CircleImageView myHeadShot;
@@ -107,4 +109,9 @@ public class FrgmMember extends Fragment {
     EditText edtxt_createTableName;
     Button btn_mySetting;
     Button btn_mySchedule;
+    Button btn_myCollect;
+
+
+
+
 }

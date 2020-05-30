@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
+public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
 
     private ArrayList<String> database_Name = new ArrayList<>();
     private ArrayList<String> database_address = new ArrayList<>();
@@ -70,7 +70,7 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
     private View.OnClickListener btn_addTravel_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Toast toast = Toast.makeText(Act_addSpotInShowTravelPlan.this,"ok",Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(ActAddSpotInShowTravelPlan.this,"ok",Toast.LENGTH_LONG);
             toast.show();
         }
     };
@@ -78,7 +78,7 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.frg_search);
+        setContentView(R.layout.frg_search);  // 跟 Search 共用 fragment
         InitialComponent();
         InitialCitySpinner();
     }
@@ -89,9 +89,9 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
         btn_searchDB = findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
         Tablename = getIntent().getExtras().getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
-        Log.i("Act_addSpotInShowTravelPlan","onCreate Tablename :" + Tablename);
+        Log.i("ActAddSpotInShowTravelPlan","onCreate Tablename :" + Tablename);
         getDays = getIntent().getExtras().getInt("DAYS");
-        Log.i("Act_addSpotInShowTravelPlan","onCreate getDays :" + getDays);
+        Log.i("ActAddSpotInShowTravelPlan","onCreate getDays :" + getDays);
     }
 
     Spinner spinner_cityName,spinner_spotType;
@@ -101,7 +101,7 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
     private void InitialCitySpinner() {
 
         spinner_cityName = (Spinner)findViewById(R.id.spinner_cityName);
-        ArrayAdapter<String> citylist = new ArrayAdapter<>(Act_addSpotInShowTravelPlan.this,
+        ArrayAdapter<String> citylist = new ArrayAdapter<>(ActAddSpotInShowTravelPlan.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 cityNameArray);
         spinner_cityName.setAdapter(citylist);
@@ -118,7 +118,7 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
         });
 
         spinner_spotType = (Spinner)findViewById(R.id.spinner_spotType);
-        ArrayAdapter<String> cityTypelist = new ArrayAdapter<>(Act_addSpotInShowTravelPlan.this,
+        ArrayAdapter<String> cityTypelist = new ArrayAdapter<>(ActAddSpotInShowTravelPlan.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 cityTypeArray);
         spinner_spotType.setAdapter(cityTypelist);
@@ -154,13 +154,13 @@ public class Act_addSpotInShowTravelPlan extends AppCompatActivity {
     private  void InitialDatabase(){
     }
     //  RecyclerView : 大樓 , RecycleViewAdapter : 管理員 , ArrayList 載入的資料 : 住戶
-    C_TravelAddSpotInShowRecycleViewAdapter adapter;
+    C_MemberAddSpotInShowRecycleViewAdapter adapter;
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_TravelAddSpotInShowRecycleViewAdapter(Act_addSpotInShowTravelPlan.this, database_Name, database_address, mySpotToldescribe, database_lat, database_long, getDays, Tablename);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        adapter = new C_MemberAddSpotInShowRecycleViewAdapter(ActAddSpotInShowTravelPlan.this, database_Name, database_address, mySpotToldescribe, database_lat, database_long, getDays, Tablename);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(Act_addSpotInShowTravelPlan.this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
+        recyclerView.setLayoutManager(new LinearLayoutManager(ActAddSpotInShowTravelPlan.this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();
     }
 

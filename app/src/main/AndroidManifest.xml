@@ -33,10 +33,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.Member.ActMySchedule"></activity>
-        <activity android:name=".ui.Travel.Act_addSpotInShowTravelPlan" />
+        <activity android:name=".ui.Member.ActAddSpotInShowTravelPlan" />
         <activity android:name=".ActRecycle" />
-        <activity android:name=".ui.Travel.ActAddTravelPlan" />
-        <activity android:name=".ui.Travel.ActShowTravelPlan" />
+        <activity android:name=".ui.Member.ActAddTravelPlan" />
+        <activity android:name=".ui.Member.ActMemberShowTravelPlan" />
+        <activity android:name=".ui.Member.ActMyCollect"/>
         <activity
             android:name=".ActEntrance"
             android:exported="true"> <!-- android:name = ".xxxx"  Activity name -->

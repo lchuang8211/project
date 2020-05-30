@@ -199,6 +199,7 @@ public class ActEntrance extends AppCompatActivity {
                 cbox_Autosignin.setChecked(true);
                 Toast toast = Toast.makeText(ActEntrance.this, "自動登入中...", Toast.LENGTH_LONG);
                 String password = setAccount.getString(C_Dictionary.TABLE_SCHEMA_PASSWORD,"");
+                edtxt_passwd.setText("11111111111111");
                 Bundle bundle = new Bundle();
                 bundle.putString(C_Dictionary.USER_ACCOUNT, account );
                 bundle.putString(C_Dictionary.USER_PASSWORD, password );

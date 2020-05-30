@@ -40,6 +40,12 @@ public class C_MySQLite extends SQLiteOpenHelper {
     private String RememberMyAccount = "CREATE TABLE IF NOT EXISTS "+ C_Dictionary.TABLE_NAME_ACCOUNT_INFORMATION
             +"( "+ C_Dictionary.TABLE_SCHEMA_ACCOUNT +C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TABLE_SCHEMA_PASSWORD+C_Dictionary.VALUE_TYPE_STRING+" )";
+
+    private String SQL_MY_COLLECTION_TABLE = "CREATE TABLE IF NOT EXISTS " + C_Dictionary.MY_COLLECTION_TABLE
+            +" ( "+ C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + " )";
     public C_MySQLite(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -54,6 +60,7 @@ public class C_MySQLite extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_TRAVEL_LIST);
         db.execSQL(RememberMyAccount);
+        db.execSQL(SQL_MY_COLLECTION_TABLE);
         Log.i("C_MySQLite onCreate ", "RememberMyAccount :"+ RememberMyAccount);
         Log.i("C_MySQLite onCreate ", "SQL_CREATE_TRAVEL_LIST :"+ SQL_CREATE_TRAVEL_LIST);
 //        Log.i("C_MySQLite ", "Version this db is :"+this.db.getVersion());
@@ -63,6 +70,7 @@ public class C_MySQLite extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_CREATE_TRAVEL_LIST);
         db.execSQL(RememberMyAccount);
+        db.execSQL(SQL_MY_COLLECTION_TABLE);
         onCreate(db);
     }
 }

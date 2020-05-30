@@ -82,4 +82,6 @@ public class C_Dictionary {
     public static final String TABLE_SCHEMA_ACCOUNT = "TABLE_SCHEMA_ACCOUNT";
     public static final String TABLE_NAME_ACCOUNT_INFORMATION = "TABLE_NAME_ACCOUNT_INFORMATION";
 
+    public static final String PUBLIC_TRAVEL_PLAN_TO_CLOUD = "PUBLIC_TRAVEL_PLAN_TO_CLOUD";
+    public static final String MY_COLLECTION_TABLE = "MY_COLLECTION_TABLE";
 }

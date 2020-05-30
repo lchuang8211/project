@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
-public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_TravelShowPlanRecycleViewAdapter.ViewHolder>{
+public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_MemberShowPlanRecycleViewAdapter.ViewHolder>{
 
     View itemView;
     private static final  String TAG = "C_TravelShowPlanRecycleViewAdapter";
@@ -47,7 +46,7 @@ public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_T
     Uri uri = Uri.fromFile(file);  //建立超連結
 
 
-    public C_TravelShowPlanRecycleViewAdapter(Context context,  ArrayList<Integer> showSpotDate, ArrayList<Integer> showSpotQueue, ArrayList<String> showSpotName, ArrayList<Double> showSpotLatitude, ArrayList<Double> showSpotLongitude, ArrayList<String> showSpotDescrbe, String planName, int WhichDay) {
+    public C_MemberShowPlanRecycleViewAdapter(Context context, ArrayList<Integer> showSpotDate, ArrayList<Integer> showSpotQueue, ArrayList<String> showSpotName, ArrayList<Double> showSpotLatitude, ArrayList<Double> showSpotLongitude, ArrayList<String> showSpotDescrbe, String planName, int WhichDay) {
         this.showSpotDate = showSpotDate;
         this.showSpotQueue = showSpotQueue;
         this.showSpotName = showSpotName;
@@ -62,7 +61,7 @@ public class C_TravelShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_T
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_travel_show_plan, parent, false);  //嵌入 RecycleView 的 list item XML
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_member_show_plan, parent, false);  //嵌入 RecycleView 的 list item XML
         holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }

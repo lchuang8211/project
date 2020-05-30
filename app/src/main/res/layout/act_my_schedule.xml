@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="?android:attr/windowBackground"
+    android:padding="15sp">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10sp">
+        <Button
+            android:id="@+id/btn_addMyPlan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建立旅遊計畫m"
+            android:textSize="20sp"/>
 
-    <TextView
-        android:text="Text Schedule"
-        android:id="@+id/txt_Schedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <com.google.android.material.circularreveal.CircularRevealFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_view_member"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </com.google.android.material.circularreveal.CircularRevealFrameLayout>
 </LinearLayout>

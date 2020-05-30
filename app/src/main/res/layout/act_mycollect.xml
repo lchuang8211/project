@@ -2,14 +2,15 @@
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
-        android:id="@+id/txt_signupAccount"
-        android:gravity="center"
-        android:text="text"
-        android:textSize="30sp"
+        android:text=" 1231564231 my collext "
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcle_mycollect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

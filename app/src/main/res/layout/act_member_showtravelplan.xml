@@ -39,7 +39,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_weight="1"
-        android:id="@+id/travel_planInfo_RecyclerView"
+        android:id="@+id/mamber_actshowtravelplan_planInfo_RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

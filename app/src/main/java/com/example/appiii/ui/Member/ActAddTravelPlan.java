@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 
 import android.content.ContentValues;
@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import android.icu.util.Calendar;
 import android.widget.Toast;
@@ -148,7 +147,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_travellist_add);
+        setContentView(R.layout.act_member_add_travelplan_list_add);  // 建立行程表的 Activity
         setTitle("建立行程表");
         InitialComponent();
     }

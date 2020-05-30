@@ -109,16 +109,16 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 //                if (urlConnection.getResponseCode() == 200) { /* do something */}
             getinputStream = urlConnection.getInputStream();   //接收初始化 response //Step 6 : 一定要接收 Response 才算成功
 //                urlConnection.getInputStream();
-            Log.i("JSON", "getinputStream  :" + getinputStream);
+//            Log.i("JSON", "getinputStream  :" + getinputStream);
             BufferedReader reader = new BufferedReader(new InputStreamReader(getinputStream));
             String line;
             builder = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
-            Log.i("JSON", "respone builder :" + builder.toString());
+//            Log.i("JSON", "respone builder :" + builder.toString());
             jsonArrayfromPHP = new JSONArray(builder.toString());
-            Log.i("JSON", "jsonArrayfromPHP . toS : " + jsonArrayfromPHP.toString());
+//            Log.i("JSON", "jsonArrayfromPHP . toS : " + jsonArrayfromPHP.toString());
             reader.close();
             urlConnection.disconnect();
 //            Log.i("JSON", "disconnect urlConnection");
@@ -138,7 +138,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     protected void onPostExecute(String result)
     {
         super.onPostExecute(result);
-        Log.i("JSON","進入 onPostExecute : "+result);
+//        Log.i("JSON","進入 onPostExecute : "+result);
 
         try {
             for (int i = 0; i < jsonArrayfromPHP.length(); i++) {
@@ -148,13 +148,13 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 //                    Log.i("C_GetDataFromDatabase","empty 沒有資料 :"+jsonfromPHP.getBoolean("empty"));
 //                    return;
 //                }
-                    Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
+//                    Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
                     ctiyName = jsonfromPHP.getString("Name");
                     SpotAddress = jsonfromPHP.getString("Add");
                     SpotToldescribe = jsonfromPHP.getString("Toldescribe");
                     SpotLocation_latitude = jsonfromPHP.getString("Py");
                     SpotLocation_longitude = jsonfromPHP.getString("Px");
-                    Log.i("JSON", ctiyName + ":" + SpotAddress);
+//                    Log.i("JSON", ctiyName + ":" + SpotAddress);
 
                     getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(), SpotAddress.trim(), SpotToldescribe.trim(),
                             Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()));   //Call function

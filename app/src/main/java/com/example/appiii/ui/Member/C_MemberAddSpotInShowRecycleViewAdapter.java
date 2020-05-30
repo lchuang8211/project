@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -21,10 +21,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
-public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapter<C_TravelAddSpotInShowRecycleViewAdapter.ViewHolder>{
+public class C_MemberAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapter<C_MemberAddSpotInShowRecycleViewAdapter.ViewHolder>{
 
     View itemView;
     private static final  String TAG = "RecyclerViewAdapter";
@@ -50,7 +50,7 @@ public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
 
 
 
-    public C_TravelAddSpotInShowRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude, int getDays, String Tablename) {
+    public C_MemberAddSpotInShowRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude, int getDays, String Tablename) {
         this.mySpotName = mySpotName;
         this.mySpotAddress = mySpotAddress;
         this.mySpotToldescribe = mySpotToldescribe;
@@ -75,6 +75,14 @@ public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
         Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
+        holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ mySpotName.get(position) +"'",null);
+        if(holder.cursorForBind.getCount()==0){
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_64px ).into(holder.img_Collect);
+        }else{
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
+        }
+
+
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
         holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
         Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
@@ -90,11 +98,19 @@ public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
         CircleImageView getItem_image;
         TextView txt_Name_Address;
         Button getbtn_addTravel;
+        CircleImageView img_Collect;
+        C_MySQLite SQLite_helper;
+        SQLiteDatabase sqLiteDB;
+        Cursor cursorForBind;
         Button btn_finish;
 //        Button btn_getItem;
         RelativeLayout getParentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            SQLite_helper = new C_MySQLite(mContext);  // helper
+            sqLiteDB = SQLite_helper.getReadableDatabase();
+            img_Collect = itemView.findViewById(R.id.img_Collect);
             getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
@@ -152,11 +168,37 @@ public class C_TravelAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
                 }
             });
 
-
+            img_Collect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    C_MySQLite SQLite_helper = new C_MySQLite(mContext);
+                    SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
+                    Cursor cursor;
+                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
+                            +" from "+C_Dictionary.MY_COLLECTION_TABLE
+                            +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+mySpotName.get(getAdapterPosition()) +"'"  ,null);
+                    Log.i("cursor","cursor : "+cursor.getCount());
+                    if (cursor.getCount()==0){
+                        Boolean changed_collat = true;
+                        ContentValues values = new ContentValues();
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                        sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
+                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
+                    }
+                    if (cursor.getCount()==1){
+                        sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{mySpotName.get(getAdapterPosition())});
+                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
+                        return;
+                    }
+                }
+            });
 
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
 //            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);  // 與 Search 共用 不改
             // RelativeLayout.XML 的 layout 的 Layout ID
             // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
             // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版

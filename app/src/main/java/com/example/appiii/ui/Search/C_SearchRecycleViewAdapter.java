@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
@@ -72,7 +73,14 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
-//        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
+
+        holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ mySpotName.get(position) +"'",null);
+        if(holder.cursorForBind.getCount()==0){
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_64px ).into(holder.img_Collect);
+        }else{
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
+        }
+
         holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
         Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
     }
@@ -84,14 +92,24 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
-        CircleImageView getItem_image;
+        CircleImageView getItem_image,img_Collect;
         TextView txt_Name_Address;
         Button getbtn_addTravel;
-
+        Cursor cursorForBind;
+        C_MySQLite helper;
+        SQLiteDatabase sqLiteDB;
 //        Button btn_getItem;
         RelativeLayout getParentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            getItem_image = itemView.findViewById(R.id.getCirlceImage);
+            getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            // RelativeLayout.XML 的 layout 的 Layout ID
+            // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
+            helper = new C_MySQLite(mContext);
+            sqLiteDB = helper.getWritableDatabase();
+            img_Collect = itemView.findViewById(R.id.img_Collect);
             getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
@@ -130,6 +148,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                 public void onClick(View v) {
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
+
                     values = new ContentValues();  // insert 用
                     SQLite_helper = new C_MySQLite(mContext);  // helper
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
@@ -209,15 +228,36 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 //                    toast.show();
                 }
             });
+            img_Collect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    C_MySQLite SQLite_helper = new C_MySQLite(mContext);
+                    SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
+                    Cursor cursor;
+                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
+                            +" from "+C_Dictionary.MY_COLLECTION_TABLE
+                            +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+mySpotName.get(getAdapterPosition()) +"'"  ,null);
+                    Log.i("cursor","cursor : "+cursor.getCount());
+                    if (cursor.getCount()==0){
+                        Boolean changed_collat = true;
+                        ContentValues values = new ContentValues();
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                        sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
+                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
+                    }
+                    if (cursor.getCount()==1){
+                        sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{mySpotName.get(getAdapterPosition())});
+                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
+                        return;
+                    }
+                }
+            });
 
 
 
-            getItem_image = itemView.findViewById(R.id.getCirlceImage);
-//            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
-            // RelativeLayout.XML 的 layout 的 Layout ID
-            // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
-            // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
 
 
         }

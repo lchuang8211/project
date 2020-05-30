@@ -1,9 +1,12 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -12,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +34,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
-public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRecycleViewAdapter.ViewHolder>{
+public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRecycleViewAdapter.ViewHolder>{
     private ArrayList<String> myPlanName = new ArrayList<>();
     private ArrayList<String> myPlanDate = new ArrayList<>();
     private ArrayList<Integer> myPlanTotalDay = new ArrayList<>();
@@ -40,8 +45,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
 
 
 
-
-    public C_TravelRecycleViewAdapter(Context context, ArrayList<String> myPlanName, ArrayList<String> myPlanDate, ArrayList<Integer> myPlanTotalDay) {
+    public C_MemberRecycleViewAdapter(Context context, ArrayList<String> myPlanName, ArrayList<String> myPlanDate, ArrayList<Integer> myPlanTotalDay) {
         this.myPlanName = myPlanName;
         this.myPlanDate = myPlanDate;
         this.myPlanTotalDay = myPlanTotalDay;
@@ -52,7 +56,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  // part 1 : 建立 Holder
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_travel, parent, false);  //嵌入 RecycleView 的 list item XML
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_list_member_myschedule, parent, false);  //嵌入 RecycleView 的 list item XML
         holder = new ViewHolder(view);  // 讓 holder 去控制 RecycleView
         return holder;
     }
@@ -68,7 +72,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
         Log.i(TAG, "onBindViewHolder: myPlanTotalDay :"+ myPlanTotalDay.size());
 
         holder.txt_Plan_Name.setText(myPlanName.get(position));
-        holder.txt_Plan_date.setText(myPlanDate.get(position) +" "+myPlanTotalDay.get(position)+" 天");
+//        holder.txt_Plan_date.setText(myPlanDate.get(position) +" "+myPlanTotalDay.get(position)+" 天");
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 //        holder.txt_Name_Address.setText(myPlanName.get(position));
         Log.i(TAG, "onBindViewHolder: myPlanName.get(position): " + myPlanName.get(position));
@@ -82,6 +86,8 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
+
+
         Cursor cursor;
         C_MySQLite SQLite_helper;
         SQLiteDatabase sqLiteDatabase;
@@ -89,13 +95,32 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
         CircleImageView getItem_image;
         TextView txt_Plan_date;
         TextView txt_Plan_Name;
+        CheckBox cbox_pushToCloud;
         RelativeLayout getParentLayout;
+        SharedPreferences sharedPreferences;
+        SharedPreferences.Editor write;
         public ViewHolder(@NonNull View itemView) {   // 設置 item onclisk 定義 UI的動作
             super(itemView);
+
+            getItem_image = itemView.findViewById(R.id.getCirlceImage);
+            getParentLayout = itemView.findViewById(R.id.getReLativeLayoutID_act_myschedule);
+            // RelativeLayout.XML 的 layout 的 Layout ID
+            // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
+            // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
+
+            sharedPreferences = mContext.getSharedPreferences("public_travelPlan", Activity.MODE_PRIVATE);
+            write = sharedPreferences.edit();
+            Boolean publicToClound = sharedPreferences.getBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,false);
+            Log.i("publicToClound","publicToClound : "+publicToClound);
             txt_Plan_date = itemView.findViewById(R.id.txt_Plan_info);
             txt_Plan_Name = itemView.findViewById(R.id.txt_Spot_Name);
+            cbox_pushToCloud = itemView.findViewById(R.id.cbox_pushToCloud);
+            if(publicToClound){
+                cbox_pushToCloud.setChecked(true);
+            }else{
+                cbox_pushToCloud.setChecked(false);
+            }
             layout = (LinearLayout) itemView.findViewById(R.id.layout_showPlan);
-
             layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -110,7 +135,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
                             sqLiteDatabase = SQLite_helper.getReadableDatabase();
                             String newTablename = "["+ C_Dictionary.CREATE_TABLE_HEADER + myPlanName.get( getAdapterPosition())+"]";
                             sqLiteDatabase.delete(C_Dictionary.TRAVEL_LIST_Table_Name,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[] {myPlanName.get( getAdapterPosition())});
-                            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+newTablename);
+                            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + newTablename );
                             myPlanName.remove( getAdapterPosition()) ;
                             myPlanDate.remove( getAdapterPosition());
                             myPlanTotalDay.remove( getAdapterPosition());
@@ -127,7 +152,7 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
             layout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ActShowTravelPlan.class);
+                    Intent intent = new Intent(mContext, ActMemberShowTravelPlan.class);
                     Bundle bundle = new Bundle();
                     SQLite_helper = new C_MySQLite(mContext);
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
@@ -147,11 +172,6 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
                     }
                     if (empty==1){
                         Log.i("on click","layout : empty :" + empty);
-//                        cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from " + newTablename +" group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
-//                        cursor.moveToLast();
-//                        int maxDay = cursor.getInt(0);
-//                        Log.i("on click","layout : maxDay :" + maxDay);
-//                        bundle.putInt(C_Dictionary.TRAVEL_MAX_PLAN_DAY, maxDay);
                         bundle.putBoolean(C_Dictionary.TRAVEL_PLAN_IS_EMPTY, false );
                         bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, myPlanName.get( getAdapterPosition()) );
                         Log.i("on click","layout : myPlanName.get( getAdapterPosition()) :" + myPlanName.get( getAdapterPosition()));
@@ -160,17 +180,32 @@ public class C_TravelRecycleViewAdapter extends RecyclerView.Adapter<C_TravelRec
                     }
 
 
-//                    Toast.makeText(v.getContext(),"click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();
-//                    Log.i(TAG, "onClick: ViewHolder on getAdapterPosition() :"+ getAdapterPosition());
                 }
             });
 
+            cbox_pushToCloud.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                ContentValues contentValues = new ContentValues();
 
-            getItem_image = itemView.findViewById(R.id.getCirlceImage);
-            getParentLayout = itemView.findViewById(R.id.getTravelForParent_Layout);
-            // RelativeLayout.XML 的 layout 的 Layout ID
-            // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
-            // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SQLite_helper = new C_MySQLite(mContext);
+                    sqLiteDatabase = SQLite_helper.getReadableDatabase();
+                    if (isChecked){
+                        write.putBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,true).commit();
+                        contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
+                        Log.i("勾","sqLiteDatabase :"+ myPlanName.get(getAdapterPosition()));
+                        sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{ myPlanName.get( getAdapterPosition()) } );
+                        Log.i("勾","sqLiteDatabase :"+sqLiteDatabase);
+                    }else{
+                        write.putBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,false).commit();
+                        contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
+                        Log.i("沒勾","sqLiteDatabase :"+ myPlanName.get(getAdapterPosition()));
+                        sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[] { myPlanName.get( getAdapterPosition()) });
+                        Log.i("沒勾","sqLiteDatabase :"+sqLiteDatabase);
+                    }
+                }
+            });
+
 
         }
     }

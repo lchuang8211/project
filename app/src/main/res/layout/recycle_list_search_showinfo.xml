@@ -34,12 +34,23 @@
         android:textSize="15sp" />
 
 </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_Collect"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_gravity="center_vertical"
+        />
     <Button
         android:id="@+id/getbtn_addTravel"
         android:text="加入行程"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"/>
-
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </LinearLayout>

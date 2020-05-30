@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
@@ -44,8 +45,10 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
     private ArrayList<Double> mySpotLatitude = new ArrayList<>();
     private ArrayList<Double> mySpotLongitude = new ArrayList<>();
     private Context mContext;
-    File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\tedros.png");  // 開啟本地檔案
-    Uri uri = Uri.fromFile(file);  //建立超連結
+//    File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\heart_64px.png");  // 開啟本地檔案
+//    File file_fill = new File(mContext.getFilesDir(), "heart_fill_64px.png");  // 開啟本地檔案
+//    Uri uri = Uri.fromFile(file);  //建立超連結
+//    Uri uri_fill = Uri.fromFile(file_fill);  //建立超連結
 
 
 
@@ -72,7 +75,15 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
         Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
-//        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
+
+        holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ mySpotName.get(position) +"'",null);
+        if(holder.cursorForBind.getCount()==0){
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_64px ).into(holder.img_Collect);
+        }else{
+            Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
+        }
+
+//      Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
         holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
         Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
     }
@@ -85,13 +96,22 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
         CircleImageView getItem_image;
+        CircleImageView img_Collect;
         TextView txt_Name_Address;
         Button getbtn_addTravel;
         RelativeLayout getParentLayout;   // recyclerView 的 使用的 RelativeLayout 排版
+        C_MySQLite SQLiteHHHH;
+        SQLiteDatabase sqLiteDB;
+        Cursor cursorForBind;
 //        Button btn_getItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            SQLiteHHHH = new C_MySQLite(mContext);
+            sqLiteDB = SQLiteHHHH.getWritableDatabase();
+            getParentLayout = itemView.findViewById(R.id.getHotParent_Layout);
+            getItem_image = itemView.findViewById(R.id.getCirlceImage);
+            img_Collect = itemView.findViewById(R.id.img_Collect);
             getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
@@ -128,6 +148,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
                 C_MySQLite SQLite_helper;
                 SQLiteDatabase sqLiteDatabase;
                 String[] planName;
+
                 @Override
                 public void onClick(View v) {
 //                    Bundle bundle = new Bundle();
@@ -197,11 +218,37 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
                 }
             });
 
+            img_Collect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    C_MySQLite SQLite_helper = new C_MySQLite(mContext);
+                    SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
+                    Cursor cursor;
+                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
+                                +" from "+C_Dictionary.MY_COLLECTION_TABLE
+                                +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+mySpotName.get(getAdapterPosition()) +"'"  ,null);
+                    Log.i("cursor","cursor : "+cursor.getCount());
+                    if (cursor.getCount()==0){
+                        Boolean changed_collat = true;
+                        ContentValues values = new ContentValues();
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                        sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
+                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
+                    }
+                    if (cursor.getCount()==1){
+                            sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{mySpotName.get(getAdapterPosition())});
+                            Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
+                            return;
+                        }
+                    }
+            });
 
 
-            getItem_image = itemView.findViewById(R.id.getCirlceImage);
-//            getItem_txt = itemView.findViewById(R.id.getItem_txt);
-            getParentLayout = itemView.findViewById(R.id.getHotParent_Layout);
+
+
 
         }
     }
