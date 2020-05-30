@@ -2,7 +2,7 @@
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:text=" 1231564231 my collext "
@@ -12,6 +12,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcle_mycollect"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

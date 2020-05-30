@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RecyclerView 的 list 配置 -->
+<LinearLayout android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/getMyCollect_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="?android:attr/selectableItemBackground"
+
+        android:padding="10sp">
+        <!-- CircleImageView 圓形元件 -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/favorite_24px"
+            android:id="@+id/img_StarCollect"
+            android:layout_width="50sp"
+            android:layout_height="50sp"/>
+        <TextView
+            android:layout_marginLeft="8sp"
+            android:layout_centerVertical="true"
+            android:id="@+id/txt_Spot_Name"
+            android:layout_toRightOf="@+id/img_StarCollect"
+            android:layout_toLeftOf="@+id/btn_deleteCollect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
+        <Button
+            android:background="@drawable/trash"
+            android:layout_centerVertical="true"
+            android:id="@+id/btn_deleteCollect"
+            android:layout_alignParentRight="true"
+            android:layout_width="40sp"
+            android:layout_height="40sp"/>
+    </RelativeLayout>
+</LinearLayout>
