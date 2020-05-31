@@ -43,16 +43,8 @@
             android:text="設定"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/edtxt_createTableName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/show_sqlite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="show_sqlite"
-            />
+
+
 
     </LinearLayout>
 </LinearLayout>

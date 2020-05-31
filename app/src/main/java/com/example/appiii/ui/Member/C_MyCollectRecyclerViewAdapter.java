@@ -1,5 +1,6 @@
 package com.example.appiii.ui.Member;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,7 +44,7 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
 
     @Override
     public void onBindViewHolder(@NonNull C_MyCollectRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.txt_Spot_Name.setText(Collect_Node_Name.get(position));
+        holder.txt_Node_Name.setText(Collect_Node_Name.get(position));
     }
 
     @Override
@@ -54,25 +55,26 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout getRelativeLayout;
-        TextView txt_Spot_Name;
+        TextView txt_Node_Name;
         Button btn_deleteCollect;
         C_MySQLite helper;
         SQLiteDatabase SQLiteDB;
         Cursor cursor;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txt_Spot_Name = itemView.findViewById(R.id.txt_Spot_Name);
+            txt_Node_Name = itemView.findViewById(R.id.txt_Spot_Name);
             btn_deleteCollect = itemView.findViewById(R.id.btn_deleteCollect);
             getRelativeLayout = itemView.findViewById(R.id.getMyCollect_layout);
-
             helper = new C_MySQLite(mContext);
             SQLiteDB = helper.getReadableDatabase();
-
-
-            txt_Spot_Name.setOnClickListener(new View.OnClickListener() {
+            txt_Node_Name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(Collect_Node_Name.get(getAdapterPosition()));
+                    builder.setMessage("概述:\n\n"+Collect_Node_Describe.get(getAdapterPosition()));
+                    builder.setNegativeButton("取消",null);
+                    builder.setPositiveButton("查看地圖",null).create().show();
                 }
             });
             btn_deleteCollect.setOnClickListener(new View.OnClickListener() {

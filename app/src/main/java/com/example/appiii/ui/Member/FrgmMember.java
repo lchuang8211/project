@@ -3,6 +3,7 @@ package com.example.appiii.ui.Member;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -79,12 +80,11 @@ public class FrgmMember extends Fragment {
         InitialComponent();
         switch(budle.getString(C_Dictionary.USER_STATUS)){
             case C_Dictionary.USER_STATUS_MEMBER:
-                memberStatus.setText("你已是會員");
+                memberStatus.setText( sharedPreferences.getString(C_Dictionary.USER_NAME_SETTING,"還沒有建立名稱") );
                 break;
             case C_Dictionary.USER_STATUS_VISITORS:
                 memberStatus.setText("你還不是會員");
                 break;
-
         }
         return inflatedView_Member;
     }
@@ -92,21 +92,22 @@ public class FrgmMember extends Fragment {
     private void InitialComponent() {
         memberStatus = inflatedView_Member.findViewById(R.id.memberStatus);
         myHeadShot = inflatedView_Member.findViewById(R.id.myHeadShot);
-        edtxt_createTableName = inflatedView_Member.findViewById(R.id.edtxt_createTableName);
         btn_mySetting = inflatedView_Member.findViewById(R.id.btn_mySetting);
         btn_mySetting.setOnClickListener(btn_mySetting_click);
         btn_mySchedule = inflatedView_Member.findViewById(R.id.btn_mySchedule);
         btn_mySchedule.setOnClickListener(btn_mySchedule_click);
         btn_myCollect = inflatedView_Member.findViewById(R.id.btn_myCollect);
         btn_myCollect.setOnClickListener(btn_myCollect_click);
-    }
+        sharedPreferences = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
 
+    }
+    SharedPreferences sharedPreferences;
     CircleImageView myHeadShot;
     ContentValues values;
     C_MySQLite SQLite_helper;  // helper
-    SQLiteDatabase sqLiteDatabase, sqLiteDatabase_write;
+    SQLiteDatabase sqLiteDatabase;
+
     TextView memberStatus;
-    EditText edtxt_createTableName;
     Button btn_mySetting;
     Button btn_mySchedule;
     Button btn_myCollect;

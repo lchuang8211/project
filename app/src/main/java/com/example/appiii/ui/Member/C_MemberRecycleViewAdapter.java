@@ -1,6 +1,5 @@
 package com.example.appiii.ui.Member;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -72,6 +70,24 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
         Log.i(TAG, "onBindViewHolder: myPlanTotalDay :"+ myPlanTotalDay.size());
 
         holder.txt_Plan_Name.setText(myPlanName.get(position));
+
+        holder.cursorForBind = holder.sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY+" from "+C_Dictionary.TRAVEL_LIST_Table_Name
+                +" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"='"+myPlanName.get(position)+"'",null);
+//        Log.i(TAG, "onBindViewHolder: "+ holder.cursor.getInt(0));
+        if(holder.cursorForBind.moveToNext()){
+            if (holder.cursorForBind.getInt(0)==1) {
+                holder.cbox_pushToCloud.setChecked(true);
+            }
+            else
+                holder.cbox_pushToCloud.setChecked(false);
+        }
+
+//        if(cursor){
+//            cbox_pushToCloud.setChecked(true);
+//        }else{
+//            cbox_pushToCloud.setChecked(false);
+//        }
+
 //        holder.txt_Plan_date.setText(myPlanDate.get(position) +" "+myPlanTotalDay.get(position)+" 天");
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 //        holder.txt_Name_Address.setText(myPlanName.get(position));
@@ -88,7 +104,7 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
 
 
-        Cursor cursor;
+        Cursor cursor, cursorForBind;
         C_MySQLite SQLite_helper;
         SQLiteDatabase sqLiteDatabase;
         LinearLayout layout;
@@ -101,25 +117,18 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
         SharedPreferences.Editor write;
         public ViewHolder(@NonNull View itemView) {   // 設置 item onclisk 定義 UI的動作
             super(itemView);
-
+            SQLite_helper = new C_MySQLite(mContext);
+            sqLiteDatabase = SQLite_helper.getReadableDatabase();
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
             getParentLayout = itemView.findViewById(R.id.getReLativeLayoutID_act_myschedule);
             // RelativeLayout.XML 的 layout 的 Layout ID
             // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
             // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
 
-            sharedPreferences = mContext.getSharedPreferences("public_travelPlan", Activity.MODE_PRIVATE);
-            write = sharedPreferences.edit();
-            Boolean publicToClound = sharedPreferences.getBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,false);
-            Log.i("publicToClound","publicToClound : "+publicToClound);
             txt_Plan_date = itemView.findViewById(R.id.txt_Plan_info);
             txt_Plan_Name = itemView.findViewById(R.id.txt_Spot_Name);
             cbox_pushToCloud = itemView.findViewById(R.id.cbox_pushToCloud);
-            if(publicToClound){
-                cbox_pushToCloud.setChecked(true);
-            }else{
-                cbox_pushToCloud.setChecked(false);
-            }
+
             layout = (LinearLayout) itemView.findViewById(R.id.layout_showPlan);
             layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -141,7 +150,6 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
                             myPlanTotalDay.remove( getAdapterPosition());
                             notifyItemRemoved( getAdapterPosition() );
                             notifyDataSetChanged();
-//                            notifyItemRangeInserted(0, myPlanName.size());
                         }
                     }).create().show();  // 右邊
 
@@ -185,23 +193,31 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
 
             cbox_pushToCloud.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 ContentValues contentValues = new ContentValues();
-
+                Bundle bundle ;
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                     SQLite_helper = new C_MySQLite(mContext);
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
                     if (isChecked){
-                        write.putBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,true).commit();
                         contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
                         Log.i("勾","sqLiteDatabase :"+ myPlanName.get(getAdapterPosition()));
                         sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{ myPlanName.get( getAdapterPosition()) } );
                         Log.i("勾","sqLiteDatabase :"+sqLiteDatabase);
+                        bundle = new Bundle();
+                        // 行程名稱/使用者帳號/使用者名稱
+                        bundle.putBoolean(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,true);
+                        bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, myPlanName.get( getAdapterPosition()));  //行程名稱
+                        new C_AsyncPublicPlan(mContext).execute(bundle);
                     }else{
-                        write.putBoolean(C_Dictionary.PUBLIC_TRAVEL_PLAN_TO_CLOUD,false).commit();
+                        Log.i("cbox_pushToCloud","create : 沒勾 :");
                         contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
-                        Log.i("沒勾","sqLiteDatabase :"+ myPlanName.get(getAdapterPosition()));
                         sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[] { myPlanName.get( getAdapterPosition()) });
                         Log.i("沒勾","sqLiteDatabase :"+sqLiteDatabase);
+                        bundle = new Bundle();
+                        bundle.putBoolean(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,false);
+                        bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, myPlanName.get( getAdapterPosition()));  //行程名稱
+                        new C_AsyncPublicPlan(mContext).execute(bundle);
                     }
                 }
             });

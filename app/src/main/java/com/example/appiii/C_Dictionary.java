@@ -45,8 +45,14 @@ public class C_Dictionary {
     public final static String SEARCH_SPOT_INFO_COPY = "SEARCH_SPOT_INFO_COPY";
 
 
-
+    //建立欄位的資料型太
     //NULL、INTEGER、REAL（浮點數）、TEXT(字串)和 BLOB(布林)
+    public static final String VALUE_TYPE_DOUBLE = " REAL NOT NULL";
+    public static final String VALUE_TYPE_INT = " INT NOT NULL";
+    public static final String VALUE_TYPE_STRING = " TEXT NOT NULL";
+    public static final String VALUE_TYPE_BLOB = " BLOB NOT NULL";
+    public static final String VALUE_COMMA_SEP = ", ";
+
     public static final String TRAVEL_LIST_Table_Name = "TRAVEL_LIST_Table_Name";
     public static final String TRAVEL_LIST_SCHEMA_PLAN_NAME = "TRAVEL_LIST_SCHEMA_PLAN_NAME";
     public static final String CREATE_TABLE_if_not_exists = "CREATE TABLE IF NOT EXISTS ";
@@ -59,15 +65,9 @@ public class C_Dictionary {
     public static final String TABLE_SCHEMA_NODE_NAME = "TABLE_SCHEMA_NODE_NAME";
     public static final String TABLE_SCHEMA_NODE_LONGITUDE = "TABLE_SCHEMA_NODE_LONGITUDE";
     public static final String TABLE_SCHEMA_NODE_LATITUDE = "TABLE_SCHEMA_NODE_LATITUDE";
-    public static final String VALUE_TYPE_DOUBLE = " REAL NOT NULL";
-    public static final String VALUE_TYPE_INT = " INT NOT NULL";
-    public static final String VALUE_TYPE_STRING = " TEXT NOT NULL";
-    public static final String VALUE_TYPE_BLOB = " BLOB NOT NULL";
-    public static final String VALUE_COMMA_SEP = ", ";
+
     public static final String CREATE_TABLE_HEADER = "plan_";  // 建 Plan 時附加的 Table 名稱
-
-
-    public static final String TRAVEL_SCHEMA_TABLE_VISIBILITY = "TRAVEL_SCHEMA_TABLE_VISIBILITY";
+    public static final String TRAVEL_SCHEMA_TABLE_VISIBILITY = "TRAVEL_SCHEMA_TABLE_VISIBILITY";  // 紀錄是否有公開行程表
 
     public static final String TABLE_SCHEMA_id = "_id";
     public static final int TRAVEL_ADD_PLAN_REQUEST_CODE = 301;  // travel activity for add plan
@@ -78,10 +78,18 @@ public class C_Dictionary {
     public static final String TABLE_SCHEMA_NODE_DESCRIBE = "TABLE_SCHEMA_NODE_DESCRIBE";
 
     public static final String TABLE_SCHEMA_PASSWORD = "TABLE_SCHEMA_PASSWORD";
-
     public static final String TABLE_SCHEMA_ACCOUNT = "TABLE_SCHEMA_ACCOUNT";
     public static final String TABLE_NAME_ACCOUNT_INFORMATION = "TABLE_NAME_ACCOUNT_INFORMATION";
 
-    public static final String PUBLIC_TRAVEL_PLAN_TO_CLOUD = "PUBLIC_TRAVEL_PLAN_TO_CLOUD";
-    public static final String MY_COLLECTION_TABLE = "MY_COLLECTION_TABLE";
+
+    public static final String MY_COLLECTION_TABLE = "MY_COLLECTION_TABLE";  //我的最愛的資料表名稱
+
+    public static final String ACCOUNT_SETTING = "ACCOUNT_SETTING";   // 帳號設定的SharedPreference資料名稱
+    public static final String REMEMBER_ACCOUNT_SETTING = "RemamberAccountSetting";  // 自動記憶帳號
+    public static final String AUTO_SIGN_IN_SETTING = "AutoSignInSetting";  //自動登入+記憶帳密
+    public static final String USER_NAME_SETTING = "USER_NAME_SETTING"; // 使用者暱稱
+
+    public static final String PUBLIC_TRAVEL_PLAN_TO_CLOUD = "PUBLIC_TRAVEL_PLAN_TO_CLOUD"; // 確認使否要上傳雲端
+    public static final String PUBLIC_TO_CLOUND_SIGNAL = "PUBLIC_TO_CLOUND_SIGNAL";   //行程表 上傳雲端許可 FOR AsyncTask FOR PHP
+    public static final String CLOUND_TABLE_NAME = "CLOUND_TABLE_NAME";  //雲端上的新 table 名
 }

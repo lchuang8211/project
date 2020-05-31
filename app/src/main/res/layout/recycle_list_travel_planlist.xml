@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RecyclerView 的 list 配置 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_alignBottom="@+id/getCirlceImage"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/planlist_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="8sp">
+    <!-- CircleImageView 圓形元件 -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:id="@+id/getCirlceImage"
+        android:src="@drawable/user_64px"
+        app:civ_border_width="2sp"
+        app:civ_border_color="#222222"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/getCirlceImage">
+        <TextView
+            android:paddingLeft="5sp"
+            android:background="#B0E0E6"
+            android:id="@+id/txt_planName"
+            android:gravity="center_vertical"
+            android:text="userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"/>
+            <TextView
+                android:paddingRight="5sp"
+                android:id="@+id/txt_planDate"
+                android:text="userName"
+                android:layout_gravity="center_vertical"
+                android:gravity="right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:layout_alignParentRight="true"
+                />
+        </FrameLayout>
+
+
+<LinearLayout
+    android:layout_marginTop="30sp"
+    android:orientation="vertical"
+    android:layout_marginLeft="5sp"
+    android:layout_toRightOf="@+id/getCirlceImage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+
+        android:id="@+id/txt_userName"
+        android:text="userAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" />
+    <TextView
+
+        android:id="@+id/txt_userAccount"
+        android:text="planName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+    </LinearLayout>
+</RelativeLayout>
+
+</LinearLayout>
