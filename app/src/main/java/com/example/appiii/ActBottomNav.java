@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.appiii.ui.Member.FrgmMember;
@@ -30,37 +31,72 @@ public class ActBottomNav extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle(R.string.hotspot);
+                    fragment_member.getView().setVisibility(View.GONE);
+                    fragment_search.getView().setVisibility(View.GONE);
+                    fragment_travel.getView().setVisibility(View.GONE);
+                    fragment_gmap.getView().setVisibility(View.GONE);
                     if (fragment_home.isAdded()) {
+                        fragment_home.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_search).hide(fragment_travel).hide(fragment_gmap).hide(fragment_member)
                                 .show(fragment_home).commit();
+                    }else{
+                        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_home).commit();
                     }
                     break;
                 case R.id.navigation_search:
                     setTitle(R.string.search);
+                    fragment_home.getView().setVisibility(View.GONE);
+                    fragment_member.getView().setVisibility(View.GONE);
+                    fragment_travel.getView().setVisibility(View.GONE);
+                    fragment_gmap.getView().setVisibility(View.GONE);
                     if (fragment_search.isAdded()){
+                        fragment_search.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_home).hide(fragment_travel).hide(fragment_gmap).hide(fragment_member)
                                 .show(fragment_search).commit();
+                    }else{
+                        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_search).commit();
                     }
                     break;
                 case R.id.navigation_travel:
                     setTitle(R.string.travel);
+                    fragment_home.getView().setVisibility(View.GONE);
+                    fragment_search.getView().setVisibility(View.GONE);
+                    fragment_member.getView().setVisibility(View.GONE);
+                    fragment_gmap.getView().setVisibility(View.GONE);
                     if (fragment_travel.isAdded()){
+                        fragment_travel.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_home) .hide(fragment_search).hide(fragment_gmap).hide(fragment_member)
                                 .show(fragment_travel).commit();
+                    }else{
+                        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_travel).commit();
                     }
                     break;
                 case R.id.navigation_gmap:
                     setTitle(R.string.gmap);
+                    fragment_home.getView().setVisibility(View.GONE);
+                    fragment_search.getView().setVisibility(View.GONE);
+                    fragment_travel.getView().setVisibility(View.GONE);
+                    fragment_member.getView().setVisibility(View.GONE);
                     if (fragment_gmap.isAdded()){
+                        fragment_gmap.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_home).hide(fragment_search).hide(fragment_travel).hide(fragment_member)
                                 .show(fragment_gmap).commit();
+                    }else{
+                        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_gmap).commit();
                     }
                     break;
                 case R.id.navigation_member:
                     setTitle(R.string.member);
+                    fragment_home.getView().setVisibility(View.GONE);
+                    fragment_search.getView().setVisibility(View.GONE);
+                    fragment_travel.getView().setVisibility(View.GONE);
+                    fragment_gmap.getView().setVisibility(View.GONE);
                     if (fragment_member.isAdded()){
                         getSupportFragmentManager().beginTransaction().hide(fragment_home).hide(fragment_search).hide(fragment_travel).hide(fragment_gmap)
                                 .show(fragment_member).commit();
+                        fragment_member.getView().setVisibility(View.VISIBLE);
+                    }else{
+                        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_member).commit();
                     }
                     break;
             }

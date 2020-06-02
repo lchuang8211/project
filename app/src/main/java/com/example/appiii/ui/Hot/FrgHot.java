@@ -59,15 +59,15 @@ public class FrgHot extends Fragment {
 //        getMyGPS_Location();
         if(bundle!=null){
             getUserStatus_home = bundle.getString(C_Dictionary.USER_STATUS);
-            txt_home.setText(getUserStatus_home);
+//            txt_home.setText(getUserStatus_home);
         }
         return inflatedView;
     }
 
     private void InitialComponent() {
         InitinalSearch();
-        btn_home = inflatedView.findViewById(R.id.btn_hot);
-        txt_home = inflatedView.findViewById(R.id.txt_hotspot);
+//        btn_home = inflatedView.findViewById(R.id.btn_hot);
+//        txt_home = inflatedView.findViewById(R.id.txt_hotspot);
     }
 
     private void InitinalSearch() {

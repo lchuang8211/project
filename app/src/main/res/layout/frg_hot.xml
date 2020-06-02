@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
 
-    <TextView
-        android:id="@+id/txt_hotspot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HotSpot"
-        android:textSize="35sp"/>
-    <Button
-        android:id="@+id/btn_hot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_hot"

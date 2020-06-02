@@ -108,11 +108,10 @@ public class ActAddTravelPlan extends AppCompatActivity {
             String TableName = "plan_"+ rawTableName;
             SQLite_helper = new C_MySQLite(ActAddTravelPlan.this);
             sqLiteDatabase = SQLite_helper.getReadableDatabase();
-            String[] checkPlanName = {TableName};
-            Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",checkPlanName);
-            if (cursor.moveToNext()){
+            Cursor cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{rawTableName});
+            if (cursor.getCount()>0){
                 Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單已存在" );
-                Toast.makeText(ActAddTravelPlan.this,"表單已存在 "+edtxt_PlanName.getText().toString().trim(),Toast.LENGTH_LONG).show();
+                Toast.makeText(ActAddTravelPlan.this,edtxt_PlanName.getText().toString().trim()+" 已存在 ",Toast.LENGTH_LONG).show();
                 return;
             }else{
                 Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單沒有重複" );

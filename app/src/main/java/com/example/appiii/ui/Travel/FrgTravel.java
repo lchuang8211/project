@@ -39,7 +39,7 @@ public class FrgTravel extends Fragment {
     private ArrayList<String> AL_PlanName = new ArrayList<>();
     private ArrayList<String> AL_StartDate = new ArrayList<>();
     private ArrayList<String> AL_EndDate = new ArrayList<>();
-    
+
     private View.OnClickListener btn_addPlan_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

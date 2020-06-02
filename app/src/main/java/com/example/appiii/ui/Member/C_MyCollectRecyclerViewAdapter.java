@@ -2,6 +2,7 @@ package com.example.appiii.ui.Member;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
@@ -80,12 +81,21 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
             btn_deleteCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SQLiteDB.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{Collect_Node_Name.get(getAdapterPosition())});
-                    Collect_Node_Name.remove(getAdapterPosition());
-                    Collect_Node_Describe.remove(getAdapterPosition());
-                    Collect_Node_Latitude.remove(getAdapterPosition());
-                    Collect_Node_Longitude.remove(getAdapterPosition());
-                    notifyDataSetChanged();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("刪除");
+                    builder.setMessage("確定刪除 "+Collect_Node_Name.get(getAdapterPosition()) +" 嗎?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SQLiteDB.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{Collect_Node_Name.get(getAdapterPosition())});
+                            Collect_Node_Name.remove(getAdapterPosition());
+                            Collect_Node_Describe.remove(getAdapterPosition());
+                            Collect_Node_Latitude.remove(getAdapterPosition());
+                            Collect_Node_Longitude.remove(getAdapterPosition());
+                            notifyDataSetChanged();
+                        }
+                    }).create().show();
+
                 }
             });
         }
