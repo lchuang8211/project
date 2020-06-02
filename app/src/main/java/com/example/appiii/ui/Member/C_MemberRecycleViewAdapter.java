@@ -199,16 +199,22 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
 
                     SQLite_helper = new C_MySQLite(mContext);
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
+                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY
+                            +" from "+C_Dictionary.TRAVEL_LIST_Table_Name
+                            + " where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME +"=?",new String[]{myPlanName.get( getAdapterPosition())});
+                    cursor.moveToFirst();
                     if (isChecked){
-                        contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
-                        Log.i("勾","sqLiteDatabase :"+ myPlanName.get(getAdapterPosition()));
-                        sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{ myPlanName.get( getAdapterPosition()) } );
                         Log.i("勾","sqLiteDatabase :"+sqLiteDatabase);
                         bundle = new Bundle();
                         // 行程名稱/使用者帳號/使用者名稱
+//                        sp.getBoolean("public",true);
                         bundle.putBoolean(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,true);
                         bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, myPlanName.get( getAdapterPosition()));  //行程名稱
-                        new C_AsyncPublicPlan(mContext).execute(bundle);
+                        if(cursor.getInt(0)==0){
+                            contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
+                            sqLiteDatabase.update(C_Dictionary.TRAVEL_LIST_Table_Name,contentValues,C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{ myPlanName.get( getAdapterPosition()) } );
+                            new C_AsyncPublicPlan(mContext).execute(bundle);
+                        }
                     }else{
                         Log.i("cbox_pushToCloud","create : 沒勾 :");
                         contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
@@ -218,8 +224,10 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
                         bundle.putBoolean(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,false);
                         bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, myPlanName.get( getAdapterPosition()));  //行程名稱
                         new C_AsyncPublicPlan(mContext).execute(bundle);
+                        }
+
                     }
-                }
+
             });
 
 

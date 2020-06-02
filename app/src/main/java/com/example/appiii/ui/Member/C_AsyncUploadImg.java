@@ -126,6 +126,10 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
             writer = new DataOutputStream(out);  // 把要送出的資料寫入輸出串流  //Step 4 : 要傳送的檔案/方式 (JSON=TXT檔)
             SharedPreferences sharedPreferences = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
             String filename = sharedPreferences.getString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,"dafault_user");
+
+            filename = filename+".jpg";
+
+
             writer.writeBytes(twoHyphens + boundary + lineEnd);
             writer.writeBytes("Content-Disposition: form-data; name=\"uploadHeadShot\"; filename=\""+filename +"\"" + lineEnd);
             writer.writeBytes("Content-Type: image/*"+ lineEnd);
