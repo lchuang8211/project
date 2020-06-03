@@ -144,10 +144,10 @@ public class FrgmMember extends Fragment {
                 try{
                     Uri uri = data.getData();
 //                    File file = new File(uri.getPath());
+
                     Log.i(TAG, "onActivityResult: 111 uri " +uri);
                     new C_AsyncUploadImg(getContext()).execute(uri);
                     myHeadShot.setImageURI(uri);
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }

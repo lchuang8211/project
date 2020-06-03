@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -132,9 +133,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                             intent.putExtras(bundle);
                             mContext.startActivity(intent);
                         }
-                    });
-                    Dialog dialog = builder.create();
-                    dialog.show();
+                    }).create().show();
                 }
             });
 
@@ -146,9 +145,6 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                 String[] planName;
                 @Override
                 public void onClick(View v) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
-
                     values = new ContentValues();  // insert 用
                     SQLite_helper = new C_MySQLite(mContext);  // helper
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
@@ -171,61 +167,38 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                             // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
                             // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
                             String newTablename = "["+ C_Dictionary.CREATE_TABLE_HEADER+planName[which]+"]";
-                            Log.i("maxdate","exists getAdapterPosition :"+which);
-                            Log.i("maxdate","exists planName getAdapterPosition :"+planName[which]);
-                            cursor = sqLiteDatabase.rawQuery("select exists (select 1 from "+ newTablename +" )",null);
-                            cursor.moveToLast();
-                            int empty = cursor.getInt(0);
-                            Log.i("maxdate","exists empty :"+empty);
-                            if (empty==0){   // 如果 TABLE 是空 TABLE
-//                                values.put( C_Dictionary.TABLE_SCHEMA_id, DatabaseUtils.queryNumEntries(sqLiteDatabase,planName[getAdapterPosition()]) );
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
-                                values.put(C_Dictionary.TABLE_SCHEMA_DATE,1);
-                                values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,1);
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE,mySpotToldescribe.get(getAdapterPosition()));
-                                sqLiteDatabase.insert( newTablename,null,values);
-                            }else if(empty==1){ // 如果 TABLE 不為空 TABLE
-                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from "+ newTablename +" group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
-                            cursor.moveToLast();
-                            int maxdate = cursor.getInt(0);
-                            Log.i("maxdate","maxdate:"+maxdate);
-                            cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+ newTablename +" Where COLUMN_NAME_DATE = "+maxdate+" group by COLUMN_NAME_DATE",null);
-                            cursor.moveToLast();
-                            int maxQueue = cursor.getInt(0);
-                            Log.i("maxQueue","maxQueue:"+maxQueue);
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
-                                values.put(C_Dictionary.TABLE_SCHEMA_DATE,maxdate);
-                                values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
-                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE,mySpotToldescribe.get(getAdapterPosition()));
-                                sqLiteDatabase.insert( newTablename,null,values);
 
-                            AlertDialog.Builder builderDays = new AlertDialog.Builder(mContext);
-                            builderDays.setTitle("select a day");
-                            String[] Days=new String[maxdate];
-                            for(int i=1; i<=maxdate;i++){
-                                Days[i-1] = "第 "+ i +" 天的行程";
+                            SharedPreferences sp = mContext.getSharedPreferences(C_Dictionary.PLAN_DAYS_RECORD,0);
+                            int days = sp.getInt(planName[which],1);
+                            final int whichplan = which;
+                            String[] SingleDay=new String[days];
+                            for(int i = 1; i<=days ; i++){
+                                SingleDay[i-1]="第 "+i+" 天";
                             }
-                            builderDays.setItems(Days,null).create().show();
+                            AlertDialog.Builder subbuilder = new AlertDialog.Builder(mContext);
+                            subbuilder.setTitle("選一天");
+                            subbuilder.setItems(SingleDay, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int innerwhich) {
+                                    // get which
+                                    cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+"["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]"+" Where COLUMN_NAME_DATE = "+(innerwhich+1)+" group by COLUMN_NAME_DATE",null);
+                                    int maxQueue=0;
+                                    if(cursor.getCount()>0){
+                                        cursor.moveToLast();
+                                        maxQueue = cursor.getInt(0);
+                                    }
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
+                                    values.put(C_Dictionary.TABLE_SCHEMA_DATE,innerwhich+1);
+                                    values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLatitude.get(getAdapterPosition()) );
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLongitude.get(getAdapterPosition()));
+                                    sqLiteDatabase.insert( "["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]" ,null,values);
+                                }
+                            }).create().show(); //第二個
 
-
-                            }
-//                            cursor=sqLiteDatabase.rawQuery("select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1",null);
-//                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
-//                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,planName[getAdapterPosition()]);
-                            Toast.makeText(mContext,which+":"+planName[which],Toast.LENGTH_LONG).show();
                         }
-                    })
-                    .create()
-                    .show();
-//                    builder.setPositiveButton("ok",null);
-//                    Dialog dialog = builder.create();
-//                    dialog.show();
-//                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
-//                    toast.show();
+                    }).create().show();  //第一個
                 }
             });
             img_Collect.setOnClickListener(new View.OnClickListener() {

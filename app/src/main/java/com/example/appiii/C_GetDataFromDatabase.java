@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 
 public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 
+    private static final String TAG = "C_GetDataFromDatabase";
     public Interface_AsyncGetDBTask getDBTaskCompleted = null;
 
     public C_GetDataFromDatabase(Interface_AsyncGetDBTask task_Completed) {
@@ -34,6 +35,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     private String Stringinput, StringOutput;
     private String postTophp_CityName;
     private String postTophp_SpotType;
+    private String postSearch_Input;
     private Double[] LocationOutput = new Double[2];
     private String phoneDataJson;
     private StringBuilder builder;
@@ -59,14 +61,20 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     @Override
     protected String doInBackground(Bundle... getStrings) {
         try {
+            jsonfromPhone = new JSONObject();
             Log.i("JSON","String 進來 : "+ getStrings);
             Bundle bundle = getStrings[0];
             postTophp_CityName = bundle.getString(C_Dictionary.CITY_NAME_REQUEST);
             postTophp_SpotType = bundle.getString(C_Dictionary.SPOT_TYPE_REQUEST);
+            if(bundle.getString("EDITTXT_SEARCH_INPUT")!=null ){
+                postSearch_Input = bundle.getString("EDITTXT_SEARCH_INPUT");
+                Log.i(TAG, "doInBackground: postSearch_Input :"+postSearch_Input);
+                jsonfromPhone.put("EDITTXT_SEARCH_INPUT", URLEncoder.encode(postSearch_Input,"UTF-8"));
+            }
             Log.i("JSON","CityName 接 bundle : "+ postTophp_CityName);
             Log.i("JSON","SpotType 接 bundle : "+ postTophp_SpotType);
             //手機輸入字串(input)轉成 JSON格式
-            jsonfromPhone = new JSONObject();
+
             postTophp_CityName =  URLEncoder.encode(postTophp_CityName,"UTF-8");  //避免中文亂碼而暫時避掉中文
             postTophp_SpotType = URLEncoder.encode(postTophp_SpotType,"UTF-8");
             Log.i("JSON","String 進來 URLEncoder : "+ postTophp_CityName);

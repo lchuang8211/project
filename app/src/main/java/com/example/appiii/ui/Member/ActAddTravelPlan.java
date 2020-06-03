@@ -2,6 +2,7 @@ package com.example.appiii.ui.Member;
 
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormat;
@@ -136,7 +137,9 @@ public class ActAddTravelPlan extends AppCompatActivity {
             sqLiteDatabase.execSQL( newPlanTable );
             Toast.makeText(ActAddTravelPlan.this,"建立完成 "+edtxt_PlanName.getText().toString().trim(),Toast.LENGTH_LONG).show();
             int maxplanDay = (int)Math.abs( enddate.getTime()-startdate.getTime() )/(60*60*1000*24);
-
+            SharedPreferences sharedPreferences = getSharedPreferences(C_Dictionary.PLAN_DAYS_RECORD,0);
+            SharedPreferences.Editor w = sharedPreferences.edit();
+            w.putInt(edtxt_PlanName.getText().toString().trim(), maxplanDay+1 ).commit();   // 紀錄計畫有幾天
             setResult(RESULT_OK); // RESULT_OK 不回傳常數
             finish();
         }

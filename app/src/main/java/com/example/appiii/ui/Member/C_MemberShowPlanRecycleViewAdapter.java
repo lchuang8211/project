@@ -3,9 +3,12 @@ package com.example.appiii.ui.Member;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 
@@ -141,7 +145,21 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
                     showbuilder.setTitle( showSpotName.get(getAdapterPosition()) );
                     showbuilder.setMessage("概述:\n\n"+showSpotDescrbe.get(getAdapterPosition()));
                     showbuilder.setNegativeButton("取消",null);
-                    showbuilder.setPositiveButton("查看地圖",null).create().show();
+                    showbuilder.setPositiveButton("查看地圖",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE, showSpotLatitude.get( getAdapterPosition() ));
+                            Log.i(TAG, "onClick: Longitude 顛倒 : "+showSpotLatitude.get( getAdapterPosition()));
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE, showSpotLongitude.get( getAdapterPosition() ));
+                            Log.i(TAG, "onClick: sLatitude 顛倒 : "+showSpotLongitude.get( getAdapterPosition()));
+                            bundle.putString(C_Dictionary.SPOT_NAME, showSpotName.get( getAdapterPosition() ));
+                            Log.i(TAG, "onClick: send bundle :" + bundle);
+                            intent.putExtras(bundle);
+                            mContext.startActivity(intent);
+                        }
+                    }).create().show();
                 }
             });
 

@@ -192,10 +192,10 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
              LOCATION_LATITUDE = bundle.getDouble(C_Dictionary.LOCATION_LATITUDE);
              LOCATION_LONGITUDE = bundle.getDouble(C_Dictionary.LOCATION_LONGITUDE);
             SpotName = bundle.getString(C_Dictionary.SPOT_NAME);
-            Log.i(TAG, "onCreate: bundle :"+ LOCATION_LONGITUDE + "," +LOCATION_LATITUDE);
+            Log.i(TAG, "onCreate: ActGoogleMaps bundle :"+ LOCATION_LONGITUDE + "," +LOCATION_LATITUDE);
             LatLng SearchAttraction = new LatLng(LOCATION_LATITUDE, LOCATION_LONGITUDE);
             mMap.addMarker(new MarkerOptions().position(SearchAttraction).title(SpotName).snippet(SpotName) );
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SearchAttraction,14));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SearchAttraction,12));
         }
     }
     private void InitialComponent() {

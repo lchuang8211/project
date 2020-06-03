@@ -1,5 +1,6 @@
 package com.example.appiii.ui.Member;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,6 +10,8 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.webkit.MimeTypeMap;
 
 import com.example.appiii.C_Dictionary;
 
@@ -29,10 +32,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
     private String TAG = "C_AsyncUploadImg";
     Context mContext;
+    CircleImageView cImg;
     public C_AsyncUploadImg(Context mContext){
+
         this.mContext = mContext;
     }
 
@@ -57,43 +64,92 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
+
+    public String getMimeType(Uri uri) {
+        String mimeType = null;
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = mContext.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
+    }
+
     @Override
     protected Void doInBackground(Uri... uris) {
         boundary = "===" + System.currentTimeMillis() + "===";
-
-
         Uri uri = uris[0];
-        Bitmap bitmap = null;
+        String MimeType = getMimeType(uri);
+        Log.i(TAG, "doInBackground: 222 fileType " + MimeType);
+        String filetype="";
+        switch(MimeType){
+            case "image/jpeg" :
+                filetype = ".jpeg";
+                break;
+            case "image/png" :
+                 filetype = ".png";
+                break;
+            case "image/bmp" :
+                 filetype = ".bmp";
+                break;
+        }
+
+
         try {
             bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
         } catch (IOException e) {
             e.printStackTrace();
         }
         Log.i(TAG, "doInBackground: 222 uri " + uri);
-        File file = new File(uri.getPath());
-        Log.i(TAG, "doInBackground: 222 file " + file.toString());
-        String filePath = uri.getPath();
-        Log.i(TAG, "doInBackground: filePath :" + filePath);
-        String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
-        Log.i(TAG, "doInBackground: file_extn :" + file_extn);
-        BitmapFactory.Options options = new BitmapFactory.Options();
+//        File file = new File(uri.getPath());
+//        Log.i(TAG, "doInBackground: 222 file " + file.toString());
+//        String fileName = file.getName();
+//        Log.i(TAG, "doInBackground: filePath :" + fileName);
+//        String fileType = fileName.substring(fileName.lastIndexOf("."),fileName.length());
+//        Log.i(TAG, "doInBackground: fileType :" + fileType);
+//        String filePath = uri.getPath();
+//        Log.i(TAG, "doInBackground: filePath :" + filePath);
+//        String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
+//        Log.i(TAG, "doInBackground: file_extn :" + file_extn);
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 3;
-        byte[] bitmapArray = new byte[bitmap.getWidth()*bitmap.getHeight()];
+
+
+
+
+//        byte[] bitmapArray = new byte[bitmap.getWidth()*bitmap.getHeight()];
 //        bitmap = BitmapFactory.decodeFile(uri.getPath(),options);
         byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-        Log.i(TAG, "doInBackground: bitmap: " + bitmap);
+
+//        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+//        Log.i(TAG, "doInBackground: bitmap: " + bitmap);
 //        byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
-        bitmapArray = byteArrayOutputStream.toByteArray();
-        String encode_string = Base64.encodeToString(bitmapArray,0);
-        JSONObject jsonObject = new JSONObject();
+//        bitmapArray = byteArrayOutputStream.toByteArray();
+        byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
+        for (int i = 0; i < bitmap.getWidth(); ++i) {
+            for (int j = 0; j < bitmap.getHeight(); ++j) {
+                //we're interested only in the MSB of the first byte,
+                //since the other 3 bytes are identical for B&W images
+                pixels[i + j] = (byte) ((bitmap.getPixel(i, j) & 0x80) >> 7);
+            }
+        }
         try {
-            jsonObject.put("imgName",encode_string);
-        } catch (JSONException e) {
+            byteArrayOutputStream.write(pixels);
+//            Log.i(TAG, "doInBackground: pixels : "+ byteArrayOutputStream.write(pixels));
+        } catch (IOException e) {
             e.printStackTrace();
         }
-//        Log.i(TAG, "doInBackground: encode_string: "+encode_string);
+        byte[] buf = byteArrayOutputStream.toByteArray();
+        String str_baos = new String(buf);
+        Log.i(TAG, "doInBackground: pixels baos : "+ str_baos );
+
+        String ImgPixels = pixels.toString();
+        Log.i(TAG, "doInBackground: pixels : "+pixels.toString());
 
         try {
             urlConnection = (HttpURLConnection) urlAPI.openConnection();  // STEP 1
@@ -122,20 +178,17 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
 
 
 
-                    out = urlConnection.getOutputStream();  // 輸出的初始化
+            out = urlConnection.getOutputStream();  // 輸出的初始化
             writer = new DataOutputStream(out);  // 把要送出的資料寫入輸出串流  //Step 4 : 要傳送的檔案/方式 (JSON=TXT檔)
             SharedPreferences sharedPreferences = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
-            String filename = sharedPreferences.getString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,"dafault_user");
-
-            filename = filename+".jpg";
-
+            String UserName = sharedPreferences.getString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,"dafault_user");
 
             writer.writeBytes(twoHyphens + boundary + lineEnd);
-            writer.writeBytes("Content-Disposition: form-data; name=\"uploadHeadShot\"; filename=\""+filename +"\"" + lineEnd);
-            writer.writeBytes("Content-Type: image/*"+ lineEnd);
+            writer.writeBytes("Content-Disposition: form-data; name=\"uploadHeadShot\"; filename=\""+UserName +filetype +"\"" + lineEnd);
+            writer.writeBytes("Content-Type: "+ MimeType + lineEnd);
             writer.writeBytes(lineEnd);
 
-            writer.writeBytes(encode_string);
+            writer.writeBytes(str_baos);
 
             writer.writeBytes(lineEnd);
             writer.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);

@@ -150,11 +150,11 @@ public class ActEntrance extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked){
-                cbox_Autosignin.setVisibility(View.VISIBLE);
+                cbox_Autosignin.setEnabled(true);
                 RemamberAccount = true;
                 writeSetting.putBoolean(C_Dictionary.REMEMBER_ACCOUNT_SETTING,true).apply();
             }else{
-                cbox_Autosignin.setVisibility(View.GONE);
+                cbox_Autosignin.setEnabled(false);
                 RemamberAccount = false;
                 writeSetting.putBoolean(C_Dictionary.REMEMBER_ACCOUNT_SETTING,false).apply();
             }
@@ -213,6 +213,7 @@ public class ActEntrance extends AppCompatActivity {
             cbox_rememberAccount.setChecked(true);
             edtxt_account.setText(account);
             if(SignInAuto){
+                cbox_Autosignin.setEnabled(true);
                 cbox_Autosignin.setChecked(true);
                 Toast toast = Toast.makeText(ActEntrance.this, "自動登入中...", Toast.LENGTH_LONG);
                 String password = setAccount.getString(C_Dictionary.TABLE_SCHEMA_PASSWORD,"");
@@ -242,7 +243,7 @@ public class ActEntrance extends AppCompatActivity {
             }
         }else{
             cbox_rememberAccount.setChecked(false);
-            cbox_Autosignin.setVisibility(View.GONE);
+            cbox_Autosignin.setEnabled(false);
             return;
         }
     }

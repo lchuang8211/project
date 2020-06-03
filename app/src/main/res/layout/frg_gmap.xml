@@ -16,10 +16,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-        <TextView
-            android:text="顯示路線"
-            android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_myPlan"
+            android:text="我的行程"
+            android:layout_width="120sp"
             android:layout_height="wrap_content"/>
+        <Space
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="詳細行程"
+            android:id="@+id/btn_myShowDay"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     </RelativeLayout>
 

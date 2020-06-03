@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,10 @@ public class FrgSearch extends Fragment {
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
+            if(edtxt_searchInput.getText().toString().matches("")){
+                bundle.putString("EDITTXT_SEARCH_INPUT","");
+            }else
+                bundle.putString("EDITTXT_SEARCH_INPUT",edtxt_searchInput.getText().toString());
             new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
@@ -61,13 +66,16 @@ public class FrgSearch extends Fragment {
                     mySpotToldescribe.add(Toldescribe);
                     database_lat.add(Lcation_lat);
                     database_long.add(Lcation_long);
-                    txt_searchCount.setText(database_Name.size()+" 筆結果");
+//                    txt_searchCount.setText(database_Name.size()+" 筆結果");
                     InitRecyclerView();
                 }
             }).execute(bundle);
             if (database_Name.size()>0 || database_address.size()>0 ){   // 如果有上一筆資料 即刪除
                 database_Name.clear();
                 database_address.clear();
+                mySpotToldescribe.clear();
+                database_lat.clear();
+                database_long.clear();
             }
         }
     };
@@ -85,12 +93,10 @@ public class FrgSearch extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         inflatedView_Search = inflater.inflate(R.layout.frg_search,container,false);
-//        txt_cityNumber = inflatedView_Search.findViewById(R.id.txt_cityNumber);
-        txt_searchCount = inflatedView_Search.findViewById(R.id.txt_searchcount);
 
         btn_searchDB = inflatedView_Search.findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
-
+        edtxt_searchInput = inflatedView_Search.findViewById(R.id.edtxt_searchInput);
 //        InitRecyclerView();
 //        C_Ggps appLocationManager = new C_Ggps(getContext());
 //        txt_gps.setText(String.valueOf(appLocationManager.getLatitude()) +"\n"+ appLocationManager.getLongitude());
@@ -156,7 +162,9 @@ public class FrgSearch extends Fragment {
     }
 
     private  void InitialDatabase(){
+
     }
+    EditText edtxt_searchInput;
     //  RecyclerView : 大樓 , RecycleViewAdapter : 管理員 , ArrayList 載入的資料 : 住戶
     C_SearchRecycleViewAdapter adapter;
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定

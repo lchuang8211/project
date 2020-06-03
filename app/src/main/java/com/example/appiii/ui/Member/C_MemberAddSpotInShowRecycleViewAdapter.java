@@ -161,8 +161,8 @@ public class C_MemberAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE,gettheDays);
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_QUEUE,maxQueue+1);
-                    contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
-                    contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
+                    contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLatitude.get(getAdapterPosition()) );
+                    contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLongitude.get(getAdapterPosition()));
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE,mySpotToldescribe.get(getAdapterPosition()));
                     sqLiteDatabase.insert( "["+new_Tablename+"]",null,contentValues);
                 }

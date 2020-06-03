@@ -62,8 +62,8 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
                 }
             }).execute(bundle);
             if (database_Name.size()>0 || database_address.size()>0 ){   // 如果有上一筆資料 即刪除
-                database_Name.clear();
-                database_address.clear();
+                database_Name.clear(); database_lat.clear(); database_long.clear();
+                database_address.clear(); mySpotToldescribe.clear();
             }
         }
     };
@@ -78,6 +78,7 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("增加景點");
         setContentView(R.layout.frg_search);  // 跟 Search 共用 fragment
         InitialComponent();
         InitialCitySpinner();
@@ -85,7 +86,7 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
     static int getDays;
     static String Tablename;
     private void InitialComponent() {
-        txt_gps = findViewById(R.id.txt_searchcount);
+//        txt_gps = findViewById(R.id.txt_searchcount);
         btn_searchDB = findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
         Tablename = getIntent().getExtras().getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);

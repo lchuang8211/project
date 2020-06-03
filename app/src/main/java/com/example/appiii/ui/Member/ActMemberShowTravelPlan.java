@@ -204,17 +204,17 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
             cursor = sqLiteDatabase.rawQuery("select * from " + table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ 1 + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
             while(cursor.moveToNext()){
                 showSpotDate.add(cursor.getInt(0));
-                Log.i("while","showPlanDate"+cursor.getInt(0));
+
                 showSpotQueue.add(cursor.getInt(1));
-                Log.i("while","showPlanQueue"+cursor.getInt(0));
+
                 showSpotName.add(cursor.getString(2));
-                Log.i("while","showPlanName"+cursor.getString(0));
+
                 showSpotLatitude.add(cursor.getDouble(3));
-                Log.i("while","showPlanLatitude"+cursor.getDouble(0));
+
                 showSpotLongitude.add(cursor.getDouble(4));
-                Log.i("while","showPlanLongitude"+cursor.getDouble(0));
+
                 showSpotDescribe.add(cursor.getString(5));
-                Log.i("while","showPlanLongitude"+cursor.getString(5));
+
             }
             ButtonID=1;  //只秀第一天
             InitRecyclerView();

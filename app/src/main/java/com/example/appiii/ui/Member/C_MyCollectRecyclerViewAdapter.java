@@ -3,8 +3,11 @@ package com.example.appiii.ui.Member;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 
@@ -75,7 +79,19 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
                     builder.setTitle(Collect_Node_Name.get(getAdapterPosition()));
                     builder.setMessage("概述:\n\n"+Collect_Node_Describe.get(getAdapterPosition()));
                     builder.setNegativeButton("取消",null);
-                    builder.setPositiveButton("查看地圖",null).create().show();
+                    builder.setPositiveButton("查看地圖",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,Collect_Node_Latitude.get( getAdapterPosition() ));
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,Collect_Node_Longitude.get( getAdapterPosition() ));
+                            bundle.putString(C_Dictionary.SPOT_NAME,Collect_Node_Name.get( getAdapterPosition() ));
+//                            Log.i(TAG, "onClick: send bundle :" + bundle);
+                            intent.putExtras(bundle);
+                            mContext.startActivity(intent);
+                        }
+                    }).create().show();
                 }
             });
             btn_deleteCollect.setOnClickListener(new View.OnClickListener() {
