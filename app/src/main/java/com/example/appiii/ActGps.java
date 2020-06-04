@@ -3,21 +3,14 @@ package com.example.appiii;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 
-import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.webkit.GeolocationPermissions;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
-import android.webkit.WebViewClient;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -28,7 +21,6 @@ import android.location.Criteria;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -36,8 +28,8 @@ import androidx.core.content.ContextCompat;
 public class ActGps extends Activity {
 
 
-    public LocationManager locationManager;
-    private LocationManager lm;
+
+    private LocationManager locationmanager;
     private Location location;
     private int MIN_TIME_BW_UPDATES =5000, MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 判斷GPS更新的最小時間建閣與忽略距離
     private Criteria criteria;
@@ -100,8 +92,8 @@ public class ActGps extends Activity {
 
     private void getMyGPS_Location() {
         //請求GPS位置提供者 NET OR GPS
-        boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean isNetworkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        boolean isGPSEnabled = locationmanager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationmanager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         location = null;
         if (!(isGPSEnabled || isNetworkEnabled)) {
@@ -110,24 +102,27 @@ public class ActGps extends Activity {
         } else {
             if (isNetworkEnabled) {
                 Log.i("location", "NET 定位");
-                if (ActivityCompat.checkSelfPermission(ActGps.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActGps.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION},0);
                 }
-                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);  //更新GPS頻率
-                location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                locationmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);  //更新GPS頻率
+                location = locationmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 Log.i("location", "NET 定位1" + location);
             }
             if (isGPSEnabled) {
-                if (ActivityCompat.checkSelfPermission(ActGps.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActGps.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                if (checkSelfPermission( Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission( Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION},0);
                 }
                 Log.i("location", "GPS 定位");
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
-                location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                locationmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
+                location = locationmanager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
         }
+
         updateLocation(location);
     }
+
+
 
     LocationListener locationListener = new LocationListener() {
         // 當位置改變時觸發
@@ -212,7 +207,7 @@ public class ActGps extends Activity {
         // 設定對電源的需求
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         //獲取LocationManager物件
-        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationmanager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     }
     private void webView_all() {
         webView = findViewById(R.id.webview);

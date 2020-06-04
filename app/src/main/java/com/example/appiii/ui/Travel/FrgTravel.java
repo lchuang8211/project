@@ -41,7 +41,7 @@ public class FrgTravel extends Fragment {
     private ArrayList<String> AL_PlanName = new ArrayList<>();
     private ArrayList<String> AL_StartDate = new ArrayList<>();
     private ArrayList<String> AL_EndDate = new ArrayList<>();
-    private ArrayList<URL> AL_HandImgURL = new ArrayList<>();
+    private ArrayList<String> AL_HandImg = new ArrayList<>();
     private View.OnClickListener btn_addPlan_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -49,22 +49,23 @@ public class FrgTravel extends Fragment {
             bundle.putString("Search_requirement",null);
             new C_AsyncTravelPlanList(new Interface_AsyncPlanList() {
                 @Override
-                public void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate) {  // URL head_img
+                public void PlanListFinish(String UserAccount, String PlanName, String StartDate, String EndDate, String head_img) {  // String UserName
                     AL_UserAccount.add(UserAccount);
-                    AL_UserName.add(UserName);
+//                    AL_UserName.add(UserName);
                     AL_PlanName.add(PlanName);
                     AL_StartDate.add(StartDate);
                     AL_EndDate.add(EndDate);
-//                    AL_HandImgURL.add(head_img);
+                    AL_HandImg.add(head_img);
                     InitialRecycler();
                 }
             }).execute(bundle);
-            if (AL_UserAccount.size()>0 || AL_UserName.size()>0  || AL_PlanName.size()>0  || AL_StartDate.size()>0  || AL_EndDate.size()>0 ){   // 如果有上一筆資料 即刪除
+            if (AL_UserAccount.size()>0 || AL_UserName.size()>0  || AL_PlanName.size()>0  || AL_StartDate.size()>0  || AL_EndDate.size()>0 || AL_HandImg.size()>0 ){   // 如果有上一筆資料 即刪除
                 AL_UserAccount.clear();
                 AL_UserName.clear();
                 AL_PlanName.clear();
                 AL_StartDate.clear();
                 AL_EndDate.clear();
+                AL_HandImg.clear();
             }
         }
     };
@@ -74,7 +75,6 @@ public class FrgTravel extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflatedView = inflater.inflate(R.layout.frg_travel,container,false);
         InitialComponent();
-        InitialRecycler();
         return inflatedView;
     }
 
@@ -90,30 +90,34 @@ Button btn_addPlan;
         bundle.putString("Search_requirement",null);
         new C_AsyncTravelPlanList(new Interface_AsyncPlanList() {
             @Override
-            public void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate) {
+            public void PlanListFinish(String UserAccount, String PlanName, String StartDate, String EndDate, String head_img) { // String UserName
                 AL_UserAccount.add(UserAccount);
-                AL_UserName.add(UserName);
+//                AL_UserName.add(UserName);
                 AL_PlanName.add(PlanName);
                 AL_StartDate.add(StartDate);
                 AL_EndDate.add(EndDate);
+                AL_HandImg.add(head_img);
+                Log.i(TAG, "PlanListFinish: "+ AL_PlanName.get(0));
+                Log.i(TAG, "PlanListFinish: "+ AL_HandImg.get(0));
                 InitialRecycler();
             }
         }).execute(bundle);
-        if (AL_UserAccount.size()>0 || AL_UserName.size()>0  || AL_PlanName.size()>0  || AL_StartDate.size()>0  || AL_EndDate.size()>0 ){   // 如果有上一筆資料 即刪除
+        if (AL_UserAccount.size()>0 || AL_UserName.size()>0  || AL_PlanName.size()>0  || AL_StartDate.size()>0  || AL_EndDate.size()>0 ||  AL_HandImg.size() > 0){   // 如果有上一筆資料 即刪除
             AL_UserAccount.clear();
             AL_UserName.clear();
             AL_PlanName.clear();
             AL_StartDate.clear();
             AL_EndDate.clear();
+            AL_HandImg.clear();
         }
     }
 
     RecyclerView recyclerView;
     C_TravelPlanListRecycleViewAdapter adapter;
     private void InitialRecycler() {
-        Log.i(TAG, "InitialRecycler: size :  " + AL_UserAccount.size());
+        Log.i(TAG, "InitialRecycler: size :  " + AL_UserAccount.size()+" "+AL_UserAccount.get(0)+":"+AL_HandImg.get(0));
         recyclerView = inflatedView.findViewById(R.id.travel_recycler_layout_planlist);
-        adapter = new C_TravelPlanListRecycleViewAdapter(getActivity(), AL_UserAccount, AL_UserName, AL_PlanName, AL_StartDate, AL_EndDate);
+        adapter = new C_TravelPlanListRecycleViewAdapter(getActivity(), AL_UserAccount, AL_PlanName, AL_StartDate, AL_EndDate, AL_HandImg);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 

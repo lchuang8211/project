@@ -2,7 +2,7 @@
 <!-- RecyclerView 的 list 配置 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_alignBottom="@+id/getCirlceImage"
+    android:layout_alignBottom="@+id/getHeadImage"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -19,7 +19,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="80sp"
         android:layout_height="80sp"
-        android:id="@+id/getCirlceImage"
+        android:id="@+id/getHeadImage"
         android:src="@drawable/user_64px"
         app:civ_border_width="2sp"
         app:civ_border_color="#222222"/>
@@ -27,7 +27,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/getCirlceImage">
+            android:layout_toRightOf="@+id/getHeadImage">
         <TextView
             android:paddingLeft="5sp"
             android:background="#B0E0E6"
@@ -55,14 +55,14 @@
     android:layout_marginTop="30sp"
     android:orientation="vertical"
     android:layout_marginLeft="5sp"
-    android:layout_toRightOf="@+id/getCirlceImage"
+    android:layout_toRightOf="@+id/getHeadImage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
 
         android:id="@+id/txt_userName"
-        android:text="userAccount"
+        android:text="**********userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp" />

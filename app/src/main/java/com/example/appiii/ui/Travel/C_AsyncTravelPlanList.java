@@ -117,10 +117,15 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
             for(int i=0; i<jsarray.length();i++){
                 JSONObject jsobj = new JSONObject();
                 jsobj = jsarray.getJSONObject(i);
-                String getlist = jsobj.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
-                String[] tokens = getlist.split("\\|");
-//                interface_plist_finish.PlanListFinish(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
-//                Log.i(TAG, "onPostExecute: tokens:"+tokens[0]+"::"+tokens[1]+"::"+tokens[2]+"::"+tokens[3]+"::"+tokens[4]);
+                String getUesrAccount = jsobj.getString("account");
+                ///////////-------- nick name
+                String getPlanName = jsobj.getString("plan_Name");
+                String getStarDate = jsobj.getString("start_date");
+                String getEndDate = jsobj.getString("end_date");
+                String getHead_img = "http://hhlc.ddnsking.com"+jsobj.getString("head_img");
+//                String[] tokens = getlist.split("\\|");
+                interface_plist_finish.PlanListFinish( getUesrAccount, getPlanName, getStarDate, getEndDate, getHead_img);  //nick_name
+                Log.i(TAG, "onPostExecute: tokens :"+getUesrAccount+"::"+getPlanName+"::"+getStarDate+"::"+getEndDate+"::"+getHead_img);
             }
         } catch (JSONException e) {
             e.printStackTrace();
