@@ -26,6 +26,8 @@ import com.example.appiii.ui.Member.C_MemberRecycleViewAdapter;
 import com.example.appiii.ui.Member.C_MySQLite;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.net.URI;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +41,7 @@ public class FrgTravel extends Fragment {
     private ArrayList<String> AL_PlanName = new ArrayList<>();
     private ArrayList<String> AL_StartDate = new ArrayList<>();
     private ArrayList<String> AL_EndDate = new ArrayList<>();
-
+    private ArrayList<URL> AL_HandImgURL = new ArrayList<>();
     private View.OnClickListener btn_addPlan_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -47,12 +49,13 @@ public class FrgTravel extends Fragment {
             bundle.putString("Search_requirement",null);
             new C_AsyncTravelPlanList(new Interface_AsyncPlanList() {
                 @Override
-                public void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate) {
+                public void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate) {  // URL head_img
                     AL_UserAccount.add(UserAccount);
                     AL_UserName.add(UserName);
                     AL_PlanName.add(PlanName);
                     AL_StartDate.add(StartDate);
                     AL_EndDate.add(EndDate);
+//                    AL_HandImgURL.add(head_img);
                     InitialRecycler();
                 }
             }).execute(bundle);

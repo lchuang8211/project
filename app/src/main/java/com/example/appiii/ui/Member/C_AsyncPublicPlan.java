@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.appiii.C_Dictionary;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,14 +72,19 @@ public class C_AsyncPublicPlan extends AsyncTask<Bundle,Void,Void> {
                     endDate = cursor.getString(2);  // 行程結束的日期
                 }
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, 0); //儲存的檔案名稱
-                String userName = sharedPreferences.getString(C_Dictionary.USER_NAME_SETTING, "").trim();  //使用者暱稱
+                String userID = sharedPreferences.getString(C_Dictionary.USER_U_ID, "").trim();  //使用者ID 唯一
                 String userAccount = sharedPreferences.getString(C_Dictionary.TABLE_SCHEMA_ACCOUNT, "").trim(); // 使用者帳號
 
-                String new_planName = userAccount + "|" + userName + "|" + planName + "|" + startDate + "|" + endDate;
+                String new_planName = userID + "|" + userAccount + "|" + planName + "|" + startDate + "|" + endDate;
 
                 try {
                     setJsonObject.put(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,Signal);   // 放刪除/新增 訊號
-                    setJsonObject.put(C_Dictionary.CLOUND_TABLE_NAME, URLEncoder.encode(new_planName.trim(), "UTF-8"));  // 要建的 Table name
+//                    setJsonObject.put(C_Dictionary.CLOUND_TABLE_NAME, URLEncoder.encode(new_planName.trim(), "UTF-8"));  // 要建的 Table name
+                    setJsonObject.put(C_Dictionary.USER_U_ID,userID);  // u_id   USER_U_ID  USER_ACCOUNT TRAVEL_LIST_SCHEMA_PLAN_NAME TABLE_SCHEMA_DATE_START TABLE_SCHEMA_DATE_END
+                    setJsonObject.put(C_Dictionary.USER_ACCOUNT,userAccount);  // 使用者帳號
+                    setJsonObject.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME , URLEncoder.encode(planName.trim(),"UTF-8"));  // 行程名稱
+                    setJsonObject.put(C_Dictionary.TABLE_SCHEMA_DATE_START , startDate);  // 開始日期
+                    setJsonObject.put(C_Dictionary.TABLE_SCHEMA_DATE_END , endDate);  // 結束日期
                 } catch (JSONException | UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

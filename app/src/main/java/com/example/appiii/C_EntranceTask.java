@@ -1,5 +1,7 @@
 package com.example.appiii;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
+    private static final String TAG = "C_EntranceTask";
     private Interface_AsyncEntrance memberCheck = null;
     private String userAccout , userPassword, passMember;
+    private Context mContext;
     private HttpURLConnection urlConnection = null;
     private InputStream getinputStream = null;
     private OutputStream out = null;
@@ -34,8 +38,8 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
         }
     }
 
-
-    C_EntranceTask(Interface_AsyncEntrance memberCheck){
+    C_EntranceTask(Context mContext, Interface_AsyncEntrance memberCheck){
+        this.mContext=mContext;
         this.memberCheck = memberCheck;
     }
 
@@ -99,17 +103,23 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        int checknum = Integer.parseInt(result);
-        Log.i("builder","echo result :"+result);
-        switch (checknum){
+        try {
+            JSONObject js = new JSONObject(result);
+        switch (js.getInt("ENTRANCE_NUM")){
             case 1:
                 check=true;
                 Log.i("builder","1echo check :"+check);
+                SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+                SharedPreferences.Editor w = sh.edit();
+                w.putString(C_Dictionary.USER_U_ID, js.getString("u_id")).apply();
                 break;
             case 0:
                 check=false;
                 Log.i("builder","2echo check :"+check);
             break;
+        }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         Log.i("builder","3echo check :"+check);
         memberCheck.memberCheckFinish(check);

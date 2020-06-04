@@ -111,6 +111,7 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
         super.onPostExecute(string);
         Log.i(TAG, "onPostExecute: onPostExecute:" + string);
         try {
+            URL url_img ;
             JSONArray jsarray = new JSONArray(string);
             Log.i(TAG, "onPostExecute: json size"+ jsarray.length());
             for(int i=0; i<jsarray.length();i++){
@@ -118,8 +119,8 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
                 jsobj = jsarray.getJSONObject(i);
                 String getlist = jsobj.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
                 String[] tokens = getlist.split("\\|");
-                interface_plist_finish.PlanListFinish(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
-                Log.i(TAG, "onPostExecute: tokens:"+tokens[0]+"::"+tokens[1]+"::"+tokens[2]+"::"+tokens[3]+"::"+tokens[4]);
+//                interface_plist_finish.PlanListFinish(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
+//                Log.i(TAG, "onPostExecute: tokens:"+tokens[0]+"::"+tokens[1]+"::"+tokens[2]+"::"+tokens[3]+"::"+tokens[4]);
             }
         } catch (JSONException e) {
             e.printStackTrace();

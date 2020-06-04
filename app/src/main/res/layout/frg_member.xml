@@ -9,15 +9,18 @@
     android:gravity="center_horizontal">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="300sp"
-        android:layout_height="300sp"
+        android:layout_width="250sp"
+        android:layout_height="250sp"
         android:id="@+id/myHeadShot"
         android:src="@drawable/tedros"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
     <TextView
         android:id="@+id/memberStatus"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="20sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="customer"
         android:textSize="35sp"/>

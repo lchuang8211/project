@@ -87,7 +87,8 @@ public class C_Dictionary {
     public static final String ACCOUNT_SETTING = "ACCOUNT_SETTING";   // 帳號設定的SharedPreference資料名稱
     public static final String REMEMBER_ACCOUNT_SETTING = "RemamberAccountSetting";  // 自動記憶帳號
     public static final String AUTO_SIGN_IN_SETTING = "AutoSignInSetting";  //自動登入+記憶帳密
-    public static final String USER_NAME_SETTING = "USER_NAME_SETTING"; // 使用者暱稱
+    public static final String USER_NICK_NAME = "USER_NICK_NAME"; // 使用者暱稱
+    public static final String USER_U_ID = "USER_U_ID"; // 使用者ID  唯一
 
     public static final String PUBLIC_TRAVEL_PLAN_TO_CLOUD = "PUBLIC_TRAVEL_PLAN_TO_CLOUD"; // 確認使否要上傳雲端
     public static final String PUBLIC_TO_CLOUND_SIGNAL = "PUBLIC_TO_CLOUND_SIGNAL";   //行程表 上傳雲端許可 FOR AsyncTask FOR PHP

@@ -1,8 +1,6 @@
 package com.example.appiii.ui.Member;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,37 +8,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.FileUtils;
-import android.os.Parcelable;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.CursorLoader;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 
-import java.io.File;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -129,13 +119,30 @@ public class FrgmMember extends Fragment {
         }
     };
     private String imagePath;//將要上傳的圖片路徑
-    public String getRealPathFromURI(Context context,Uri uri){
-        String[] proj = { MediaStore.Audio.Media.DATA };
-        Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
+    private View.OnLongClickListener userNickName_longclick = new View.OnLongClickListener(){
+        @Override
+        public boolean onLongClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("請輸入暱稱");
+            LinearLayout linearLayout = new LinearLayout(getContext());
+            final EditText edname = new EditText(getContext());
+            edname.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            linearLayout.addView(edname);
+            builder.setView(linearLayout);
+            builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (edname.getText().toString().matches(""))
+                        return;
+                    w.putString(C_Dictionary.USER_NICK_NAME,edname.getText().toString()).commit();
+                    userNickName.setText(edname.getText().toString());
+                }
+            }).create().show();
+
+            return true;
+        }
+    };
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,17 +170,19 @@ public class FrgmMember extends Fragment {
         InitialComponent();
         switch(budle.getString(C_Dictionary.USER_STATUS)){
             case C_Dictionary.USER_STATUS_MEMBER:
-                memberStatus.setText( sharedPreferences.getString(C_Dictionary.USER_NAME_SETTING,"還沒有建立名稱") );
+//                userNickName.setText( sharedPreferences.getString(C_Dictionary.USER_NICK_NAME,"還沒有建立名稱") );
                 break;
             case C_Dictionary.USER_STATUS_VISITORS:
-                memberStatus.setText("你還不是會員");
+//                userNickName.setText("你還不是會員");
                 break;
         }
         return inflatedView_Member;
     }
 
     private void InitialComponent() {
-        memberStatus = inflatedView_Member.findViewById(R.id.memberStatus);
+
+        userNickName = inflatedView_Member.findViewById(R.id.memberStatus);
+        userNickName.setOnLongClickListener(userNickName_longclick);
         myHeadShot = inflatedView_Member.findViewById(R.id.myHeadShot);
         myHeadShot.setOnClickListener(myHeadShot_click);
         btn_mySetting = inflatedView_Member.findViewById(R.id.btn_mySetting);
@@ -183,15 +192,16 @@ public class FrgmMember extends Fragment {
         btn_myCollect = inflatedView_Member.findViewById(R.id.btn_myCollect);
         btn_myCollect.setOnClickListener(btn_myCollect_click);
         sharedPreferences = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
-
+        w = sharedPreferences.edit();
     }
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor w;
     CircleImageView myHeadShot;
     ContentValues values;
     C_MySQLite SQLite_helper;  // helper
     SQLiteDatabase sqLiteDatabase;
 
-    TextView memberStatus;
+    TextView userNickName;
     Button btn_mySetting;
     Button btn_mySchedule;
     Button btn_myCollect;

@@ -52,7 +52,7 @@ public class ActEntrance extends AppCompatActivity {
                 bundle.putString(C_Dictionary.USER_ACCOUNT, edtxt_account.getText().toString());
                 bundle.putString(C_Dictionary.USER_PASSWORD, edtxt_passwd.getText().toString());
                 bundle.putInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP,1);
-                new C_EntranceTask(new Interface_AsyncEntrance() {
+                new C_EntranceTask(ActEntrance.this, new Interface_AsyncEntrance() {
                     @Override
                     public void memberCheckFinish(Boolean checkMember) {
                         System.out.println(checkMember);
@@ -62,7 +62,6 @@ public class ActEntrance extends AppCompatActivity {
                             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_MEMBER);
                             intent.putExtras(bundle);
                             startActivity(intent);
-
                             if (RemamberAccount) {
                                 writeSetting.putString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,edtxt_account.getText().toString()).apply();
                                 if(SignInAuto) {
@@ -123,13 +122,13 @@ public class ActEntrance extends AppCompatActivity {
                     bundle.putString(C_Dictionary.USER_SIGNUP_PASSWORD,edtxt_SingupPassword.getText().toString());
                     bundle.putInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP,2);
 
-                    new C_EntranceTask(new Interface_AsyncEntrance() {
+                    new C_EntranceTask(ActEntrance.this, new Interface_AsyncEntrance() {
                         @Override
                         public void memberCheckFinish(Boolean checkMember) {
                             if(checkMember){
-                                SharedPreferences sharedPreferences = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
-                                SharedPreferences.Editor write = sharedPreferences.edit();
-                                write.putString(C_Dictionary.USER_NAME_SETTING,edtxt_SingupName.getText().toString().trim()).apply();
+                                setAccount = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, Activity.MODE_PRIVATE);
+                                writeSetting = setAccount.edit();
+                                writeSetting.putString(C_Dictionary.USER_NICK_NAME,edtxt_SingupName.getText().toString());
                                 Toast.makeText(ActEntrance.this, "加入會員成功", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(ActEntrance.this, "帳號重複", Toast.LENGTH_SHORT).show();
@@ -222,7 +221,7 @@ public class ActEntrance extends AppCompatActivity {
                 bundle.putString(C_Dictionary.USER_ACCOUNT, account );
                 bundle.putString(C_Dictionary.USER_PASSWORD, password );
                 bundle.putInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP,1);
-                new C_EntranceTask(new Interface_AsyncEntrance() {
+                new C_EntranceTask(ActEntrance.this, new Interface_AsyncEntrance() {
                     @Override
                     public void memberCheckFinish(Boolean checkMember) {
                         System.out.println(checkMember);
