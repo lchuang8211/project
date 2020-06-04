@@ -87,10 +87,8 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
                 input_stringbuilder.append(line);
             }
             Log.i(TAG, "doInBackground: input_stringbuilder : +++++++++++++++++++++++++++ : "+ input_stringbuilder.toString());
-
             reader.close();
             urlConnection.disconnect();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

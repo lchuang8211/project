@@ -29,8 +29,8 @@ import com.example.appiii.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FrgmMember extends Fragment {
-    private static final String TAG = "FrgmMember";
+public class FrgMember extends Fragment {
+    private static final String TAG = "FrgMember";
     View inflatedView_Member;
     Bundle budle;
 
@@ -147,7 +147,6 @@ public class FrgmMember extends Fragment {
                 try{
                     Uri uri = data.getData();
 //                    File file = new File(uri.getPath());
-
                     Log.i(TAG, "onActivityResult: 111 uri " +uri);
                     new C_AsyncUploadImg(getContext()).execute(uri);
                     myHeadShot.setImageURI(uri);
@@ -157,6 +156,8 @@ public class FrgmMember extends Fragment {
                 break;
         }
     }
+
+
 
     @Nullable
     @Override

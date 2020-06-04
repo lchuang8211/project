@@ -28,7 +28,7 @@
         tools:layout="@layout/frg_gmap" />
     <fragment
         android:id="@+id/navigation_member"
-        android:name="com.example.appiii.ui.Member.FrgmMember"
+        android:name="com.example.appiii.ui.Member.FrgMember"
         android:label="@string/member"
         tools:layout="@layout/frg_member" />
 </navigation>

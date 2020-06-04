@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.appiii.ui.Member.FrgmMember;
+import com.example.appiii.ui.Member.FrgMember;
 import com.example.appiii.ui.Gmap.FrgGmap;
 import com.example.appiii.ui.Hot.FrgHot;
 import com.example.appiii.ui.Search.FrgSearch;
@@ -35,6 +34,7 @@ public class ActBottomNav extends AppCompatActivity {
                     fragment_search.getView().setVisibility(View.GONE);
                     fragment_travel.getView().setVisibility(View.GONE);
                     fragment_gmap.getView().setVisibility(View.GONE);
+                    ((FrgHot)fragment_home).OpenBtnEvent();
                     if (fragment_home.isAdded()) {
                         fragment_home.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_search).hide(fragment_travel).hide(fragment_gmap).hide(fragment_member)
@@ -91,10 +91,12 @@ public class ActBottomNav extends AppCompatActivity {
                     fragment_search.getView().setVisibility(View.GONE);
                     fragment_travel.getView().setVisibility(View.GONE);
                     fragment_gmap.getView().setVisibility(View.GONE);
+                    ((FrgHot)fragment_home).CloseBtnEvent();
                     if (fragment_member.isAdded()){
+                        fragment_member.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_home).hide(fragment_search).hide(fragment_travel).hide(fragment_gmap)
                                 .show(fragment_member).commit();
-                        fragment_member.getView().setVisibility(View.VISIBLE);
+
                     }else{
                         getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment_member).commit();
                     }
@@ -132,7 +134,7 @@ public class ActBottomNav extends AppCompatActivity {
         fragment_search = new FrgSearch();
         fragment_travel = new FrgTravel();
         fragment_gmap = new FrgGmap();
-        fragment_member = new FrgmMember();
+        fragment_member = new FrgMember();
 
         fragment_home.setArguments(bundle);
         fragment_search.setArguments(bundle);

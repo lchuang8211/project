@@ -162,6 +162,14 @@ public class FrgHot extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();
     }
+    public void CloseBtnEvent(){
+        adapter.holder.txt_Name_Address.setClickable(false);
+        adapter.holder.btn_addTravel.setClickable(false);
+    }
+    public void OpenBtnEvent(){
+        adapter.holder.txt_Name_Address.setClickable(true);
+        adapter.holder.btn_addTravel.setClickable(true);
+    }
 
 
     Button btn_home;

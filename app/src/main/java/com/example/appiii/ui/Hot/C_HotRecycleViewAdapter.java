@@ -96,7 +96,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
         CircleImageView getItem_image;
         CircleImageView img_Collect;
         TextView txt_Name_Address;
-        Button getbtn_addTravel;
+        Button btn_addTravel;
         RelativeLayout getParentLayout;   // recyclerView 的 使用的 RelativeLayout 排版
         C_MySQLite SQLiteHHHH;
         SQLiteDatabase sqLiteDB;
@@ -110,12 +110,13 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
             getParentLayout = itemView.findViewById(R.id.getHotParent_Layout);
             getItem_image = itemView.findViewById(R.id.getCirlceImage);
             img_Collect = itemView.findViewById(R.id.img_Collect);
-            getbtn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
+            btn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
             txt_Name_Address.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    Log.i(TAG, "onClick: inhot adapter txtclick");
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle( mySpotName.get( getAdapterPosition() ) );
                     builder.setMessage( "概述:\n" + mySpotToldescribe.get( getAdapterPosition() ) );
@@ -140,7 +141,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
                 }
             });
 
-            getbtn_addTravel.setOnClickListener(new View.OnClickListener(){
+            btn_addTravel.setOnClickListener(new View.OnClickListener(){
                 Cursor cursor;
                 ContentValues values;
                 C_MySQLite SQLite_helper;
@@ -149,6 +150,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
 
                 @Override
                 public void onClick(View v) {
+                    Log.i(TAG, "onClick: inhot adapter btnclick");
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
                     values = new ContentValues();  // insert 用
@@ -249,6 +251,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
             img_Collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i(TAG, "onClick: inhot adapter imgclick");
                     C_MySQLite SQLite_helper = new C_MySQLite(mContext);
                     SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
                     Cursor cursor;
