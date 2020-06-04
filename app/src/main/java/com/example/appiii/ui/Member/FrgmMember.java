@@ -2,16 +2,12 @@ package com.example.appiii.ui.Member;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -134,7 +129,8 @@ public class FrgmMember extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     if (edname.getText().toString().matches(""))
                         return;
-                    w.putString(C_Dictionary.USER_NICK_NAME,edname.getText().toString()).commit();
+//                    w.putString(C_Dictionary.USER_NICK_NAME,edname.getText().toString()).commit();
+                    // 修改 要 上傳資料庫
                     userNickName.setText(edname.getText().toString());
                 }
             }).create().show();
@@ -168,14 +164,13 @@ public class FrgmMember extends Fragment {
         inflatedView_Member = inflater.inflate(R.layout.frg_member,container,false);
         budle = this.getArguments();   // 在fragment 中拿到 bundle
         InitialComponent();
-        switch(budle.getString(C_Dictionary.USER_STATUS)){
-            case C_Dictionary.USER_STATUS_MEMBER:
-//                userNickName.setText( sharedPreferences.getString(C_Dictionary.USER_NICK_NAME,"還沒有建立名稱") );
-                break;
-            case C_Dictionary.USER_STATUS_VISITORS:
-//                userNickName.setText("你還不是會員");
-                break;
+        if(sharedPreferences.getInt(C_Dictionary.USER_STATUS,0)==1);{
+            userNickName.setText(sharedPreferences.getString(C_Dictionary.USER_NICK_NAME,"vister"));
         }
+        if (sharedPreferences.getInt(C_Dictionary.USER_STATUS,0)==0){
+            userNickName.setText("vister");
+        }
+
         return inflatedView_Member;
     }
 

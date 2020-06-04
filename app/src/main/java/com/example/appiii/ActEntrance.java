@@ -21,8 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.appiii.ui.Member.C_MySQLite;
-
 public class ActEntrance extends AppCompatActivity {
     static Boolean SignInAuto;
     static Boolean RemamberAccount;
@@ -34,6 +32,7 @@ public class ActEntrance extends AppCompatActivity {
             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_VISITORS);
             intent.putExtras(bundle);
             startActivity(intent);
+            writeSetting.putInt(C_Dictionary.USER_STATUS,0).commit();
             Toast toast = Toast.makeText(ActEntrance.this,"訪客登入",Toast.LENGTH_LONG);
             toast.show();
 
@@ -62,12 +61,16 @@ public class ActEntrance extends AppCompatActivity {
                             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_MEMBER);
                             intent.putExtras(bundle);
                             startActivity(intent);
+                            SharedPreferences setAccount = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, 0);
+                            SharedPreferences.Editor write = setAccount.edit();
+                            write.putInt(C_Dictionary.USER_STATUS, 1).commit();
                             if (RemamberAccount) {
-                                writeSetting.putString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,edtxt_account.getText().toString()).apply();
+                                write.putString(C_Dictionary.TABLE_SCHEMA_ACCOUNT,edtxt_account.getText().toString()).apply();
                                 if(SignInAuto) {
-                                    writeSetting.putString(C_Dictionary.TABLE_SCHEMA_PASSWORD, edtxt_passwd.getText().toString()).apply();
+                                    write.putString(C_Dictionary.TABLE_SCHEMA_PASSWORD, edtxt_passwd.getText().toString()).apply();
                                 }
                             }
+//                            writeSetting.putInt(C_Dictionary.USER_STATUS, 1).commit();
                             Toast toast = Toast.makeText(ActEntrance.this, "登入成功", Toast.LENGTH_LONG);
                             toast.show();
                         } else{
@@ -93,7 +96,7 @@ public class ActEntrance extends AppCompatActivity {
 
             final EditText edtxt_SingupAccount = (EditText) view.findViewById(R.id.edtxt_SingupAccount);
             final EditText edtxt_SingupPassword = (EditText) view.findViewById(R.id.edtxt_SingupPassword);
-            final EditText edtxt_SingupName = (EditText) view.findViewById(R.id.edtxt_SignupName);
+            final EditText edtxt_SignupNickName = (EditText) view.findViewById(R.id.edtxt_SignupNickName);
             AlertDialog.Builder builder = new AlertDialog.Builder(ActEntrance.this);
             builder.setTitle("申請會員");
             builder.setNegativeButton("取消",null);
@@ -108,7 +111,7 @@ public class ActEntrance extends AppCompatActivity {
                         Toast.makeText(ActEntrance.this, "請輸入密碼", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (edtxt_SingupName.getText().toString().matches("")) {
+                    if (edtxt_SignupNickName.getText().toString().matches("")) {
                         Toast.makeText(ActEntrance.this, "請輸入帳號名稱", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -118,8 +121,9 @@ public class ActEntrance extends AppCompatActivity {
                     }
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(C_Dictionary.USER_SIGNUP_ACCOUNT,edtxt_SingupAccount.getText().toString());
-                    bundle.putString(C_Dictionary.USER_SIGNUP_PASSWORD,edtxt_SingupPassword.getText().toString());
+                    bundle.putString(C_Dictionary.USER_SIGNUP_ACCOUNT,edtxt_SingupAccount.getText().toString().trim());
+                    bundle.putString(C_Dictionary.USER_SIGNUP_PASSWORD,edtxt_SingupPassword.getText().toString().trim());
+                    bundle.putString(C_Dictionary.USER_NICK_NAME,edtxt_SignupNickName.getText().toString().trim());
                     bundle.putInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP,2);
 
                     new C_EntranceTask(ActEntrance.this, new Interface_AsyncEntrance() {
@@ -128,7 +132,7 @@ public class ActEntrance extends AppCompatActivity {
                             if(checkMember){
                                 setAccount = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, Activity.MODE_PRIVATE);
                                 writeSetting = setAccount.edit();
-                                writeSetting.putString(C_Dictionary.USER_NICK_NAME,edtxt_SingupName.getText().toString());
+                                writeSetting.putString(C_Dictionary.USER_NICK_NAME,edtxt_SignupNickName.getText().toString().trim()).commit();
                                 Toast.makeText(ActEntrance.this, "加入會員成功", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(ActEntrance.this, "帳號重複", Toast.LENGTH_SHORT).show();
@@ -231,6 +235,7 @@ public class ActEntrance extends AppCompatActivity {
                             bundle.putString(C_Dictionary.USER_STATUS,C_Dictionary.USER_STATUS_MEMBER);
                             intent.putExtras(bundle);
                             startActivity(intent);
+                            writeSetting.putInt(C_Dictionary.USER_STATUS, 1).commit();
                             Toast toast = Toast.makeText(ActEntrance.this, "登入成功", Toast.LENGTH_LONG);
                             toast.show();
                         } else{

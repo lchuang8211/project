@@ -15,11 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.util.ArrayList;

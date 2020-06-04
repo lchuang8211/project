@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
 
 import java.io.File;

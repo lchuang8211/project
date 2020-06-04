@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
 
 import java.util.ArrayList;

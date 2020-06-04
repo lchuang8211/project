@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

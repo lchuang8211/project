@@ -1,21 +1,13 @@
 package com.example.appiii.ui.Travel;
 
-import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.ActMemberShowTravelPlan;
-import com.example.appiii.ui.Member.C_AsyncPublicPlan;
-import com.example.appiii.ui.Member.C_MySQLite;
+import com.example.appiii.C_MySQLite;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,8 +48,7 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
     }
 
     private Context mContext;
-    File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\tedros.png");  // 開啟本地檔案
-    Uri uri = Uri.fromFile(file);  //建立超連結
+
     private static final  String TAG = "TravelPlanList - RecyclerViewAdapter ";
 //    URL url = new URL("http://hhlc.ddnsking.com/");
 
@@ -97,12 +84,19 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
         holder.txt_userAccount.setText(AL_UserAccount.get(position));
         Log.i(TAG, "onBindViewHolder: AL_UserAccount : " + AL_UserAccount.get(position));
         Log.i(TAG, "onBindViewHolder: HeadImg : " + AL_HeadImg.get(position));
-//        holder.txt_userName.setText(AL_UserName.get(position));
+//        holder.txt_userName.setText(AL_UserName.get(position));uri
 
-        Glide.with(mContext).asBitmap().load( AL_HeadImg.get(position) )
+        if(AL_HeadImg.get(position).toString().trim().matches("")){
+
+        }else{
+            Glide.with(mContext).asBitmap().load( "http://hhlc.ddnsking.com"+AL_HeadImg.get(position) )
                 .skipMemoryCache(true)// 跳過記憶體緩衝
                 .diskCacheStrategy(DiskCacheStrategy.NONE) //不要在硬碟儲存緩衝
                 .into(holder.getHeadImage);
+        }
+//        if(AL_HeadImg.get(position) == "" || AL_HeadImg.get(position) == null){
+
+//        }
 //       holder.txt_Plan_Name.setText(myPlanName.get(position));
 
 //       Log.i(TAG, "onBindViewHolder: "+ holder.cursor.getInt(0));
@@ -127,17 +121,24 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
         TextView txt_userName;
         TextView txt_planName;
         TextView txt_planDate;
-        RelativeLayout getParentLayout;
+        RelativeLayout planlist_Layout;
         SharedPreferences sharedPreferences;
         SharedPreferences.Editor write;
         public ViewHolder(@NonNull View itemView) {   // 設置 item onclisk 定義 UI的動作
             super(itemView);
-            getParentLayout = itemView.findViewById(R.id.planlist_Layout);
+            planlist_Layout = itemView.findViewById(R.id.planlist_Layout);
             getHeadImage = itemView.findViewById(R.id.getHeadImage);
             txt_userName = itemView.findViewById(R.id.txt_userName);
             txt_userAccount = itemView.findViewById(R.id.txt_userAccount);
             txt_planName = itemView.findViewById(R.id.txt_planName);
             txt_planDate = itemView.findViewById(R.id.txt_planDate);
+
+            planlist_Layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         }
     }

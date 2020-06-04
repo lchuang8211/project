@@ -1,11 +1,5 @@
 package com.example.appiii.ui.Travel;
 
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,18 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.ActAddTravelPlan;
-import com.example.appiii.ui.Member.C_MemberRecycleViewAdapter;
-import com.example.appiii.ui.Member.C_MySQLite;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.net.URI;
-import java.net.URL;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -118,6 +103,7 @@ Button btn_addPlan;
         Log.i(TAG, "InitialRecycler: size :  " + AL_UserAccount.size()+" "+AL_UserAccount.get(0)+":"+AL_HandImg.get(0));
         recyclerView = inflatedView.findViewById(R.id.travel_recycler_layout_planlist);
         adapter = new C_TravelPlanListRecycleViewAdapter(getActivity(), AL_UserAccount, AL_PlanName, AL_StartDate, AL_EndDate, AL_HandImg);
+        Log.i(TAG, "InitialRecycler: size : " +AL_UserAccount.size()+" Img: "+ AL_HandImg.size());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 

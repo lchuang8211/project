@@ -97,9 +97,6 @@ public class FrgSearch extends Fragment {
         btn_searchDB = inflatedView_Search.findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
         edtxt_searchInput = inflatedView_Search.findViewById(R.id.edtxt_searchInput);
-//        InitRecyclerView();
-//        C_Ggps appLocationManager = new C_Ggps(getContext());
-//        txt_gps.setText(String.valueOf(appLocationManager.getLatitude()) +"\n"+ appLocationManager.getLongitude());
 
         InitialCitySpinner();
         InitialDatabase();

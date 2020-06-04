@@ -1,15 +1,9 @@
 package com.example.appiii.ui.Travel;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.example.appiii.C_Dictionary;
-import com.example.appiii.ui.Member.C_MySQLite;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
     private Context mContext;
@@ -122,7 +114,7 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
                 String getPlanName = jsobj.getString("plan_Name");
                 String getStarDate = jsobj.getString("start_date");
                 String getEndDate = jsobj.getString("end_date");
-                String getHead_img = "http://hhlc.ddnsking.com"+jsobj.getString("head_img");
+                String getHead_img = jsobj.getString("head_img");
 //                String[] tokens = getlist.split("\\|");
                 interface_plist_finish.PlanListFinish( getUesrAccount, getPlanName, getStarDate, getEndDate, getHead_img);  //nick_name
                 Log.i(TAG, "onPostExecute: tokens :"+getUesrAccount+"::"+getPlanName+"::"+getStarDate+"::"+getEndDate+"::"+getHead_img);

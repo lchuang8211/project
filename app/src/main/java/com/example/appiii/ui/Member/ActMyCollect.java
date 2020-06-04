@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
 
 import java.util.ArrayList;

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 
 import org.json.JSONArray;
 import org.json.JSONException;

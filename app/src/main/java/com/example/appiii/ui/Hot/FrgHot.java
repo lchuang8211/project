@@ -47,20 +47,14 @@ public class FrgHot extends Fragment {
     private ArrayList<String> mySpotToldescribe = new ArrayList<>();
     private ArrayList<Double> database_lat = new ArrayList<>();
     private ArrayList<Double> database_long = new ArrayList<>();
-
-    static String getUserStatus_home;
     Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflatedView = inflater.inflate(R.layout.frg_hot,container,false);
         bundle = this.getArguments();  // get bundle in fragment;
         InitialComponent();
-//        getMyGPS_Location();
-        if(bundle!=null){
-            getUserStatus_home = bundle.getString(C_Dictionary.USER_STATUS);
-//            txt_home.setText(getUserStatus_home);
-        }
         return inflatedView;
     }
 
@@ -83,7 +77,6 @@ public class FrgHot extends Fragment {
                 mySpotToldescribe.add(Toldescribe);
                 database_lat.add(Lcation_lat);
                 database_long.add(Lcation_long);
-
                 InitRecyclerView();
             }
         }).execute(bundleToDb);

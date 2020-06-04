@@ -18,11 +18,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     private static final String TAG = "C_EntranceTask";
     private Interface_AsyncEntrance memberCheck = null;
-    private String userAccout , userPassword, passMember;
+    private String userAccout , userPassword, userNickName, passMember;
     private Context mContext;
     private HttpURLConnection urlConnection = null;
     private InputStream getinputStream = null;
@@ -46,8 +47,11 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     @Override
     protected String doInBackground(Bundle... bundles) {
         JSONObject userMember = new JSONObject();
+        SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+
+
         Bundle bundle = bundles[0];
-        int userSign_in_or_up =  bundle.getInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP);
+        int userSign_in_or_up = bundle.getInt(C_Dictionary.USER_SIGNIN_OR_SIGNUP);
 
         try {
             if(userSign_in_or_up==1) {
@@ -55,11 +59,14 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
                 userPassword = bundle.getString(C_Dictionary.USER_PASSWORD);
                 userMember.put(C_Dictionary.USER_ACCOUNT,userAccout);
                 userMember.put(C_Dictionary.USER_PASSWORD,userPassword);
+//                userMember.put(C_Dictionary.USER_NICK_NAME, URLEncoder.encode(sh.getString(C_Dictionary.USER_NICK_NAME,""),"UTF-8") );
             }else if(userSign_in_or_up==2){
                 userAccout = bundle.getString(C_Dictionary.USER_SIGNUP_ACCOUNT);
                 userPassword = bundle.getString(C_Dictionary.USER_SIGNUP_PASSWORD);
+                userNickName = bundle.getString(C_Dictionary.USER_NICK_NAME);
                 userMember.put(C_Dictionary.USER_SIGNUP_ACCOUNT,userAccout);
                 userMember.put(C_Dictionary.USER_SIGNUP_PASSWORD,userPassword);
+                userMember.put(C_Dictionary.USER_NICK_NAME, URLEncoder.encode(userNickName,"UTF-8"));
             }
             userMember.put(C_Dictionary.USER_SIGNIN_OR_SIGNUP,String.valueOf(userSign_in_or_up));
             Log.i("userMember","userMember :"+userMember.toString());
@@ -112,6 +119,7 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
                 SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
                 SharedPreferences.Editor w = sh.edit();
                 w.putString(C_Dictionary.USER_U_ID, js.getString("u_id")).apply();
+                w.putString(C_Dictionary.USER_NICK_NAME, js.getString(C_Dictionary.USER_NICK_NAME)).apply();
                 break;
             case 0:
                 check=false;
