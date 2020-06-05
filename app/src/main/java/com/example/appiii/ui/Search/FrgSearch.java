@@ -98,6 +98,7 @@ public class FrgSearch extends Fragment {
         btn_searchDB.setOnClickListener(btn_searchDB_click);
         edtxt_searchInput = inflatedView_Search.findViewById(R.id.edtxt_searchInput);
 
+
         InitialCitySpinner();
         InitialDatabase();
         return inflatedView_Search;
@@ -153,7 +154,6 @@ public class FrgSearch extends Fragment {
             case "住宿":
                 spotType = C_Dictionary.SPOT_TYPE_HOTEL;
                 break;
-
         }
         return spotType;
     }

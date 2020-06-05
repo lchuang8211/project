@@ -1,9 +1,11 @@
 package com.example.appiii.ui.Travel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 import com.example.appiii.C_MySQLite;
 
@@ -136,7 +139,19 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
             planlist_Layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Bundle bundle = new Bundle();
+                    bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, AL_PlanName.get( getAdapterPosition() ));
+                    bundle.putString(C_Dictionary.USER_ACCOUNT, AL_UserAccount.get( getAdapterPosition() ));
+                    /////////////////////////////////////////////////
+                    new C_AsyncGetPlanDetail(
+                            /////////////////////////////////////////////////
+                            // How to put the ArrayList into bundle
+                            // https://stackoverflow.com/questions/42436012/how-to-put-the-arraylist-into-bundle
+                            /////////////////////////////////////////////////
+                            // Parcelable and Serializable
+                            // https://stackoverflow.com/questions/3323074/android-difference-between-parcelable-and-serializable
+                    ).execute(bundle);
+                    /////////////////////////////////////////////////
                 }
             });
 

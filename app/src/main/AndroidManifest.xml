@@ -23,10 +23,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,12 +34,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.Member.ActMySchedule"></activity>
+        <activity android:name=".ui.Travel.ActPlanDetail"></activity>
+        <activity android:name=".ui.Member.ActMySchedule" />
         <activity android:name=".ui.Member.ActAddSpotInShowTravelPlan" />
         <activity android:name=".ActRecycle" />
         <activity android:name=".ui.Member.ActAddTravelPlan" />
         <activity android:name=".ui.Member.ActMemberShowTravelPlan" />
-        <activity android:name=".ui.Member.ActMyCollect"/>
+        <activity android:name=".ui.Member.ActMyCollect" />
         <activity
             android:name=".ActEntrance"
             android:exported="true"> <!-- android:name = ".xxxx"  Activity name -->
@@ -61,7 +62,6 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

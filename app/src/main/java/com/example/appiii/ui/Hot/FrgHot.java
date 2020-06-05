@@ -2,7 +2,6 @@ package com.example.appiii.ui.Hot;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.icu.text.CaseMap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,23 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appiii.ActEntrance;
-import com.example.appiii.ActGps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_GetDataFromDatabase;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
-import com.example.appiii.ui.Search.C_SearchRecycleViewAdapter;
 
 import java.util.ArrayList;
 
@@ -154,21 +148,25 @@ public class FrgHot extends Fragment {
     }
 
     C_HotRecycleViewAdapter adapter;
+    static RecyclerView recyclerView_hot;
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
-        RecyclerView recyclerView = inflatedView.findViewById(R.id.recycle_view_hot);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
+        recyclerView_hot = inflatedView.findViewById(R.id.recycle_view_hot);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
         adapter = new C_HotRecycleViewAdapter(getActivity(), database_Name, database_address, mySpotToldescribe, database_lat, database_long);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
+        recyclerView_hot.setAdapter(adapter);
+        recyclerView_hot.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();
     }
     public void CloseBtnEvent(){
-        adapter.holder.txt_Name_Address.setClickable(false);
-        adapter.holder.btn_addTravel.setClickable(false);
+        if (adapter != null) {
+
+        }
     }
     public void OpenBtnEvent(){
-        adapter.holder.txt_Name_Address.setClickable(true);
-        adapter.holder.btn_addTravel.setClickable(true);
+        Log.i(TAG, "set hot adapter true : "+database_Name.size());
+
+//        ((C_HotRecycleViewAdapter)recyclerView_hot.getAdapter()).setAdapterClickFlag(true);
+        InitRecyclerView();
     }
 
 

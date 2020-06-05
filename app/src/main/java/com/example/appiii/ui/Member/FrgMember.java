@@ -187,6 +187,13 @@ public class FrgMember extends Fragment {
         btn_mySchedule.setOnClickListener(btn_mySchedule_click);
         btn_myCollect = inflatedView_Member.findViewById(R.id.btn_myCollect);
         btn_myCollect.setOnClickListener(btn_myCollect_click);
+        txt_return = inflatedView_Member.findViewById(R.id.txt_return);
+        txt_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
+            }
+        });
         sharedPreferences = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
         w = sharedPreferences.edit();
     }
@@ -197,7 +204,7 @@ public class FrgMember extends Fragment {
     C_MySQLite SQLite_helper;  // helper
     SQLiteDatabase sqLiteDatabase;
 
-    TextView userNickName;
+    TextView userNickName , txt_return;
     Button btn_mySetting;
     Button btn_mySchedule;
     Button btn_myCollect;

@@ -47,9 +47,10 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
 //    File file_fill = new File(mContext.getFilesDir(), "heart_fill_64px.png");  // 開啟本地檔案
 //    Uri uri = Uri.fromFile(file);  //建立超連結
 //    Uri uri_fill = Uri.fromFile(file_fill);  //建立超連結
-
-
-
+    Boolean AdapterClickFlag = true ;
+    public void setAdapterClickFlag(boolean iptflag){
+        this.AdapterClickFlag = iptflag;
+    }
     public C_HotRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
         this.mySpotName = mySpotName;
         this.mySpotAddress = mySpotAddress;
@@ -70,10 +71,15 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {  // part 2 : 複製 RecyclerView 的 XML && 定義 XML 的設定
+//        setClickFlag(AdapterClickFlag);
 //        Log.i(TAG, "onBindViewHolder: called");
         holder.setIsRecyclable(false);
 //        Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
-
+        if(!AdapterClickFlag){
+            holder.txt_Name_Address.setEnabled(false);
+            holder.btn_addTravel.setEnabled(false);
+            holder.img_Collect.setEnabled(false);
+        }
         holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ mySpotName.get(position) +"'",null);
         if(holder.cursorForBind.getCount()==0){
             Glide.with(mContext).asBitmap().load( R.drawable.heart_64px ).into(holder.img_Collect);
@@ -91,8 +97,8 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
         return mySpotName.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder{ // ViewHolder 類別 Class 變數要在內部定義 才能包在 ViewHolder 中使用
+        Boolean ClickFlag = true ;
         CircleImageView getItem_image;
         CircleImageView img_Collect;
         TextView txt_Name_Address;
@@ -102,7 +108,11 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
         SQLiteDatabase sqLiteDB;
         Cursor cursorForBind;
 //        Button btn_getItem;
-
+public void setClickFlag(boolean iptflag){
+    Log.i(TAG, "setClickFlag: iptflag:" + iptflag);
+    ClickFlag = iptflag;
+    Log.i(TAG, "setClickFlag: iptflag:" + ClickFlag);
+}
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             SQLiteHHHH = new C_MySQLite(mContext);
@@ -113,98 +123,104 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
             btn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
-            txt_Name_Address.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    Log.i(TAG, "onClick: inhot adapter txtclick");
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle( mySpotName.get( getAdapterPosition() ) );
-                    builder.setMessage( "概述:\n" + mySpotToldescribe.get( getAdapterPosition() ) );
-                    builder.setNegativeButton("取消",null);
-                    builder.setPositiveButton("查看位置",new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,mySpotLatitude.get( getAdapterPosition() ));
-                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,mySpotLongitude.get( getAdapterPosition() ));
-                            bundle.putString(C_Dictionary.SPOT_NAME,mySpotName.get( getAdapterPosition() ));
-                            Log.i(TAG, "onClick: send bundle :" + bundle);
-                            intent.putExtras(bundle);
-                            mContext.startActivity(intent);
-                        }
-                    });
-                    Dialog dialog = builder.create();
-                    dialog.show();
+//            Log.i(TAG, "ViewHolder: in ClickFlag " + ClickFlag);
+                txt_Name_Address.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i(TAG, "ViewHolder: in ClickFlag 前" + ClickFlag);
+//                        if (!ClickFlag) return;
+                        Log.i(TAG, "ViewHolder: in ClickFlag 後" + ClickFlag);
+                        Log.i(TAG, "onClick: inhot adapter txtclick");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle(mySpotName.get(getAdapterPosition()));
+                        builder.setMessage("概述:\n" + mySpotToldescribe.get(getAdapterPosition()));
+                        builder.setNegativeButton("取消", null);
+                        builder.setPositiveButton("查看位置", null);
+//                    new DialogInterface.OnClickListener(){
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,mySpotLatitude.get( getAdapterPosition() ));
+//                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,mySpotLongitude.get( getAdapterPosition() ));
+//                            bundle.putString(C_Dictionary.SPOT_NAME,mySpotName.get( getAdapterPosition() ));
+//                            Log.i(TAG, "onClick: send bundle :" + bundle);
+//                            intent.putExtras(bundle);
+//                            mContext.startActivity(intent);
+//                        }
+//                    }
+                        Dialog dialog = builder.create();
+                        dialog.show();
 //                    Toast.makeText(v.getContext(),"click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();
 //                    Log.i(TAG, "onClick: ViewHolder on getAdapterPosition() :"+ getAdapterPosition());
-                }
-            });
+                    }
+                });
 
-            btn_addTravel.setOnClickListener(new View.OnClickListener(){
-                Cursor cursor;
-                ContentValues values;
-                C_MySQLite SQLite_helper;
-                SQLiteDatabase sqLiteDatabase;
-                String[] planName;
+                btn_addTravel.setOnClickListener(new View.OnClickListener() {
+                    Cursor cursor;
+                    ContentValues values;
+                    C_MySQLite SQLite_helper;
+                    SQLiteDatabase sqLiteDatabase;
+                    String[] planName;
 
-                @Override
-                public void onClick(View v) {
-                    Log.i(TAG, "onClick: inhot adapter btnclick");
+                    @Override
+                    public void onClick(View v) {
+//                        if (!ClickFlag) return;
+                        Log.i(TAG, "onClick: inhot adapter btnclick");
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
-                    values = new ContentValues();  // insert 用
-                    SQLite_helper = new C_MySQLite(mContext);  // helper
-                    sqLiteDatabase = SQLite_helper.getReadableDatabase();
-                    cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
+                        values = new ContentValues();  // insert 用
+                        SQLite_helper = new C_MySQLite(mContext);  // helper
+                        sqLiteDatabase = SQLite_helper.getReadableDatabase();
+                        cursor = sqLiteDatabase.rawQuery("select * from " + C_Dictionary.TRAVEL_LIST_Table_Name + ";", null);
 //                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);
-                    Log.i("getbtn_addTravel","TRAVEL_LIST_Table_Name:"+cursor.getCount());
-                    Log.i("getbtn_addTravel","MY_Table_Name"+cursor.getCount());
-                    planName=new String[(int)DatabaseUtils.queryNumEntries(sqLiteDatabase,C_Dictionary.TRAVEL_LIST_Table_Name)];
-                    int count = 0 ;
-                    while (cursor.moveToNext()){
-                        planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
-                        count++;
-                    }
+                        Log.i("getbtn_addTravel", "TRAVEL_LIST_Table_Name:" + cursor.getCount());
+                        Log.i("getbtn_addTravel", "MY_Table_Name" + cursor.getCount());
+                        planName = new String[(int) DatabaseUtils.queryNumEntries(sqLiteDatabase, C_Dictionary.TRAVEL_LIST_Table_Name)];
+                        int count = 0;
+                        while (cursor.moveToNext()) {
+                            planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
+                            count++;
+                        }
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("選擇要加入行程");
-                    builder.setItems(planName, new DialogInterface.OnClickListener(){    // addItemToSchedule_selected 點擊加入
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String newtable = "["+C_Dictionary.CREATE_TABLE_HEADER+planName[which]+"]";
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle("選擇要加入行程");
+                        builder.setItems(planName, new DialogInterface.OnClickListener() {    // addItemToSchedule_selected 點擊加入
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String newtable = "[" + C_Dictionary.CREATE_TABLE_HEADER + planName[which] + "]";
 
-                            // select exists (select 1 from TRAvel_list_table_name);  // 檢查表是否為 empty
-                            // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
-                            // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
-                            SharedPreferences sp = mContext.getSharedPreferences(C_Dictionary.PLAN_DAYS_RECORD,0);
-                            int days = sp.getInt(planName[which],1);
-                            final int whichplan = which;
-                            String[] SingleDay=new String[days];
-                            for(int i = 1; i<=days ; i++){
-                                SingleDay[i-1]="第 "+i+" 天";
-                            }
-                            AlertDialog.Builder subbuilder = new AlertDialog.Builder(mContext);
-                            subbuilder.setTitle("選一天");
-                            subbuilder.setItems(SingleDay, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int innerwhich) {
-                                    // get which
-                                    cursor=sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from "+"["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]"+" Where COLUMN_NAME_DATE = "+(innerwhich+1)+" group by COLUMN_NAME_DATE",null);
-                                    int maxQueue=0;
-                                    if(cursor.getCount()>0){
-                                        cursor.moveToLast();
-                                        maxQueue = cursor.getInt(0);
-                                    }
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
-                                    values.put(C_Dictionary.TABLE_SCHEMA_DATE,innerwhich+1);
-                                    values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLongitude.get(getAdapterPosition()) );
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
-                                    sqLiteDatabase.insert( "["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]" ,null,values);
+                                // select exists (select 1 from TRAvel_list_table_name);  // 檢查表是否為 empty
+                                // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
+                                // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
+                                SharedPreferences sp = mContext.getSharedPreferences(C_Dictionary.PLAN_DAYS_RECORD, 0);
+                                int days = sp.getInt(planName[which], 1);
+                                final int whichplan = which;
+                                String[] SingleDay = new String[days];
+                                for (int i = 1; i <= days; i++) {
+                                    SingleDay[i - 1] = "第 " + i + " 天";
                                 }
-                            }).create().show();
+                                AlertDialog.Builder subbuilder = new AlertDialog.Builder(mContext);
+                                subbuilder.setTitle("選一天");
+                                subbuilder.setItems(SingleDay, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int innerwhich) {
+                                        // get which
+                                        cursor = sqLiteDatabase.rawQuery("select count(COLUMN_NAME_DATE)  from " + "[" + C_Dictionary.CREATE_TABLE_HEADER + planName[whichplan] + "]" + " Where COLUMN_NAME_DATE = " + (innerwhich + 1) + " group by COLUMN_NAME_DATE", null);
+                                        int maxQueue = 0;
+                                        if (cursor.getCount() > 0) {
+                                            cursor.moveToLast();
+                                            maxQueue = cursor.getInt(0);
+                                        }
+                                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));  //地點名稱
+                                        values.put(C_Dictionary.TABLE_SCHEMA_DATE, innerwhich + 1);
+                                        values.put(C_Dictionary.TABLE_SCHEMA_QUEUE, (maxQueue + 1));
+                                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLongitude.get(getAdapterPosition()));
+                                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLatitude.get(getAdapterPosition()));
+                                        sqLiteDatabase.insert("[" + C_Dictionary.CREATE_TABLE_HEADER + planName[whichplan] + "]", null, values);
+                                    }
+                                }).create().show();
 
 //                            Log.i("maxdate","exists getAdapterPosition :"+which);
 //                            Log.i("maxdate","exists planName getAdapterPosition :"+planName[which]);
@@ -238,44 +254,45 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
 //                                values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLatitude.get(getAdapterPosition()));
 //                                sqLiteDatabase.insert( newtable ,null,values);
 //                            }
-                        }
-                    });
+                            }
+                        });
 //                    builder.setPositiveButton("ok",null);
-                    Dialog dialog = builder.create();
-                    dialog.show();
+                        Dialog dialog = builder.create();
+                        dialog.show();
 //                    Toast toast = Toast.makeText(mContext,mySpotName.get( getAdapterPosition() ),Toast.LENGTH_LONG);
 //                    toast.show();
-                }
-            });
-
-            img_Collect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i(TAG, "onClick: inhot adapter imgclick");
-                    C_MySQLite SQLite_helper = new C_MySQLite(mContext);
-                    SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
-                    Cursor cursor;
-                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
-                                +" from "+C_Dictionary.MY_COLLECTION_TABLE
-                                +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+mySpotName.get(getAdapterPosition()) +"'"  ,null);
-                    Log.i("cursor","cursor : "+cursor.getCount());
-                    if (cursor.getCount()==0){
-                        Boolean changed_collat = true;
-                        ContentValues values = new ContentValues();
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
-                        sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
-                        Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
                     }
-                    if (cursor.getCount()==1){
-                            sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{mySpotName.get(getAdapterPosition())});
-                            Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
+                });
+
+                img_Collect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        if (!ClickFlag) return;
+                        Log.i(TAG, "onClick: inhot adapter imgclick");
+                        C_MySQLite SQLite_helper = new C_MySQLite(mContext);
+                        SQLiteDatabase sqLiteDatabase = SQLite_helper.getWritableDatabase();
+                        Cursor cursor;
+                        cursor = sqLiteDatabase.rawQuery("select " + C_Dictionary.TABLE_SCHEMA_NODE_NAME
+                                + " from " + C_Dictionary.MY_COLLECTION_TABLE
+                                + " WHERE " + C_Dictionary.TABLE_SCHEMA_NODE_NAME + " = '" + mySpotName.get(getAdapterPosition()) + "'", null);
+                        Log.i("cursor", "cursor : " + cursor.getCount());
+                        if (cursor.getCount() == 0) {
+                            Boolean changed_collat = true;
+                            ContentValues values = new ContentValues();
+                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
+                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
+                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
+                            values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                            sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
+                            Glide.with(mContext).asBitmap().load(R.drawable.heart_fill_64px).into(img_Collect);
+                        }
+                        if (cursor.getCount() == 1) {
+                            sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE, C_Dictionary.TABLE_SCHEMA_NODE_NAME + "=?", new String[]{mySpotName.get(getAdapterPosition())});
+                            Glide.with(mContext).asBitmap().load(R.drawable.heart_64px).into(img_Collect);
                             return;
                         }
                     }
-            });
+                });
 
 
 

@@ -34,7 +34,7 @@ public class ActBottomNav extends AppCompatActivity {
                     fragment_search.getView().setVisibility(View.GONE);
                     fragment_travel.getView().setVisibility(View.GONE);
                     fragment_gmap.getView().setVisibility(View.GONE);
-                    ((FrgHot)fragment_home).OpenBtnEvent();
+//                    ((FrgHot)fragment_home).OpenBtnEvent();
                     if (fragment_home.isAdded()) {
                         fragment_home.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_search).hide(fragment_travel).hide(fragment_gmap).hide(fragment_member)
@@ -59,6 +59,7 @@ public class ActBottomNav extends AppCompatActivity {
                     break;
                 case R.id.navigation_travel:
                     setTitle(R.string.travel);
+//                    ((FrgHot)fragment_home).CloseBtnEvent();
                     fragment_home.getView().setVisibility(View.GONE);
                     fragment_search.getView().setVisibility(View.GONE);
                     fragment_member.getView().setVisibility(View.GONE);
@@ -87,11 +88,11 @@ public class ActBottomNav extends AppCompatActivity {
                     break;
                 case R.id.navigation_member:
                     setTitle(R.string.member);
+//                    ((FrgHot)fragment_home).CloseBtnEvent();
                     fragment_home.getView().setVisibility(View.GONE);
                     fragment_search.getView().setVisibility(View.GONE);
                     fragment_travel.getView().setVisibility(View.GONE);
                     fragment_gmap.getView().setVisibility(View.GONE);
-                    ((FrgHot)fragment_home).CloseBtnEvent();
                     if (fragment_member.isAdded()){
                         fragment_member.getView().setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().hide(fragment_home).hide(fragment_search).hide(fragment_travel).hide(fragment_gmap)
@@ -156,7 +157,7 @@ public class ActBottomNav extends AppCompatActivity {
         int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         //如果沒有權限則請求權限
         if (permissionCheck != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);  //識別碼自訂
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);  //識別碼自訂
     }
     BottomNavigationView bottimNavigation;
     Fragment fragment_home, fragment_search, fragment_travel, fragment_gmap, fragment_member;
