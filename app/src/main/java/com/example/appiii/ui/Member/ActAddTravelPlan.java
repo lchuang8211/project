@@ -120,7 +120,9 @@ public class ActAddTravelPlan extends AppCompatActivity {
 
                 // select COLUMN_NAME_DATE  from 耶呼 group by COLUMN_NAME_DATE order by COLUMN_NAME_DATE desc LIMIT 1  // 找最後的天數
                 // select count(COLUMN_NAME_DATE)  from 耶呼 Where COLUMN_NAME_DATE = 2 group by COLUMN_NAME_DATE // 找當天的最後一個行程
+
                 ContentValues contentValues = new ContentValues();
+                contentValues.put(C_Dictionary.USER_U_ID, getUID);
                 contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,rawTableName);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,str_startdate);
                 contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,str_enddate);
@@ -165,8 +167,12 @@ public class ActAddTravelPlan extends AppCompatActivity {
         btn_Create.setOnClickListener(btn_Createe_click);
 //        btn_endDate = findViewById(R.id.btn_endDate);
 //        btn_endDate.setOnClickListener(btn_endDate_click);
+        sh = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        getUID = sh.getString(C_Dictionary.USER_U_ID,"visitor");
 
     }
+    SharedPreferences sh;
+    String getUID;
     C_MySQLite SQLite_helper;  // helper
     SQLiteDatabase sqLiteDatabase;
     EditText edtxt_PlanName;

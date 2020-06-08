@@ -33,7 +33,8 @@ public class C_MySQLite extends SQLiteOpenHelper {
             +")";
 // + C_Dictionary.INTEGER_PRIMARY_KEY_AUTOINCREMENT +" NOT NULL"+ C_Dictionary.VALUE_COMMA_SEP
     private String SQL_CREATE_TRAVEL_LIST = "CREATE TABLE if NOT exists " + C_Dictionary.TRAVEL_LIST_Table_Name
-            +" ( "+ C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_TYPE_STRING +" UNIQUE "+ C_Dictionary.VALUE_COMMA_SEP
+            +" ( "+C_Dictionary.USER_U_ID + C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+            + C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_TYPE_STRING +" UNIQUE "+ C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TABLE_SCHEMA_DATE_END+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
             + C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY +C_Dictionary.VALUE_TYPE_INT +")";

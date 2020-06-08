@@ -1,13 +1,18 @@
 package com.example.appiii.ui.Member;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_MySQLite;
 import com.example.appiii.ui.Travel.Interface_AsyncPlanList;
 
 import org.json.JSONArray;
@@ -23,6 +28,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
@@ -49,15 +55,16 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
 
     private Interface_AsyncLoadPlanList interface_LoadPlanListlist_finish;
 
-    public C_AsyncLoadPlanList(Interface_AsyncLoadPlanList interface_LoadPlanListlist_finish){
+    public C_AsyncLoadPlanList(Context mContext,Interface_AsyncLoadPlanList interface_LoadPlanListlist_finish){
         this.interface_LoadPlanListlist_finish = interface_LoadPlanListlist_finish;
+        this.mContext = mContext;
     }
 
-
+    String getUID;
     @Override
     protected String doInBackground(Bundle... bundles) {
 
-        String getUID = bundles[0].getString(C_Dictionary.USER_U_ID);
+        getUID = bundles[0].getString(C_Dictionary.USER_U_ID);
         Log.i(TAG, "doInBackground: getUID : "+getUID);
 
         try {
@@ -103,27 +110,80 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
 
         return input_stringbuilder.toString();
     }
-
+    C_MySQLite helper;
+    SQLiteDatabase sqlite;
     @Override
     protected void onPostExecute(String string) {
         super.onPostExecute(string);
+        helper = new C_MySQLite(mContext);
+        sqlite = helper.getReadableDatabase();
+        ArrayList<C_LoadPlanList> loadPlanList = new ArrayList<>();
+        ArrayList<C_LoadPlanDetail> loadPlanDetail = new ArrayList<>();
         Log.i(TAG, "onPostExecute: onPostExecute:" + string);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             JSONArray jsa = new JSONArray(string);
-            for (int i =0 ; i< jsa.length() ; i++){
-                JSONObject js = jsa.getJSONObject(i);
+            for (int i =0 ; i< jsa.length() ; i++){   // for load planlist
+                JSONObject jsplan = jsa.getJSONObject(i);
+                jsplan.getJSONObject("plan_info");
+                JSONObject jsp = jsplan.getJSONObject("plan_info");
+                JSONArray jsplandetail = new JSONArray(jsplan.getString("plan_detail"));
 //                js.getString(C_Dictionary.USER_U_ID);
-                String pName = js.getString("plan_name");
-                String sDate = js.getString("start_date");
-                String eDate = js.getString("end_date");
+                String pName = jsp.getString("plan_name");
+                String sDate = jsp.getString("start_date");
+                String eDate = jsp.getString("end_date");
                 String Date = sDate+" ~ "+eDate;
 
                 Date startdate  = df.parse(sDate);
                 Date enddate =  df.parse(eDate);
                 int tatolDay = (int)( Math.abs( enddate.getTime()-startdate.getTime() )/(60*60*1000*24))+1 ;
-                interface_LoadPlanListlist_finish.LoadPlanListFinish(pName,Date,tatolDay);
+                loadPlanList.add(new C_LoadPlanList(pName, Date, tatolDay));
+
+                Cursor cursor = sqlite.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{pName});
+                if (cursor.getCount()>0){
+                    Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單已存在" );
+                }else{
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(C_Dictionary.USER_U_ID, getUID);
+                    contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,pName);
+                    contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,sDate);
+                    contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,eDate);
+                    contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
+                    sqlite.insert(C_Dictionary.TRAVEL_LIST_Table_Name,null,contentValues);
+
+
+                    String newPlanTable = C_Dictionary.CREATE_TABLE_if_not_exists +"["+C_Dictionary.CREATE_TABLE_HEADER+pName + "] ("
+                            + C_Dictionary.TABLE_SCHEMA_DATE+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.TABLE_SCHEMA_QUEUE+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE+C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE +C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING +" )";
+                    sqlite.execSQL( newPlanTable );
+
+                    for(int j =0; j<jsplandetail.length(); j++){
+                        JSONObject jspdetail = jsplandetail.getJSONObject(i);
+
+                        ContentValues cv = new ContentValues();
+                        cv.put(C_Dictionary.TABLE_SCHEMA_DATE,jspdetail.getInt("COLUMN_NAME_DATE"));
+                        cv.put(C_Dictionary.TABLE_SCHEMA_QUEUE,jspdetail.getInt("COLUMN_NAME_QUEUE"));
+                        cv.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME,jspdetail.getString("TABLE_SCHEMA_NODE_NAME"));
+                        cv.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,jspdetail.getDouble("TABLE_SCHEMA_NODE_LATITUDE"));
+                        cv.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,jspdetail.getDouble("TABLE_SCHEMA_NODE_LONGITUDE"));
+                        cv.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, jspdetail.getString("TABLE_SCHEMA_NODE_DESCRIBE"));
+                        sqlite.insert(C_Dictionary.CREATE_TABLE_HEADER+pName,null,cv);
+
+                    }
+                    ////////////////////
+                    //  for(int i=0 ; i < getdatail.length ; i++){
+                    //      for load all plandetail to sqlite
+                    //  }
+                    ////////////////////
+                }
             }
+
+            interface_LoadPlanListlist_finish.LoadPlanListFinish(loadPlanList);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

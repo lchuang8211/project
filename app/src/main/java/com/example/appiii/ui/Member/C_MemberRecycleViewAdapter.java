@@ -92,8 +92,8 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
 //        holder.txt_Plan_date.setText(myPlanDate.get(position) +" "+myPlanTotalDay.get(position)+" 天");
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 //        holder.txt_Name_Address.setText(myPlanName.get(position));
-        Log.i(TAG, "onBindViewHolder: myPlanName.get(position): " + myPlanName.get(position));
-        Log.i(TAG, "onBindViewHolder: myPlanTotalDay.get(position): " + myPlanTotalDay.get(position));
+//        Log.i(TAG, "onBindViewHolder: myPlanName.get(position): " + myPlanName.get(position));
+//        Log.i(TAG, "onBindViewHolder: myPlanTotalDay.get(position): " + myPlanTotalDay.get(position));
     }
 
     @Override
