@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
@@ -82,7 +83,7 @@ public class FrgMember extends Fragment {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setItems(new String[]{"上傳照片", "拍照"}, new DialogInterface.OnClickListener() {
+            builder.setItems(new String[]{"上傳照片"}, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch(which){
@@ -176,11 +177,23 @@ public class FrgMember extends Fragment {
     }
 
     private void InitialComponent() {
-
+        sharedPreferences = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        w = sharedPreferences.edit();
         userNickName = inflatedView_Member.findViewById(R.id.memberStatus);
         userNickName.setOnLongClickListener(userNickName_longclick);
         myHeadShot = inflatedView_Member.findViewById(R.id.myHeadShot);
         myHeadShot.setOnClickListener(myHeadShot_click);
+        Log.i(TAG, "InitialComponent: 12333333 "+ sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"1"));
+        switch(sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"1")){
+            case "":
+                Glide.with(getContext()).asBitmap().load(R.drawable.user_64px).into(myHeadShot);
+
+                break;
+            default:
+                Glide.with(getContext()).asBitmap().load("http://hhlc.ddnsking.com"+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"")).into(myHeadShot);
+                break;
+        }
+
         btn_mySetting = inflatedView_Member.findViewById(R.id.btn_mySetting);
         btn_mySetting.setOnClickListener(btn_mySetting_click);
         btn_mySchedule = inflatedView_Member.findViewById(R.id.btn_mySchedule);
@@ -194,8 +207,7 @@ public class FrgMember extends Fragment {
                 return;
             }
         });
-        sharedPreferences = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
-        w = sharedPreferences.edit();
+
     }
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor w;

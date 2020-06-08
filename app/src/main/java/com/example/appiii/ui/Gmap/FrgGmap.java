@@ -2,6 +2,7 @@ package com.example.appiii.ui.Gmap;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     private ArrayList<Double> showSpotLongitude = new ArrayList<>();
     private ArrayList<String> showSpotDescrbe = new ArrayList<>();
 
-
+    SharedPreferences sh;
     private View.OnClickListener btn_searchView_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
@@ -75,9 +76,11 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     private View.OnClickListener btn_myPlan_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
+            sh = getContext().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
             C_MySQLite helper = new C_MySQLite(getActivity());
             SQLiteDatabase sqLiteDatabase = helper.getReadableDatabase();
-            Cursor cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME + " from "+ C_Dictionary.TRAVEL_LIST_Table_Name,null);
+            Cursor cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME + " from "+ C_Dictionary.TRAVEL_LIST_Table_Name + " WHERE "+C_Dictionary.USER_U_ID+"=?"
+                    ,new String[]{sh.getString(C_Dictionary.USER_U_ID,"1") });
             final String[] allPlan;
             int getcount=1;
             if(cursor.getCount()>0) {

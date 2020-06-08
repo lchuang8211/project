@@ -141,14 +141,14 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
 
                 Cursor cursor = sqlite.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"=?",new String[]{pName});
                 if (cursor.getCount()>0){
-                    Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單已存在" );
+                    Log.i("cursor","TRAVEL_LIST_SCHEMA_PLAN_NAME : 表單已存在 " +pName);
                 }else{
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(C_Dictionary.USER_U_ID, getUID);
                     contentValues.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME,pName);
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,sDate);
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,eDate);
-                    contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,0);
+                    contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
                     sqlite.insert(C_Dictionary.TRAVEL_LIST_Table_Name,null,contentValues);
 
 

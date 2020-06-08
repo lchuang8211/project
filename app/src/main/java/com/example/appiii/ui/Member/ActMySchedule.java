@@ -82,9 +82,9 @@ public class ActMySchedule extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_my_schedule);
         setTitle("行程表");
-        InitialComponent();
 //        InsertRecyclerView();
-//        InitRecyclerView();
+        InitRecyclerView();
+        InitialComponent();
     }
 
     private void InitialComponent() {
@@ -103,16 +103,24 @@ public class ActMySchedule extends AppCompatActivity {
             public void LoadPlanListFinish(ArrayList<C_LoadPlanList> C_LoadPlanList) {
                 int len = C_LoadPlanList.size();
                 Log.i(TAG, "LoadPlanListFinish: len : "+len);
-                InitRecyclerView();
+                newRecyclerView();
             }
         }).execute(userbundle);
-        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
-            plan_Name_List.clear();
-            Plan_Date_List.clear();
-            Plan_MaxDay_List.clear();
-        }
+//        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
+//            plan_Name_List.clear();
+//            Plan_Date_List.clear();
+//            Plan_MaxDay_List.clear();
+//        }
         ///////
     }
+
+    private void newRecyclerView() {
+        recyclerView = findViewById(R.id.recycle_view_member);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
+        adapter = new C_MemberRecycleViewAdapter(this, plan_Name_List, Plan_Date_List, Plan_MaxDay_List);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
     SharedPreferences sh;
     Bundle userbundle;
     Button btn_addMyPlan;
@@ -126,12 +134,14 @@ public class ActMySchedule extends AppCompatActivity {
 
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
-//        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
-//            plan_Name_List.clear();
-//            Plan_Date_List.clear();
-//            Plan_MaxDay_List.clear();
-//        }
+        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
+            plan_Name_List.clear();
+            Plan_Date_List.clear();
+            Plan_MaxDay_List.clear();
+        }
         SharedPreferences sh = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        SQLite_helper = new C_MySQLite(this);  // helper
+        sqLiteDatabase = SQLite_helper.getReadableDatabase();
         cursor = sqLiteDatabase.rawQuery("select "
                 + C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_COMMA_SEP
                 +C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_COMMA_SEP
@@ -161,9 +171,7 @@ public class ActMySchedule extends AppCompatActivity {
         adapter = new C_MemberRecycleViewAdapter(this, plan_Name_List, Plan_Date_List, Plan_MaxDay_List);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
-
     }
-
 
 
 }

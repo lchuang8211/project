@@ -68,15 +68,14 @@ public class C_AsyncPublicPlan extends AsyncTask<Bundle,Void,Void> {
             if (cursor.getCount() > 0) {
                 Log.i(TAG, "get getCount : " + cursor.getCount());
                 while (cursor.moveToNext()) {
-                    Log.i(TAG, "doInBackground: while : " + cursor.getString(0) + cursor.getString(1) + cursor.getString(2));
-                    startDate = cursor.getString(1); // 行程開始的日期
-                    endDate = cursor.getString(2);  // 行程結束的日期
+//                    Log.i(TAG, "doInBackground: while : " + cursor.getString() + cursor.getString(1) + cursor.getString(2));
+                    startDate = cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_DATE_START)); // 行程開始的日期
+                    endDate = cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_DATE_END));  // 行程結束的日期
                 }
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, 0); //儲存的檔案名稱
                 String userID = sharedPreferences.getString(C_Dictionary.USER_U_ID, "").trim();  //使用者ID 唯一
                 String userAccount = sharedPreferences.getString(C_Dictionary.TABLE_SCHEMA_ACCOUNT, "").trim(); // 使用者帳號
 
-                String new_planName = userID + "|" + userAccount + "|" + planName + "|" + startDate + "|" + endDate;
 
                 try {
                     setJsonObject.put(C_Dictionary.PUBLIC_TO_CLOUND_SIGNAL,Signal);   // 放刪除/新增 訊號

@@ -94,4 +94,5 @@ public class C_Dictionary {
     public static final String PUBLIC_TO_CLOUND_SIGNAL = "PUBLIC_TO_CLOUND_SIGNAL";   //行程表 上傳雲端許可 FOR AsyncTask FOR PHP
     public static final String CLOUND_TABLE_NAME = "CLOUND_TABLE_NAME";  //雲端上的新 table 名
     public static final String PLAN_DAYS_RECORD = "PLAN_DAYS_RECORD";
+    public static final String USER_HEAD_IMG = "USER_HEAD_IMG";
 }

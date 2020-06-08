@@ -123,7 +123,6 @@ public class ActBottomNav extends AppCompatActivity {
         if(userstatus == "USER_STATUS_VISITORS") {
             Log.i(TAG, "onCreate: inin" + userstatus);
             System.out.println("inininin");
-
         }
     }
 

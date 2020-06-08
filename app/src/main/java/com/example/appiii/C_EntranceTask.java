@@ -43,11 +43,11 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
         this.mContext=mContext;
         this.memberCheck = memberCheck;
     }
-
+    SharedPreferences sh;
     @Override
     protected String doInBackground(Bundle... bundles) {
         JSONObject userMember = new JSONObject();
-        SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
 
 
         Bundle bundle = bundles[0];
@@ -106,11 +106,13 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     return builder.toString().trim();
 
     }
+    SharedPreferences.Editor w;
     boolean check = false;
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         try {
+
             JSONObject js = new JSONObject(result);
         switch (js.getInt("ENTRANCE_NUM")){
             case 1:
@@ -118,6 +120,8 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
                 Log.i("builder","1echo check :"+check);
                 SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
                 SharedPreferences.Editor w = sh.edit();
+                w.putString(C_Dictionary.USER_HEAD_IMG, js.getString("head_img")).apply();
+                Log.i(TAG, "onPostExecute:head_img : "+js.getString("head_img"));
                 w.putString(C_Dictionary.USER_U_ID, js.getString("u_id")).apply();
                 w.putString(C_Dictionary.USER_NICK_NAME, js.getString(C_Dictionary.USER_NICK_NAME)).apply();
                 break;
