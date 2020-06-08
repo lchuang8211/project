@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RecyclerView 的 list 配置 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_linearlayout_plandetail"
+    android:layout_alignBottom="@+id/getHeadImage"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:paddingLeft="5sp"
+        android:background="#B0E0E6"
+        android:id="@+id/txt_NodeDate_Queue"
+        android:gravity="center_vertical"
+        android:text="DateQueue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+    <TextView
+        android:background="@color/colorPaleTurquoise"
+        android:id="@+id/txt_NodeName"
+        android:text="NodeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/txt_NodeDescribe"
+        android:text="NodeDescribe"
+        android:background="@color/colorMistyRose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" />
+
+</LinearLayout>

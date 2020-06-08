@@ -1,13 +1,11 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
-import android.os.Bundle;
+import java.util.ArrayList;
 
-import java.net.URL;
-
-public interface Interface_AsyncPlanList {
+public interface Interface_AsyncLoadPlanList {
 //    void AsyncTaskFinish(String output);
 //    void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize);
 //    void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate); //, URL head_img
-    void  PlanListFinish(String getUesrAccount,String getUserName, String getPlanName, String getStarDate, String getEndDate, String getHead_img);  //getUerName
+    void  LoadPlanListFinish(String plan_Name, String plan_Date, Integer plan_MaxDay);  //getUerName
 //    void  PlanListFinish(Bundle bundle);
 }

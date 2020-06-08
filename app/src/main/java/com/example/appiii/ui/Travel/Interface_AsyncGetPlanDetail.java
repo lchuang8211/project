@@ -11,6 +11,6 @@ public interface Interface_AsyncGetPlanDetail {
 // TABLE_SCHEMA_NODE_LATITUDE
 // TABLE_SCHEMA_NODE_LONGITUDE
 // TABLE_SCHEMA_NODE_DESCRIBE`
-//    void  GatPlanDetailFinish(String COLUMN_NAME_DATE, String COLUMN_NAME_QUEUE, String TABLE_SCHEMA_NODE_NAME, Double TABLE_SCHEMA_NODE_LATITUDE ,Double TABLE_SCHEMA_NODE_LONGITUDE, String TABLE_SCHEMA_NODE_DESCRIBE);  //getUerName
-    void  GatPlanDetailFinish(ArrayList bundle);
+//    void  GetPlanDetailFinish(int COLUMN_NAME_DATE, int COLUMN_NAME_QUEUE, String TABLE_SCHEMA_NODE_NAME, Double TABLE_SCHEMA_NODE_LATITUDE ,Double TABLE_SCHEMA_NODE_LONGITUDE, String TABLE_SCHEMA_NODE_DESCRIBE);  //getUerName
+    void  GetPlanDetailFinish( C_UserInfo userInfo, ArrayList<C_PlanDetail> planDetail);
 }

@@ -47,19 +47,20 @@ public class C_AsyncGetPlanDetail extends AsyncTask<Bundle,Void,String> {
 
     private Interface_AsyncGetPlanDetail PlanDetail_finish;
 
-//    public C_AsyncGetPlanDetail(Interface_AsyncGetPlanDetail PlanDetail_finish){
-//        this.PlanDetail_finish = PlanDetail_finish;
-//    }
+    public C_AsyncGetPlanDetail(Interface_AsyncGetPlanDetail PlanDetail_finish){
+        this.PlanDetail_finish = PlanDetail_finish;
+    }
 
-
+    String pName;
     @Override
     protected String doInBackground(Bundle... bundles) {
 
 //        get pName = bundles[0].getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
 //        get uAccount = bundles[0].getString(C_Dictionary.USER_ACCOUNT);
+        pName = bundles[0].getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME);
         JSONObject JsonObject = new JSONObject();
         try {
-            JsonObject.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, URLEncoder.encode(bundles[0].getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME),"UTF-8"));
+            JsonObject.put(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, URLEncoder.encode(pName,"UTF-8"));
             JsonObject.put(C_Dictionary.USER_ACCOUNT, bundles[0].getString(C_Dictionary.USER_ACCOUNT));
 
             Log.i(TAG, "doInBackground: pName : "+ bundles[0].getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
@@ -111,15 +112,26 @@ public class C_AsyncGetPlanDetail extends AsyncTask<Bundle,Void,String> {
         super.onPostExecute(string);
         Log.i(TAG, "onPostExecute: onPostExecute:" + string);
         try {
-
+            JSONObject getJson = new JSONObject(string);
+//            getJson.getString("userInfo");
+//            getJson.getString("planDatail");
 //            URL url_img ;
-            JSONArray jsarray = new JSONArray(string);
-//            Log.i(TAG, "onPostExecute: json size"+ jsarray.length());
-            ArrayList<Bundle> al_bundle = new ArrayList<>();
-            for(int i=0; i<jsarray.length();i++){
 
+            JSONObject getJsonUserInfo = new JSONObject(getJson.getString("userInfo"));
+            String userUID = getJsonUserInfo.getString("u_id");
+            String userAccount = getJsonUserInfo.getString("account");
+            String userNickName = getJsonUserInfo.getString("user_name");
+            String userHeadImg = getJsonUserInfo.getString("head_img");
+            String userSchedule = getJsonUserInfo.getString("schedule");
+            Log.i(TAG, "onPostExecute: userHeadImg : "+userHeadImg);
+            C_UserInfo getUserInfo = new C_UserInfo(userUID, userAccount, userNickName, pName,userSchedule, userHeadImg);
+
+            JSONArray jsPlanDetail = new JSONArray(getJson.getString("planDatail"));
+//            Log.i(TAG, "onPostExecute: json size"+ jsarray.length());
+            ArrayList<C_PlanDetail> getplandetail = new ArrayList<>();
+            for(int i=0; i<jsPlanDetail.length();i++){
                 JSONObject jsobj = new JSONObject();
-                jsobj = jsarray.getJSONObject(i);
+                jsobj = jsPlanDetail.getJSONObject(i);
                 int COLUMN_NAME_DATE = jsobj.getInt(C_Dictionary.TABLE_SCHEMA_DATE);
                 int COLUMN_NAME_QUEUE = jsobj.getInt(C_Dictionary.TABLE_SCHEMA_QUEUE);
                 String TABLE_SCHEMA_NODE_NAME = jsobj.getString(C_Dictionary.TABLE_SCHEMA_NODE_NAME);
@@ -127,22 +139,14 @@ public class C_AsyncGetPlanDetail extends AsyncTask<Bundle,Void,String> {
                 Double TABLE_SCHEMA_NODE_LONGITUDE = jsobj.getDouble(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE);
                 String TABLE_SCHEMA_NODE_DESCRIBE = jsobj.getString(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE);
 
-                Bundle subbundle = new Bundle();
-                subbundle.putInt(C_Dictionary.TABLE_SCHEMA_DATE, COLUMN_NAME_DATE);
-                subbundle.putInt(C_Dictionary.TABLE_SCHEMA_QUEUE, COLUMN_NAME_QUEUE);
-                subbundle.putString(C_Dictionary.TABLE_SCHEMA_NODE_NAME, TABLE_SCHEMA_NODE_NAME);
-                subbundle.putDouble(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, TABLE_SCHEMA_NODE_LATITUDE);
-                subbundle.putDouble(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, TABLE_SCHEMA_NODE_LONGITUDE);
-                subbundle.putString(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, TABLE_SCHEMA_NODE_DESCRIBE);
-
-                al_bundle.add(subbundle);
-
+                getplandetail.add(new C_PlanDetail(COLUMN_NAME_DATE, COLUMN_NAME_QUEUE, TABLE_SCHEMA_NODE_NAME, TABLE_SCHEMA_NODE_LATITUDE, TABLE_SCHEMA_NODE_LONGITUDE, TABLE_SCHEMA_NODE_DESCRIBE));
 //                PlanDetail_finish.GatPlanDetailFinish(COLUMN_NAME_DATE, COLUMN_NAME_QUEUE, TABLE_SCHEMA_NODE_NAME, TABLE_SCHEMA_NODE_LATITUDE ,TABLE_SCHEMA_NODE_LONGITUDE, TABLE_SCHEMA_NODE_DESCRIBE);
 //                PlanDetail_finish.GatPlanDetailFinish(al_bundle);
             }
+            Log.i(TAG, "onPostExecute: getplandetail size :"+ getplandetail.size());
+//            Log.i(TAG, "onPostExecute: getplandetail :"+ getplandetail);
 
-
-
+            PlanDetail_finish.GetPlanDetailFinish( getUserInfo , getplandetail );
         } catch ( Exception e) { //JSONException e |
             e.printStackTrace();
         }

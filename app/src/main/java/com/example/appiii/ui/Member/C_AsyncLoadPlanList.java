@@ -1,9 +1,14 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Member;
 
 import android.content.Context;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.appiii.C_Dictionary;
+import com.example.appiii.ui.Travel.Interface_AsyncPlanList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,14 +23,15 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
-public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
+public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
     private Context mContext;
     private static final String TAG = "C_AsyncTravelPlanList";
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/getplanlist.php");
+            urlAPI = new URL("http://hhlc.ddnsking.com/LoadPersonalPlan.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -37,24 +43,26 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
     private StringBuilder input_stringbuilder;
 
 
-    public C_AsyncTravelPlanList(Context mContext){
+    public C_AsyncLoadPlanList(Context mContext){
         this.mContext = mContext;
     }
 
-    private Interface_AsyncPlanList interface_plist_finish;
+    private Interface_AsyncLoadPlanList interface_LoadPlanListlist_finish;
 
-    public C_AsyncTravelPlanList(Interface_AsyncPlanList interface_plist_finish){
-        this.interface_plist_finish = interface_plist_finish;
+    public C_AsyncLoadPlanList(Interface_AsyncLoadPlanList interface_LoadPlanListlist_finish){
+        this.interface_LoadPlanListlist_finish = interface_LoadPlanListlist_finish;
     }
 
 
     @Override
     protected String doInBackground(Bundle... bundles) {
 
-        String region = bundles[0].getString("Search_requirement");
-
+        String getUID = bundles[0].getString(C_Dictionary.USER_U_ID);
+        Log.i(TAG, "doInBackground: getUID : "+getUID);
 
         try {
+            JSONObject js = new JSONObject() ;
+            js.put(C_Dictionary.USER_U_ID,getUID);
             urlConnection = (HttpURLConnection) urlAPI.openConnection();  // STEP 1
             Log.i("JSON", "urlConnection :" + urlConnection);
             /* optional request header */
@@ -71,13 +79,13 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
             urlConnection.setUseCaches(true); //設置是否使用緩存
             urlConnection.connect();    // // STEP 3 : 連線開啟  ( 安卓 4拿掉 ? )
 
-//            out = urlConnection.getOutputStream();  // 輸出的初始化
-//            writer = new DataOutputStream(out);  // 把要送出的資料寫入輸出串流  //Step 4 : 要傳送的檔案/方式 (JSON=TXT檔)
-//            writer.writeBytes(String.valueOf(setJsonObject));
-////                writer.writeBytes(json2);
-//            writer.flush();
-//            out.close();
-//            writer.close();
+            out = urlConnection.getOutputStream();  // 輸出的初始化
+            writer = new DataOutputStream(out);  // 把要送出的資料寫入輸出串流  //Step 4 : 要傳送的檔案/方式 (JSON=TXT檔)
+            writer.writeBytes(String.valueOf(js));
+//                writer.writeBytes(json2);
+            writer.flush();
+            out.close();
+            writer.close();
             /////////////////////////////////////////////////////////////////
             getinputStream = urlConnection.getInputStream();   //接收初始化 response //Step 6 : 一定要接收 Response 才算成功
             BufferedReader reader = new BufferedReader(new InputStreamReader(getinputStream));
@@ -89,7 +97,7 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
             Log.i(TAG, "doInBackground: input_stringbuilder : +++++++++++++++++++++++++++ : "+ input_stringbuilder.toString());
             reader.close();
             urlConnection.disconnect();
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -100,25 +108,23 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
     protected void onPostExecute(String string) {
         super.onPostExecute(string);
         Log.i(TAG, "onPostExecute: onPostExecute:" + string);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            URL url_img ;
-            JSONArray jsarray = new JSONArray(string);
-            Log.i(TAG, "onPostExecute: json size"+ jsarray.length());
-            for(int i=0; i<jsarray.length();i++){
-                JSONObject jsobj = new JSONObject();
-                jsobj = jsarray.getJSONObject(i);
-                String getUesrAccount = jsobj.getString("account");
-                ///////////-------- nick name
-                String getUserName = jsobj.getString("user_name");
-                String getPlanName = jsobj.getString("plan_Name");
-                String getStarDate = jsobj.getString("start_date");
-                String getEndDate = jsobj.getString("end_date");
-                String getHead_img = jsobj.getString("head_img");
-//                String[] tokens = getlist.split("\\|");
-                interface_plist_finish.PlanListFinish( getUesrAccount, getUserName, getPlanName, getStarDate, getEndDate, getHead_img);  //nick_name
-                Log.i(TAG, "onPostExecute: tokens :"+getUesrAccount+"::"+getUserName+"::"+getPlanName+"::"+getStarDate+"::"+getEndDate+"::"+getHead_img);
+            JSONArray jsa = new JSONArray(string);
+            for (int i =0 ; i< jsa.length() ; i++){
+                JSONObject js = jsa.getJSONObject(i);
+//                js.getString(C_Dictionary.USER_U_ID);
+                String pName = js.getString("plan_name");
+                String sDate = js.getString("start_date");
+                String eDate = js.getString("end_date");
+                String Date = sDate+" ~ "+eDate;
+
+                Date startdate  = df.parse(sDate);
+                Date enddate =  df.parse(eDate);
+                int tatolDay = (int)( Math.abs( enddate.getTime()-startdate.getTime() )/(60*60*1000*24))+1 ;
+                interface_LoadPlanListlist_finish.LoadPlanListFinish(pName,Date,tatolDay);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

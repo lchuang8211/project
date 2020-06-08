@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorWihte">#FFFFFF</color>
+    <color name="colorMistyRose">#FFE4E1</color>
+    <color name="colorPaleTurquoise">#AFEEEE</color>
+
 </resources>

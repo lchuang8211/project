@@ -34,9 +34,9 @@ public class FrgTravel extends Fragment {
             bundle.putString("Search_requirement",null);
             new C_AsyncTravelPlanList(new Interface_AsyncPlanList() {
                 @Override
-                public void PlanListFinish(String UserAccount, String PlanName, String StartDate, String EndDate, String head_img) {  // String UserName
+                public void PlanListFinish(String UserAccount,  String UserName, String PlanName, String StartDate, String EndDate, String head_img) {  // String UserName
                     AL_UserAccount.add(UserAccount);
-//                    AL_UserName.add(UserName);
+                    AL_UserName.add(UserName);
                     AL_PlanName.add(PlanName);
                     AL_StartDate.add(StartDate);
                     AL_EndDate.add(EndDate);
@@ -75,9 +75,9 @@ Button btn_addPlan;
         bundle.putString("Search_requirement",null);
         new C_AsyncTravelPlanList(new Interface_AsyncPlanList() {
             @Override
-            public void PlanListFinish(String UserAccount, String PlanName, String StartDate, String EndDate, String head_img) { // String UserName
+            public void PlanListFinish(String UserAccount, String UserName, String PlanName, String StartDate, String EndDate, String head_img) { // String UserName
                 AL_UserAccount.add(UserAccount);
-//                AL_UserName.add(UserName);
+                AL_UserName.add(UserName);
                 AL_PlanName.add(PlanName);
                 AL_StartDate.add(StartDate);
                 AL_EndDate.add(EndDate);
@@ -102,7 +102,7 @@ Button btn_addPlan;
     private void InitialRecycler() {
         Log.i(TAG, "InitialRecycler: size :  " + AL_UserAccount.size()+" "+AL_UserAccount.get(0)+":"+AL_HandImg.get(0));
         recyclerView = inflatedView.findViewById(R.id.travel_recycler_layout_planlist);
-        adapter = new C_TravelPlanListRecycleViewAdapter(getActivity(), AL_UserAccount, AL_PlanName, AL_StartDate, AL_EndDate, AL_HandImg);
+        adapter = new C_TravelPlanListRecycleViewAdapter(getActivity(), AL_UserAccount, AL_UserName, AL_PlanName, AL_StartDate, AL_EndDate, AL_HandImg);
         Log.i(TAG, "InitialRecycler: size : " +AL_UserAccount.size()+" Img: "+ AL_HandImg.size());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)

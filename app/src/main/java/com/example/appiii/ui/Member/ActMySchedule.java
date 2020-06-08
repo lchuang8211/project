@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormat;
@@ -79,6 +80,7 @@ public class ActMySchedule extends AppCompatActivity {
         setContentView(R.layout.act_my_schedule);
         setTitle("行程表");
         InitialComponent();
+        InsertRecyclerView();
         InitRecyclerView();
 
     }
@@ -89,22 +91,45 @@ public class ActMySchedule extends AppCompatActivity {
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
         btn_addMyPlan = findViewById(R.id.btn_addMyPlan);
         btn_addMyPlan.setOnClickListener(btn_addMyPlan_click);
+        sh = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        userbundle = new Bundle();
+        userbundle.putString(C_Dictionary.USER_U_ID, sh.getString(C_Dictionary.USER_U_ID,"visitor"));
+        ///////
+        // load database
+        new C_AsyncLoadPlanList(new Interface_AsyncLoadPlanList() {
+            @Override
+            public void LoadPlanListFinish(String plan_Name, String plan_Date, Integer plan_MaxDay) {
+                plan_Name_List.add(plan_Name);
+                Plan_Date_List.add(plan_Date);
+                Plan_MaxDay_List.add(plan_MaxDay);
+                InsertRecyclerView();
+            }
+        }).execute(userbundle);
+        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
+            plan_Name_List.clear();
+            Plan_Date_List.clear();
+            Plan_MaxDay_List.clear();
+        }
+        ///////
     }
-
+    SharedPreferences sh;
+    Bundle userbundle;
     Button btn_addMyPlan;
     Cursor cursor;
     ContentValues values;
     C_MySQLite SQLite_helper;
     SQLiteDatabase sqLiteDatabase;
     C_MemberRecycleViewAdapter adapter;
+    RecyclerView recyclerView;
+
 
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
-        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
-            plan_Name_List.clear();
-            Plan_Date_List.clear();
-            Plan_MaxDay_List.clear();
-        }
+//        if (plan_Name_List.size()>0 || Plan_Date_List.size()>0 || Plan_MaxDay_List.size()>0 ){   // 如果有上一筆資料 即刪除
+//            plan_Name_List.clear();
+//            Plan_Date_List.clear();
+//            Plan_MaxDay_List.clear();
+//        }
         cursor = sqLiteDatabase.rawQuery("select "
                 + C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_COMMA_SEP
                 +C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_COMMA_SEP
@@ -128,11 +153,28 @@ public class ActMySchedule extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        RecyclerView recyclerView = findViewById(R.id.recycle_view_member);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
+        recyclerView = findViewById(R.id.recycle_view_member);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
         adapter = new C_MemberRecycleViewAdapter(this, plan_Name_List, Plan_Date_List, Plan_MaxDay_List);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
+    }
 
+    private void InsertRecyclerView(){   // 同步 雲端行程表內容
+        sh = getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+        userbundle = new Bundle();
+        userbundle.putString(C_Dictionary.USER_U_ID, sh.getString(C_Dictionary.USER_U_ID,"visitor"));
+        ///////
+        // load database
+        ///////
+        new C_AsyncLoadPlanList(new Interface_AsyncLoadPlanList() {
+            @Override
+            public void LoadPlanListFinish(String plan_Name, String plan_Date, Integer plan_MaxDay) {
+                plan_Name_List.add(plan_Name);
+                Plan_Date_List.add(plan_Date);
+                Plan_MaxDay_List.add(plan_MaxDay);
+                // 寫入SQLITE的設定 SQLITE+UID
+            }
+        }).execute(userbundle);
     }
 
 }

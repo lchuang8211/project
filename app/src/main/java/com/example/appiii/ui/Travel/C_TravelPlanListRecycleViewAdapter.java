@@ -56,9 +56,9 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
 //    URL url = new URL("http://hhlc.ddnsking.com/");
 
 
-    public C_TravelPlanListRecycleViewAdapter(Context context, ArrayList<String> AL_UserAccount, ArrayList<String> AL_PlanName, ArrayList<String> AL_StartDate, ArrayList<String> AL_EndDate, ArrayList<String> AL_HeadImg) {
+    public C_TravelPlanListRecycleViewAdapter(Context context, ArrayList<String> AL_UserAccount,ArrayList<String> AL_UserName, ArrayList<String> AL_PlanName, ArrayList<String> AL_StartDate, ArrayList<String> AL_EndDate, ArrayList<String> AL_HeadImg) {
         this.AL_UserAccount = AL_UserAccount;
-//        this.AL_UserName = AL_UserName;
+        this.AL_UserName = AL_UserName;
         this.AL_PlanName = AL_PlanName;
         this.AL_StartDate = AL_StartDate;
         this.AL_EndDate = AL_EndDate;
@@ -83,7 +83,7 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
         holder.txt_planName.setText(AL_PlanName.get(position));
         Log.i(TAG, "onBindViewHolder: AL_PlanName :"+AL_PlanName.get(position));
         holder.txt_planDate.setText(AL_StartDate.get(position)+"~"+AL_EndDate.get(position));
-
+        holder.txt_userName.setText(AL_UserName.get(position));
         holder.txt_userAccount.setText(AL_UserAccount.get(position));
         Log.i(TAG, "onBindViewHolder: AL_UserAccount : " + AL_UserAccount.get(position));
         Log.i(TAG, "onBindViewHolder: HeadImg : " + AL_HeadImg.get(position));
@@ -142,15 +142,18 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
                     Bundle bundle = new Bundle();
                     bundle.putString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME, AL_PlanName.get( getAdapterPosition() ));
                     bundle.putString(C_Dictionary.USER_ACCOUNT, AL_UserAccount.get( getAdapterPosition() ));
+                    Intent itent = new Intent(mContext, ActPlanDetail.class);
+                    itent.putExtras(bundle);
+                    mContext.startActivity(itent);
                     /////////////////////////////////////////////////
-                    new C_AsyncGetPlanDetail(
+//                    new C_AsyncGetPlanDetail(
                             /////////////////////////////////////////////////
                             // How to put the ArrayList into bundle
                             // https://stackoverflow.com/questions/42436012/how-to-put-the-arraylist-into-bundle
                             /////////////////////////////////////////////////
                             // Parcelable and Serializable
                             // https://stackoverflow.com/questions/3323074/android-difference-between-parcelable-and-serializable
-                    ).execute(bundle);
+//                    ).execute(bundle);
                     /////////////////////////////////////////////////
                 }
             });
