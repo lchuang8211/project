@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Adaoter;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
+import com.example.appiii.ui.Member.Activity.ActMemberShowTravelPlan;
+import com.example.appiii.ui.Member.AsyncTask.C_AsyncPublicPlan;
 
 import java.io.File;
 import java.util.ArrayList;

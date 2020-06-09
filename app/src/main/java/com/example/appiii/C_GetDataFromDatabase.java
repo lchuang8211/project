@@ -35,6 +35,8 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     private String Stringinput, StringOutput;
     private String postTophp_CityName;
     private String postTophp_SpotType;
+    private Double postTophp_UserLatitude;
+    private Double postTophp_UserLongitude;
     private String postSearch_Input;
     private Double[] LocationOutput = new Double[2];
     private String phoneDataJson;
@@ -66,10 +68,20 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
             Bundle bundle = getStrings[0];
             postTophp_CityName = bundle.getString(C_Dictionary.CITY_NAME_REQUEST);
             postTophp_SpotType = bundle.getString(C_Dictionary.SPOT_TYPE_REQUEST);
+//            Log.i(TAG, "doInBackground: LATITUDE : "+bundle.getString(C_Dictionary.USER_LOCATION_LATITUDE));
+            if(String.valueOf(bundle.getDouble(C_Dictionary.USER_LOCATION_LATITUDE)) != null && String.valueOf(bundle.getDouble(C_Dictionary.USER_LOCATION_LONGITUDE)) != null ){
+                postTophp_UserLatitude = bundle.getDouble(C_Dictionary.USER_LOCATION_LATITUDE);
+                postTophp_UserLongitude = bundle.getDouble(C_Dictionary.USER_LOCATION_LONGITUDE);
+                Log.i(TAG, "doInBackground: LATITUDE/LONGITUDE :" + postTophp_UserLatitude+"-"+postTophp_UserLongitude);
+                jsonfromPhone.put(C_Dictionary.USER_LOCATION_LATITUDE, postTophp_UserLatitude);
+                jsonfromPhone.put(C_Dictionary.USER_LOCATION_LONGITUDE, postTophp_UserLongitude);
+            }
+            postTophp_SpotType = bundle.getString(C_Dictionary.SPOT_TYPE_REQUEST);
             if(bundle.getString("EDITTXT_SEARCH_INPUT")!=null ){
                 postSearch_Input = bundle.getString("EDITTXT_SEARCH_INPUT");
                 Log.i(TAG, "doInBackground: postSearch_Input :"+postSearch_Input);
-                jsonfromPhone.put("EDITTXT_SEARCH_INPUT", URLEncoder.encode(postSearch_Input,"UTF-8"));
+                if(!postSearch_Input.matches(""))
+                    jsonfromPhone.put("EDITTXT_SEARCH_INPUT", URLEncoder.encode(postSearch_Input,"UTF-8"));
             }
             Log.i("JSON","CityName 接 bundle : "+ postTophp_CityName);
             Log.i("JSON","SpotType 接 bundle : "+ postTophp_SpotType);
@@ -141,13 +153,15 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 //        return null;
     }
     private String ctiyName, SpotAddress, SpotToldescribe, SpotLocation_latitude, SpotLocation_longitude;
+    private String DesKeyName = "Toldescribe";
     double re_lat, re_long;
     @Override
     protected void onPostExecute(String result)
     {
         super.onPostExecute(result);
 //        Log.i("JSON","進入 onPostExecute : "+result);
-
+//        if(postTophp_SpotType==C_Dictionary.SPOT_TYPE_HOTEL)
+//            DesKeyName = "Description";
         try {
             for (int i = 0; i < jsonArrayfromPHP.length(); i++) {
                 jsonfromPHP = jsonArrayfromPHP.getJSONObject(i);
@@ -159,6 +173,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 //                    Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
                     ctiyName = jsonfromPHP.getString("Name");
                     SpotAddress = jsonfromPHP.getString("Add");
+
                     SpotToldescribe = jsonfromPHP.getString("Toldescribe");
                     SpotLocation_latitude = jsonfromPHP.getString("Py");
                     SpotLocation_longitude = jsonfromPHP.getString("Px");
@@ -166,7 +181,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 
                     getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(), SpotAddress.trim(), SpotToldescribe.trim(),
                             Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()));   //Call function
-
+//
             }
 //            re_name = jsonfromPHP.getString("name");
 //            Log.i("JSON", "name : " + re_name);
@@ -174,7 +189,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 //            Log.i("JSON", "lat : " + re_lat);
 //            re_long = jsonfromPHP.getDouble("long");
 //            Log.i("JSON", "long : " + re_long);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 //        ActGoogleMaps.txt_getAttraction.setText(result);

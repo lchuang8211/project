@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Adaoter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,9 +21,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
+import com.example.appiii.C_PlanInfo;
 import com.example.appiii.R;
 
 import java.io.File;
@@ -36,12 +38,8 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
 
     View itemView;
     private static final  String TAG = "C_TravelShowPlanRecycleViewAdapter";
-    private ArrayList<String> showSpotName = new ArrayList<>();
-    private ArrayList<Integer> showSpotDate = new ArrayList<>();
-    private ArrayList<Integer> showSpotQueue = new ArrayList<>();
-    private ArrayList<Double> showSpotLatitude = new ArrayList<>();
-    private ArrayList<Double> showSpotLongitude = new ArrayList<>();
-    private ArrayList<String> showSpotDescrbe = new ArrayList<>();
+    private ArrayList<C_PlanInfo> planInfos = new ArrayList<>();
+    private String planType;
     private String planName;
     private int WhichDay;
     private Context mContext;
@@ -51,13 +49,8 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
     Uri uri = Uri.fromFile(file);  //建立超連結
 
 
-    public C_MemberShowPlanRecycleViewAdapter(Context context, ArrayList<Integer> showSpotDate, ArrayList<Integer> showSpotQueue, ArrayList<String> showSpotName, ArrayList<Double> showSpotLatitude, ArrayList<Double> showSpotLongitude, ArrayList<String> showSpotDescrbe, String planName, int WhichDay) {
-        this.showSpotDate = showSpotDate;
-        this.showSpotQueue = showSpotQueue;
-        this.showSpotName = showSpotName;
-        this.showSpotLatitude = showSpotLatitude;
-        this.showSpotLongitude = showSpotLongitude;
-        this.showSpotDescrbe=showSpotDescrbe;
+    public C_MemberShowPlanRecycleViewAdapter(Context context, ArrayList<C_PlanInfo> planInfos, String planName, int WhichDay) {
+        this.planInfos = planInfos;
         this.planName = planName;
         this.WhichDay = WhichDay;
         this.mContext = context;
@@ -75,7 +68,16 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {  // part 2 : 複製 RecyclerView 的 XML && 定義 XML 的設定
         holder.setIsRecyclable(false);
-        holder.txt_Spot_Name.setText("第 "+(position+1)+" 個行程 :\n "+ showSpotName.get(position));
+        holder.txt_Spot_Name.setText("第 "+(position+1)+" 個行程 :\n "+ planInfos.get(position).getpNodeName());
+        Log.i(TAG, "onBindViewHolder: planInfos.get(position).getpNodeType() : "+planInfos.get(position).getpNodeType());
+        if (planInfos.get(position).getpNodeType().toString() == "SPOT_TYPE_HOTEL") {
+            Log.i(TAG, "onBindViewHolder: ingetNodType : HOTEL ");
+            Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into( holder.getItem_image);  // Gilde : 圖片 library
+        }
+        if (planInfos.get(position).getpNodeType().toString() == C_Dictionary.SPOT_TYPE_VIEW) {
+            Log.i(TAG, "onBindViewHolder: ingetNodType : VIEW ");
+            Glide.with(mContext).asBitmap().load( R.drawable.tedros ).into( holder.getItem_image);  // Gilde : 圖片 library
+        }
 //        holder.txt_Plan_info.setText( String.valueOf(showSpotLatitude.get(position))+","+String.valueOf(showSpotLongitude.get(position)) );
 ////        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 
@@ -83,7 +85,7 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
 
     @Override
     public int getItemCount() { // part 3 :
-        return showSpotDate.size();
+        return planInfos.size();
     }
 
 
@@ -114,7 +116,7 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
                 public void onClick(View v) {
                     AlertDialog.Builder deleteDialog = new AlertDialog.Builder(mContext);
                     deleteDialog.setTitle("刪除");
-                    deleteDialog.setMessage("確定刪除 "+ showSpotName.get(getAdapterPosition())+" 嗎?");
+                    deleteDialog.setMessage("確定刪除 "+ planInfos.get(getAdapterPosition()).getpNodeName()+" 嗎?");
                     deleteDialog.setNegativeButton("取消",null);
                     deleteDialog.setPositiveButton("確定", new DialogInterface.OnClickListener() {
                         @Override
@@ -123,13 +125,8 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
                             SQLiteDatabase sqLiteDatabase = sqLitehelper.getReadableDatabase();
                             sqLiteDatabase.delete("["+ C_Dictionary.CREATE_TABLE_HEADER+ planName +"]",
                                     C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=? AND "+C_Dictionary.TABLE_SCHEMA_DATE +"=? AND "+C_Dictionary.TABLE_SCHEMA_QUEUE +"=?",
-                                    new String[] { showSpotName.get(getAdapterPosition()) , String.valueOf(WhichDay), String.valueOf( showSpotQueue.get(getAdapterPosition()) ) });
-                            showSpotName.remove(getAdapterPosition());
-                            showSpotDate.remove(getAdapterPosition());
-                            showSpotQueue.remove(getAdapterPosition());
-                            showSpotLatitude.remove(getAdapterPosition());
-                            showSpotLongitude.remove(getAdapterPosition());
-                            showSpotDescrbe.remove(getAdapterPosition());
+                                    new String[] { planInfos.get(getAdapterPosition()).getpNodeName() , String.valueOf(WhichDay), String.valueOf( planInfos.get(getAdapterPosition()).getpNodeQueue() ) });
+                            planInfos.remove(getAdapterPosition());
                             notifyDataSetChanged();
                         }
                     }).create().show();
@@ -143,19 +140,17 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder showbuilder = new AlertDialog.Builder(mContext);
-                    showbuilder.setTitle( showSpotName.get(getAdapterPosition()) );
-                    showbuilder.setMessage("概述:\n\n"+showSpotDescrbe.get(getAdapterPosition()));
+                    showbuilder.setTitle( planInfos.get(getAdapterPosition()).getpNodeName() );
+                    showbuilder.setMessage("概述:\n\n"+planInfos.get(getAdapterPosition()).getpNodeDescribe());
                     showbuilder.setNegativeButton("取消",null);
                     showbuilder.setPositiveButton("查看地圖",new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(mContext, ActGoogleMaps.class);
                             Bundle bundle = new Bundle();
-                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE, showSpotLatitude.get( getAdapterPosition() ));
-                            Log.i(TAG, "onClick: Longitude 顛倒 : "+showSpotLatitude.get( getAdapterPosition()));
-                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE, showSpotLongitude.get( getAdapterPosition() ));
-                            Log.i(TAG, "onClick: sLatitude 顛倒 : "+showSpotLongitude.get( getAdapterPosition()));
-                            bundle.putString(C_Dictionary.SPOT_NAME, showSpotName.get( getAdapterPosition() ));
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE, planInfos.get( getAdapterPosition() ).getpNodeLat());
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE, planInfos.get( getAdapterPosition() ).getpNodeLong());
+                            bundle.putString(C_Dictionary.SPOT_NAME, planInfos.get( getAdapterPosition() ).getpNodeName());
                             Log.i(TAG, "onClick: send bundle :" + bundle);
                             intent.putExtras(bundle);
                             mContext.startActivity(intent);

@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Adaoter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
+import com.example.appiii.C_NodeInfo;
 import com.example.appiii.R;
 
 import java.util.ArrayList;
@@ -31,13 +32,12 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
     private ArrayList<String> Collect_Node_Describe = new ArrayList<>();
     private ArrayList<Double> Collect_Node_Latitude = new ArrayList<>();
     private ArrayList<Double> Collect_Node_Longitude = new ArrayList<>();
+    private ArrayList<C_NodeInfo> CollectInfos = new ArrayList<>();
     Context mContext;
-    public C_MyCollectRecyclerViewAdapter(Context mContext, ArrayList<String> Collect_Node_Name, ArrayList<String> Collect_Node_Describe, ArrayList<Double> Collect_Node_Latitude, ArrayList<Double> Collect_Node_Longitude) {
+    public C_MyCollectRecyclerViewAdapter(Context mContext, ArrayList<C_NodeInfo> CollectInfos) {
         this.mContext = mContext;
-        this.Collect_Node_Name = Collect_Node_Name;
-        this.Collect_Node_Describe = Collect_Node_Describe;
-        this.Collect_Node_Latitude = Collect_Node_Latitude;
-        this.Collect_Node_Longitude = Collect_Node_Longitude;
+        this.CollectInfos = CollectInfos;
+
     }
     @NonNull
     @Override
@@ -49,12 +49,12 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
 
     @Override
     public void onBindViewHolder(@NonNull C_MyCollectRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.txt_Node_Name.setText(Collect_Node_Name.get(position));
+        holder.txt_Node_Name.setText(CollectInfos.get(position).getNodeName());
     }
 
     @Override
     public int getItemCount() {
-        return Collect_Node_Name.size();
+        return CollectInfos.size();
     }
 
 
@@ -76,17 +76,17 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(Collect_Node_Name.get(getAdapterPosition()));
-                    builder.setMessage("概述:\n\n"+Collect_Node_Describe.get(getAdapterPosition()));
+                    builder.setTitle( CollectInfos.get(getAdapterPosition()).getNodeName() );
+                    builder.setMessage("概述:\n\n" + CollectInfos.get(getAdapterPosition()).getNodeDescribe() );
                     builder.setNegativeButton("取消",null);
                     builder.setPositiveButton("查看地圖",new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(mContext, ActGoogleMaps.class);
                             Bundle bundle = new Bundle();
-                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,Collect_Node_Latitude.get( getAdapterPosition() ));
-                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,Collect_Node_Longitude.get( getAdapterPosition() ));
-                            bundle.putString(C_Dictionary.SPOT_NAME,Collect_Node_Name.get( getAdapterPosition() ));
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE, CollectInfos.get( getAdapterPosition() ).getNodeLat() );
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE, CollectInfos.get( getAdapterPosition() ).getNodeLong());
+                            bundle.putString(C_Dictionary.SPOT_NAME, CollectInfos.get( getAdapterPosition() ).getNodeName());
 //                            Log.i(TAG, "onClick: send bundle :" + bundle);
                             intent.putExtras(bundle);
                             mContext.startActivity(intent);
@@ -99,15 +99,12 @@ public class C_MyCollectRecyclerViewAdapter extends RecyclerView.Adapter<C_MyCol
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("刪除");
-                    builder.setMessage("確定刪除 "+Collect_Node_Name.get(getAdapterPosition()) +" 嗎?");
+                    builder.setMessage("確定刪除 "+CollectInfos.get(getAdapterPosition()).getNodeName() +" 嗎?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SQLiteDB.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{Collect_Node_Name.get(getAdapterPosition())});
-                            Collect_Node_Name.remove(getAdapterPosition());
-                            Collect_Node_Describe.remove(getAdapterPosition());
-                            Collect_Node_Latitude.remove(getAdapterPosition());
-                            Collect_Node_Longitude.remove(getAdapterPosition());
+                            SQLiteDB.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{CollectInfos.get( getAdapterPosition() ).getNodeName()});
+                            CollectInfos.remove(getAdapterPosition());
                             notifyDataSetChanged();
                         }
                     }).create().show();

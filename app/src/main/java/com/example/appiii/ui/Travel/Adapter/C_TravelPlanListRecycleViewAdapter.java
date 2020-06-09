@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Travel.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
 import com.example.appiii.C_MySQLite;
+import com.example.appiii.ui.Travel.ActPlanDetail;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,9 +94,9 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
 
         }else{
             Glide.with(mContext).asBitmap().load( "http://hhlc.ddnsking.com"+AL_HeadImg.get(position) )
-                .skipMemoryCache(true)// 跳過記憶體緩衝
-                .diskCacheStrategy(DiskCacheStrategy.NONE) //不要在硬碟儲存緩衝
                 .into(holder.getHeadImage);
+            //  .skipMemoryCache(true)// 跳過記憶體緩衝
+            //  .diskCacheStrategy(DiskCacheStrategy.NONE) //不要在硬碟儲存緩衝
         }
 //        if(AL_HeadImg.get(position) == "" || AL_HeadImg.get(position) == null){
 

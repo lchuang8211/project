@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Activity;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -20,20 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
+import com.example.appiii.C_PlanInfo;
 import com.example.appiii.R;
+import com.example.appiii.ui.Member.Adaoter.C_MemberShowPlanRecycleViewAdapter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ActMemberShowTravelPlan extends AppCompatActivity {
+    //// 顯示單一行程表的詳細內容
+    private ArrayList<C_PlanInfo> planInfos = new ArrayList<>();
     private ArrayList<Button> Btn_changDate_list = new ArrayList<>();
-    private ArrayList<Integer> showSpotDate = new ArrayList<>();
-    private ArrayList<Integer> showSpotQueue = new ArrayList<>();
-    private ArrayList<String> showSpotName = new ArrayList<>();
-    private ArrayList<Double> showSpotLatitude = new ArrayList<>();
-    private ArrayList<Double> showSpotLongitude = new ArrayList<>();
-    private ArrayList<String> showSpotDescribe = new ArrayList<>();
     static int ButtonID = 0;
     String table_planname;
     String raw_planname;
@@ -57,8 +55,8 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==200){
-            if( showSpotDate.size()>0 || showSpotQueue.size()>0 || showSpotName.size()>0 || showSpotLatitude.size()>0 || showSpotLongitude.size()>0 || showSpotDescribe.size()>0){
-                showSpotDate.clear(); showSpotQueue.clear(); showSpotName.clear(); showSpotLatitude.clear(); showSpotLongitude.clear(); showSpotDescribe.clear();
+            if( planInfos.size()>0 ){
+                planInfos.clear();
             }
             // 判斷當天有沒有行程
             cursor = sqLiteDatabase.rawQuery("select exists ( select 1 from "+table_planname+" where COLUMN_NAME_DATE = '"+ButtonID+"') ",null)  ;
@@ -66,23 +64,19 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
             int empty = cursor.getInt(0);
             if (empty==0){
                 InitRecyclerView();
-                Toast.makeText(ActMemberShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActMemberShowTravelPlan.this,"這天尚未加入任何景點",Toast.LENGTH_SHORT).show();
             }
             if(empty==1){
                 cursor = sqLiteDatabase.rawQuery("select * from "+table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ ButtonID + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
                 while(cursor.moveToNext()){
-                    showSpotDate.add(cursor.getInt(0));
-                    Log.i("while","showPlanDate"+cursor.getInt(0));
-                    showSpotQueue.add(cursor.getInt(1));
-                    Log.i("while","showPlanQueue"+cursor.getInt(1));
-                    showSpotName.add(cursor.getString(2));
-                    Log.i("while","showPlanName"+cursor.getString(2));
-                    showSpotLatitude.add(cursor.getDouble(3));
-                    Log.i("while","showPlanLatitude"+cursor.getDouble(3));
-                    showSpotLongitude.add(cursor.getDouble(4));
-                    Log.i("while","showPlanLongitude"+cursor.getDouble(4));
-                    showSpotDescribe.add(cursor.getString(5));
-                    Log.i("while","showPlanLongitude"+cursor.getString(5));
+                    planInfos.add(new C_PlanInfo( cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_DATE)),
+                            cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_QUEUE)),
+                            cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_NAME)),
+                            cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE)),
+                            cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE)),
+                            cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE)),
+                            cursor.getString(cursor.getColumnIndex(C_Dictionary.SPOT_TYPE))
+                    ));
                 }
                 InitRecyclerView();
             }
@@ -142,32 +136,28 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    if( showSpotDate.size()>0 || showSpotQueue.size()>0 || showSpotName.size()>0 || showSpotLatitude.size()>0 || showSpotLongitude.size()>0 || showSpotDescribe.size()>0 ){
-                        showSpotDate.clear(); showSpotQueue.clear(); showSpotName.clear(); showSpotLatitude.clear(); showSpotLongitude.clear(); showSpotDescribe.clear();
+                    if( planInfos.size()>0){
+                        planInfos.clear();
                     }
                         cursor = sqLiteDatabase.rawQuery("select exists ( select 1 from "+table_planname+" where COLUMN_NAME_DATE = '"+getbuttonID+"') ",null)  ;
                         cursor.moveToLast();
                         int empty = cursor.getInt(0);
                         if (empty==0){
                             InitRecyclerView();
-                            Toast.makeText(ActMemberShowTravelPlan.this,"This Day 尚未加入任何景點",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActMemberShowTravelPlan.this,"這天尚未加入任何景點",Toast.LENGTH_SHORT).show();
                             ButtonID = getbuttonID;
                         }
                         if(empty==1){
                             cursor = sqLiteDatabase.rawQuery("select * from "+table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ getbuttonID + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
                                 while(cursor.moveToNext()){
-                                    showSpotDate.add(cursor.getInt(0));
-                                    Log.i("while","showPlanDate"+cursor.getInt(0));
-                                    showSpotQueue.add(cursor.getInt(1));
-                                    Log.i("while","showPlanQueue"+cursor.getInt(0));
-                                    showSpotName.add(cursor.getString(2));
-                                    Log.i("while","showPlanName"+cursor.getString(0));
-                                    showSpotLatitude.add(cursor.getDouble(3));
-                                    Log.i("while","showPlanLatitude"+cursor.getDouble(0));
-                                    showSpotLongitude.add(cursor.getDouble(4));
-                                    Log.i("while","showPlanLongitude"+cursor.getDouble(0));
-                                    showSpotDescribe.add(cursor.getString(5));
-                                    Log.i("while","showPlanLongitude"+cursor.getString(5));
+                                    planInfos.add(new C_PlanInfo( cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_DATE)),
+                                            cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_QUEUE)),
+                                            cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_NAME)),
+                                            cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE)),
+                                            cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE)),
+                                            cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE)),
+                                            cursor.getString(cursor.getColumnIndex(C_Dictionary.SPOT_TYPE))
+                                    ));
                             }
                             ButtonID = getbuttonID;
                             InitRecyclerView();
@@ -204,17 +194,14 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
         }else{
             cursor = sqLiteDatabase.rawQuery("select * from " + table_planname+" where "+C_Dictionary.TABLE_SCHEMA_DATE+" ='"+ 1 + "' order by "+ C_Dictionary.TABLE_SCHEMA_QUEUE +" asc" ,null);
             while(cursor.moveToNext()){
-                showSpotDate.add(cursor.getInt(0));
-
-                showSpotQueue.add(cursor.getInt(1));
-
-                showSpotName.add(cursor.getString(2));
-
-                showSpotLatitude.add(cursor.getDouble(3));
-
-                showSpotLongitude.add(cursor.getDouble(4));
-
-                showSpotDescribe.add(cursor.getString(5));
+                planInfos.add(new C_PlanInfo( cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_QUEUE)),
+                        cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_NAME)),
+                        cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE)),
+                        cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE)),
+                        cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE)),
+                        cursor.getString(cursor.getColumnIndex(C_Dictionary.SPOT_TYPE))
+                ));
 
             }
             ButtonID=1;  //只秀第一天
@@ -239,7 +226,7 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i("TAG", "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = findViewById(R.id.mamber_actshowtravelplan_planInfo_RecyclerView);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_MemberShowPlanRecycleViewAdapter(this, showSpotDate, showSpotQueue, showSpotName, showSpotLatitude, showSpotLongitude, showSpotDescribe, bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME), ButtonID);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        adapter = new C_MemberShowPlanRecycleViewAdapter(this, planInfos ,bundleFromCreate.getString(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME), ButtonID);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();

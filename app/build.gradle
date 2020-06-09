@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.appiii"
-        minSdkVersion 29
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

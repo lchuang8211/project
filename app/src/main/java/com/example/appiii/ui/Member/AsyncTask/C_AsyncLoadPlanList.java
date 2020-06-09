@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.AsyncTask;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,11 +9,11 @@ import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
-import com.example.appiii.ui.Travel.Interface_AsyncPlanList;
+import com.example.appiii.ui.Member.Activity.ActAddTravelPlan;
+import com.example.appiii.ui.Member.C_LoadPlanList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,7 +118,7 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
         helper = new C_MySQLite(mContext);
         sqlite = helper.getReadableDatabase();
         ArrayList<C_LoadPlanList> loadPlanList = new ArrayList<>();
-        ArrayList<C_LoadPlanDetail> loadPlanDetail = new ArrayList<>();
+        ArrayList<ActAddTravelPlan.C_LoadPlanDetail> loadPlanDetail = new ArrayList<>();
         Log.i(TAG, "onPostExecute: onPostExecute:" + string);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -149,6 +149,7 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_START,sDate);
                     contentValues.put(C_Dictionary.TABLE_SCHEMA_DATE_END,eDate);
                     contentValues.put(C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY,1);
+
                     sqlite.insert(C_Dictionary.TRAVEL_LIST_Table_Name,null,contentValues);
 
 
@@ -158,7 +159,8 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
                             + C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
                             + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE+C_Dictionary.VALUE_COMMA_SEP
                             + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE +C_Dictionary.VALUE_COMMA_SEP
-                            + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING +" )";
+                            + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING +C_Dictionary.VALUE_COMMA_SEP
+                            + C_Dictionary.SPOT_TYPE+C_Dictionary.VALUE_TYPE_STRING + " )";
                     sqlite.execSQL( newPlanTable );
 
                     for(int j =0; j<jsplandetail.length(); j++){
@@ -171,6 +173,7 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
                         cv.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,jspdetail.getDouble("TABLE_SCHEMA_NODE_LATITUDE"));
                         cv.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,jspdetail.getDouble("TABLE_SCHEMA_NODE_LONGITUDE"));
                         cv.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, jspdetail.getString("TABLE_SCHEMA_NODE_DESCRIBE"));
+                        cv.put(C_Dictionary.SPOT_TYPE, jspdetail.getString("SPOT_TYPE"));
                         sqlite.insert(C_Dictionary.CREATE_TABLE_HEADER+pName,null,cv);
 
                     }

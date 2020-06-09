@@ -80,7 +80,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
             C_MySQLite helper = new C_MySQLite(getActivity());
             SQLiteDatabase sqLiteDatabase = helper.getReadableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME + " from "+ C_Dictionary.TRAVEL_LIST_Table_Name + " WHERE "+C_Dictionary.USER_U_ID+"=?"
-                    ,new String[]{sh.getString(C_Dictionary.USER_U_ID,"1") });
+                    ,new String[]{sh.getString(C_Dictionary.USER_U_ID,"0") });
             final String[] allPlan;
             int getcount=1;
             if(cursor.getCount()>0) {

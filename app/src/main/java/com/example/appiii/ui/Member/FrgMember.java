@@ -27,6 +27,9 @@ import com.bumptech.glide.Glide;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
+import com.example.appiii.ui.Member.Activity.ActMyCollect;
+import com.example.appiii.ui.Member.Activity.ActMySchedule;
+import com.example.appiii.ui.Member.AsyncTask.C_AsyncUploadImg;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,14 +69,14 @@ public class FrgMember extends Fragment {
     private View.OnClickListener btn_mySchedule_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(),ActMySchedule.class);
+            Intent intent = new Intent(getActivity(), ActMySchedule.class);
             startActivity(intent);
         }
     };
     private View.OnClickListener btn_myCollect_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(),ActMyCollect.class);
+            Intent intent = new Intent(getActivity(), ActMyCollect.class);
             startActivity(intent);
         }
     };
@@ -167,9 +170,15 @@ public class FrgMember extends Fragment {
         budle = this.getArguments();   // 在fragment 中拿到 bundle
         InitialComponent();
         if(sharedPreferences.getInt(C_Dictionary.USER_STATUS,0)==1);{
+            btn_mySetting.setEnabled(true);
+            btn_mySchedule.setEnabled(true);
+            btn_myCollect.setEnabled(true);
             userNickName.setText(sharedPreferences.getString(C_Dictionary.USER_NICK_NAME,"vister"));
         }
         if (sharedPreferences.getInt(C_Dictionary.USER_STATUS,0)==0){
+            btn_mySetting.setEnabled(false);
+            btn_mySchedule.setEnabled(false);
+            btn_myCollect.setEnabled(false);
             userNickName.setText("vister");
         }
 

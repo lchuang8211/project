@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,10 @@ import android.widget.Button;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
+import com.example.appiii.ui.Member.Adaoter.C_MemberRecycleViewAdapter;
+import com.example.appiii.ui.Member.AsyncTask.C_AsyncLoadPlanList;
+import com.example.appiii.ui.Member.C_LoadPlanList;
+import com.example.appiii.ui.Member.AsyncTask.Interface_AsyncLoadPlanList;
 
 import java.text.ParseException;
 import java.util.ArrayList;

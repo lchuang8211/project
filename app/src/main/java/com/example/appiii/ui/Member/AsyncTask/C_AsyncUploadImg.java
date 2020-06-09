@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.AsyncTask;
 
 import android.content.ContentResolver;
 import android.content.Context;

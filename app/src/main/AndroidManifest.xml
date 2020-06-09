@@ -28,19 +28,19 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.Travel.ActPlanDetail"></activity>
-        <activity android:name=".ui.Member.ActMySchedule" />
-        <activity android:name=".ui.Member.ActAddSpotInShowTravelPlan" />
+        <activity android:name=".ui.Member.Activity.ActMySchedule" />
+        <activity android:name=".ui.Member.Activity.ActAddSpotInShowTravelPlan" />
         <activity android:name=".ActRecycle" />
-        <activity android:name=".ui.Member.ActAddTravelPlan" />
-        <activity android:name=".ui.Member.ActMemberShowTravelPlan" />
-        <activity android:name=".ui.Member.ActMyCollect" />
+        <activity android:name=".ui.Member.Activity.ActAddTravelPlan" />
+        <activity android:name=".ui.Member.Activity.ActMemberShowTravelPlan" />
+        <activity android:name=".ui.Member.Activity.ActMyCollect" />
         <activity
             android:name=".ActEntrance"
             android:exported="true"> <!-- android:name = ".xxxx"  Activity name -->

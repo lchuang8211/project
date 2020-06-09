@@ -135,20 +135,20 @@ public void setClickFlag(boolean iptflag){
                         builder.setTitle(mySpotName.get(getAdapterPosition()));
                         builder.setMessage("概述:\n" + mySpotToldescribe.get(getAdapterPosition()));
                         builder.setNegativeButton("取消", null);
-                        builder.setPositiveButton("查看位置", null);
-//                    new DialogInterface.OnClickListener(){
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
-//                            Bundle bundle = new Bundle();
-//                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,mySpotLatitude.get( getAdapterPosition() ));
-//                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,mySpotLongitude.get( getAdapterPosition() ));
-//                            bundle.putString(C_Dictionary.SPOT_NAME,mySpotName.get( getAdapterPosition() ));
-//                            Log.i(TAG, "onClick: send bundle :" + bundle);
-//                            intent.putExtras(bundle);
-//                            mContext.startActivity(intent);
-//                        }
-//                    }
+                        builder.setPositiveButton("查看位置",
+                    new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, ActGoogleMaps.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,mySpotLatitude.get( getAdapterPosition() ));
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,mySpotLongitude.get( getAdapterPosition() ));
+                            bundle.putString(C_Dictionary.SPOT_NAME,mySpotName.get( getAdapterPosition() ));
+                            Log.i(TAG, "onClick: send bundle :" + bundle);
+                            intent.putExtras(bundle);
+                            mContext.startActivity(intent);
+                        }
+                    });
                         Dialog dialog = builder.create();
                         dialog.show();
 //                    Toast.makeText(v.getContext(),"click " +getAdapterPosition(),Toast.LENGTH_SHORT).show();

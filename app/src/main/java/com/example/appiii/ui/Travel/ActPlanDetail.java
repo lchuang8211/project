@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.R;
+import com.example.appiii.ui.Travel.Adapter.C_PlanDetailRecycleViewAdapter;
+import com.example.appiii.ui.Travel.AsyncTask.C_AsyncGetPlanDetail;
+import com.example.appiii.ui.Travel.AsyncTask.Interface_AsyncGetPlanDetail;
 
 import java.util.ArrayList;
 
@@ -39,7 +42,7 @@ public class ActPlanDetail extends AppCompatActivity {
         myHeadShot = findViewById(R.id.myHeadShot);
         bundle=getIntent().getExtras();
         Log.i(TAG, "InitialComponent: bundle size : "+ getIntent().getExtras().size());
-        new C_AsyncGetPlanDetail( new Interface_AsyncGetPlanDetail(){
+        new C_AsyncGetPlanDetail(new Interface_AsyncGetPlanDetail(){
             @Override
             public void GetPlanDetailFinish(C_UserInfo userInfo, ArrayList<C_PlanDetail> planDetail) {
                 setTitle(userInfo.getUserNickName()+"的"+userInfo.getUserPlan());

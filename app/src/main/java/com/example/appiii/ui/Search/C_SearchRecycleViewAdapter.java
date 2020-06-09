@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.appiii.ActGoogleMaps;
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.C_NodeInfo;
 import com.example.appiii.R;
 import com.example.appiii.C_MySQLite;
 
@@ -43,18 +43,16 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     private ArrayList<String> mySpotToldescribe = new ArrayList<>();
     private ArrayList<Double> mySpotLatitude = new ArrayList<>();
     private ArrayList<Double> mySpotLongitude = new ArrayList<>();
+    private ArrayList<C_NodeInfo> searchInfos = new ArrayList<>();
     private Context mContext;
     File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\tedros.png");  // 開啟本地檔案
     Uri uri = Uri.fromFile(file);  //建立超連結
 
+    private String Type;
 
-
-    public C_SearchRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
-        this.mySpotName = mySpotName;
-        this.mySpotAddress = mySpotAddress;
-        this.mySpotToldescribe = mySpotToldescribe;
-        this.mySpotLatitude = mySpotLatitude;
-        this.mySpotLongitude = mySpotLongitude;
+    public C_SearchRecycleViewAdapter(Context context, ArrayList<C_NodeInfo> searchInfos, String Type) {
+        this.Type=Type;
+        this.searchInfos = searchInfos;
         this.mContext = context;
     }
     ViewHolder holder;
@@ -73,20 +71,22 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         holder.setIsRecyclable(false);
         Log.i(TAG, "onBindViewHolder: holder.getAdapterPosition():"+ holder.getAdapterPosition());
 
-        holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ mySpotName.get(position) +"'",null);
+        holder.cursorForBind = holder.sqLiteDB.rawQuery("select 1 from "+C_Dictionary.MY_COLLECTION_TABLE+" where "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+ searchInfos.get(position).getNodeName() +"'",null);
         if(holder.cursorForBind.getCount()==0){
             Glide.with(mContext).asBitmap().load( R.drawable.heart_64px ).into(holder.img_Collect);
         }else{
             Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
         }
-
-        holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
-        Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
+        if(Type==C_Dictionary.SPOT_TYPE_HOTEL){
+            Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into(holder.getItem_image);
+        }
+        holder.txt_Name_Address.setText(searchInfos.get(position).getNodeName()+"\n"+searchInfos.get(position).getNodeAddress());
+//        Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
     }
 
     @Override
     public int getItemCount() { // part 3 :
-        return mySpotName.size();
+        return searchInfos.size();
     }
 
 
@@ -116,17 +116,17 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle( mySpotName.get( getAdapterPosition() ) );
-                    builder.setMessage( "概述:\n" + mySpotToldescribe.get( getAdapterPosition() ) );
+                    builder.setTitle( searchInfos.get( getAdapterPosition() ).getNodeName() );
+                    builder.setMessage( "概述:\n" + searchInfos.get( getAdapterPosition() ).getNodeDescribe() );
                     builder.setNegativeButton("取消",null);
                     builder.setPositiveButton("查看位置",new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(mContext, ActGoogleMaps.class);
                             Bundle bundle = new Bundle();
-                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,mySpotLatitude.get( getAdapterPosition() ));
-                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,mySpotLongitude.get( getAdapterPosition() ));
-                            bundle.putString(C_Dictionary.SPOT_NAME,mySpotName.get( getAdapterPosition() ));
+                            bundle.putDouble(C_Dictionary.LOCATION_LATITUDE,searchInfos.get( getAdapterPosition() ).getNodeLat());
+                            bundle.putDouble(C_Dictionary.LOCATION_LONGITUDE,searchInfos.get( getAdapterPosition() ).getNodeLong());
+                            bundle.putString(C_Dictionary.SPOT_NAME,searchInfos.get( getAdapterPosition() ).getNodeName());
                             Log.i(TAG, "onClick: send bundle :" + bundle);
                             intent.putExtras(bundle);
                             mContext.startActivity(intent);
@@ -146,11 +146,12 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                     values = new ContentValues();  // insert 用
                     SQLite_helper = new C_MySQLite(mContext);  // helper
                     sqLiteDatabase = SQLite_helper.getReadableDatabase();
-                    cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+";",null);
+                    cursor = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_LIST_Table_Name+" WHERE "+C_Dictionary.USER_U_ID+"=?"+";"
+                            ,new String[]{mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0).getString(C_Dictionary.USER_U_ID,"0")});
 //                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);
                     Log.i("getbtn_addTravel","TRAVEL_LIST_Table_Name:"+cursor.getCount());
                     Log.i("getbtn_addTravel","MY_Table_Name"+cursor.getCount());
-                    planName = new String[(int)DatabaseUtils.queryNumEntries(sqLiteDatabase,C_Dictionary.TRAVEL_LIST_Table_Name)];
+                    planName = new String[cursor.getCount()];
                     int count = 0 ;
                     while (cursor.moveToNext()){
                         planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME)).trim();
@@ -185,12 +186,12 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                                         cursor.moveToLast();
                                         maxQueue = cursor.getInt(0);
                                     }
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get( getAdapterPosition() ) );  //地點名稱
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, searchInfos.get( getAdapterPosition() ).getNodeName() );  //地點名稱
                                     values.put(C_Dictionary.TABLE_SCHEMA_DATE,innerwhich+1);
                                     values.put(C_Dictionary.TABLE_SCHEMA_QUEUE,(maxQueue+1));
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,mySpotLatitude.get(getAdapterPosition()) );
-                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,mySpotLongitude.get(getAdapterPosition()));
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, searchInfos.get(getAdapterPosition()).getNodeDescribe());
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,searchInfos.get(getAdapterPosition()).getNodeLat() );
+                                    values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,searchInfos.get(getAdapterPosition()).getNodeLong());
                                     sqLiteDatabase.insert( "["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]" ,null,values);
                                 }
                             }).create().show(); //第二個
@@ -207,20 +208,20 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                     Cursor cursor;
                     cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
                             +" from "+C_Dictionary.MY_COLLECTION_TABLE
-                            +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+mySpotName.get(getAdapterPosition()) +"'"  ,null);
+                            +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+searchInfos.get(getAdapterPosition()).getNodeName() +"'"  ,null);
                     Log.i("cursor","cursor : "+cursor.getCount());
                     if (cursor.getCount()==0){
                         Boolean changed_collat = true;
                         ContentValues values = new ContentValues();
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, mySpotName.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
-                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, searchInfos.get( getAdapterPosition() ).getNodeName());
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, searchInfos.get(getAdapterPosition()).getNodeDescribe());
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, searchInfos.get(getAdapterPosition()).getNodeLat());
+                        values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, searchInfos.get(getAdapterPosition()).getNodeLong());
                         sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
                         Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
                     }
                     if (cursor.getCount()==1){
-                        sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{mySpotName.get(getAdapterPosition())});
+                        sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{searchInfos.get( getAdapterPosition() ).getNodeName()});
                         Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
                         return;
                     }

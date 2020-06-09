@@ -186,7 +186,7 @@ public class ActGoogleMaps extends FragmentActivity implements OnMapReadyCallbac
         ui_set.setZoomControlsEnabled(true);
         ui_set.setCompassEnabled(true);
         LatLng My_Location = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(My_Location).title("My Location"));
+        mMap.addMarker(new MarkerOptions().position(My_Location).title("我的位置"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(My_Location,14));
         if(bundle!=null){
              LOCATION_LATITUDE = bundle.getDouble(C_Dictionary.LOCATION_LATITUDE);

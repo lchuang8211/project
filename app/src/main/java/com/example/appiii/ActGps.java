@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -81,6 +83,7 @@ public class ActGps extends Activity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,7 @@ public class ActGps extends Activity {
         getMyGPS_Location();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void getMyGPS_Location() {
         //請求GPS位置提供者 NET OR GPS
         boolean isGPSEnabled = locationmanager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -164,13 +168,7 @@ public class ActGps extends Activity {
 
 
 
-    private void checkMyPermission() {
-        //取得現在的權限狀態
-        int permissionCheck = ContextCompat.checkSelfPermission(ActGps.this, Manifest.permission.ACCESS_FINE_LOCATION);
-        //如果沒有權限則請求權限
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(ActGps.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);  //識別碼自訂
-    }
+
 
 
     private void InitialComponent() {
@@ -217,7 +215,13 @@ public class ActGps extends Activity {
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setBuiltInZoomControls(true);       //是否支持手指縮放
     }
-
+    private void checkMyPermission() {
+        //取得現在的權限狀態
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        //如果沒有權限則請求權限
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);  //識別碼自訂
+    }
     EditText latitude, horizontal;
     WebView webView;
     Button btn_go, btn_sample, btn_location, btn_101_location, btn_85_location, btn_tower_location;

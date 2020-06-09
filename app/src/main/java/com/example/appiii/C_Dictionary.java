@@ -95,4 +95,7 @@ public class C_Dictionary {
     public static final String CLOUND_TABLE_NAME = "CLOUND_TABLE_NAME";  //雲端上的新 table 名
     public static final String PLAN_DAYS_RECORD = "PLAN_DAYS_RECORD";
     public static final String USER_HEAD_IMG = "USER_HEAD_IMG";
+    public static final String USER_LOCATION_LATITUDE = "USER_LOCATION_LATITUDE";
+    public static final String USER_LOCATION_LONGITUDE = "USER_LOCATION_LONGITUDE";
+    public static final String SPOT_TYPE = "SPOT_TYPE";
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_GetDataFromDatabase;
+import com.example.appiii.C_NodeInfo;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
 
@@ -50,6 +51,7 @@ public class FrgSearch extends Fragment {
     static final String[] cityTypeArray={
             "風景","住宿"
     };
+    private ArrayList<C_NodeInfo> searchInfos = new ArrayList<>();
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
@@ -61,21 +63,13 @@ public class FrgSearch extends Fragment {
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
                     public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
-                    database_Name.add(Name.trim());
-                    database_address.add(address.trim());
-                    mySpotToldescribe.add(Toldescribe);
-                    database_lat.add(Lcation_lat);
-                    database_long.add(Lcation_long);
-//                    txt_searchCount.setText(database_Name.size()+" 筆結果");
+                    searchInfos.add(new C_NodeInfo(Name.trim(), address.trim(), Lcation_lat, Lcation_long, Toldescribe.trim()));
                     InitRecyclerView();
                 }
             }).execute(bundle);
-            if (database_Name.size()>0 || database_address.size()>0 ){   // 如果有上一筆資料 即刪除
-                database_Name.clear();
-                database_address.clear();
-                mySpotToldescribe.clear();
-                database_lat.clear();
-                database_long.clear();
+            if (searchInfos.size()>0 ){   // 如果有上一筆資料 即刪除
+                searchInfos.clear();
+
             }
         }
     };
@@ -167,7 +161,7 @@ public class FrgSearch extends Fragment {
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = inflatedView_Search.findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_SearchRecycleViewAdapter(getActivity(), database_Name, database_address, mySpotToldescribe, database_lat, database_long);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        adapter = new C_SearchRecycleViewAdapter(getActivity(), searchInfos, spotType);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
 //        recyclerView.setOnItemClickListener();

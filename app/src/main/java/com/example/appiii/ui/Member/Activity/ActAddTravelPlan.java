@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member;
+package com.example.appiii.ui.Member.Activity;
 
 
 import android.content.ContentValues;
@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appiii.C_Dictionary;
@@ -38,6 +40,7 @@ public class ActAddTravelPlan extends AppCompatActivity {
     Date startdate;
     Date enddate;
     private View.OnClickListener txt_startDate_click = new View.OnClickListener(){
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onClick(View v) {
             calendar = Calendar.getInstance();
@@ -134,8 +137,9 @@ public class ActAddTravelPlan extends AppCompatActivity {
                     + C_Dictionary.TABLE_SCHEMA_QUEUE+C_Dictionary.VALUE_TYPE_INT+C_Dictionary.VALUE_COMMA_SEP
                     + C_Dictionary.TABLE_SCHEMA_NODE_NAME+C_Dictionary.VALUE_TYPE_STRING+C_Dictionary.VALUE_COMMA_SEP
                     + C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE+C_Dictionary.VALUE_TYPE_DOUBLE+C_Dictionary.VALUE_COMMA_SEP
-                    + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE +C_Dictionary.VALUE_COMMA_SEP
-                    + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING +" )";
+                    + C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE+C_Dictionary.VALUE_TYPE_DOUBLE + C_Dictionary.VALUE_COMMA_SEP
+                    + C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE+C_Dictionary.VALUE_TYPE_STRING + C_Dictionary.VALUE_COMMA_SEP
+                    + C_Dictionary.SPOT_TYPE + C_Dictionary.VALUE_TYPE_STRING + " )";
 
             sqLiteDatabase.execSQL( newPlanTable );
             Toast.makeText(ActAddTravelPlan.this,"建立完成 "+edtxt_PlanName.getText().toString().trim(),Toast.LENGTH_LONG).show();
@@ -180,4 +184,45 @@ public class ActAddTravelPlan extends AppCompatActivity {
     TextView txt_endDate;
     Button  btn_Create;
 
+    public static class C_LoadPlanDetail {
+        private String pDate;
+        private String pQueue;
+        private String pNode;
+        private String pLat;
+        private  String pLong ;
+        private String pDescribe;
+
+        public C_LoadPlanDetail(String pDate, String pQueue, String pNode, String pLat, String pLong, String pDescribe) {
+            this.pDate = pDate;
+            this.pQueue = pQueue;
+            this.pNode = pNode;
+            this.pLat = pLat;
+            this.pLong = pLong;
+            this.pDescribe = pDescribe;
+        }
+
+        public String getpDate() {
+            return pDate;
+        }
+
+        public String getpQueue() {
+            return pQueue;
+        }
+
+        public String getpNode() {
+            return pNode;
+        }
+
+        public String getpLat() {
+            return pLat;
+        }
+
+        public String getpLong() {
+            return pLong;
+        }
+
+        public String getpDescribe() {
+            return pDescribe;
+        }
+    }
 }

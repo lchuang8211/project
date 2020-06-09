@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Travel.AsyncTask;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.appiii.C_Dictionary;
+import com.example.appiii.ui.Travel.C_PlanDetail;
+import com.example.appiii.ui.Travel.C_UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;

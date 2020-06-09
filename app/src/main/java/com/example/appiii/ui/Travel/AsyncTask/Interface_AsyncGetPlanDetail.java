@@ -1,6 +1,9 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Travel.AsyncTask;
 
 import android.os.Bundle;
+
+import com.example.appiii.ui.Travel.C_PlanDetail;
+import com.example.appiii.ui.Travel.C_UserInfo;
 
 import java.util.ArrayList;
 
@@ -12,5 +15,5 @@ public interface Interface_AsyncGetPlanDetail {
 // TABLE_SCHEMA_NODE_LONGITUDE
 // TABLE_SCHEMA_NODE_DESCRIBE`
 //    void  GetPlanDetailFinish(int COLUMN_NAME_DATE, int COLUMN_NAME_QUEUE, String TABLE_SCHEMA_NODE_NAME, Double TABLE_SCHEMA_NODE_LATITUDE ,Double TABLE_SCHEMA_NODE_LONGITUDE, String TABLE_SCHEMA_NODE_DESCRIBE);  //getUerName
-    void  GetPlanDetailFinish( C_UserInfo userInfo, ArrayList<C_PlanDetail> planDetail);
+    void  GetPlanDetailFinish(C_UserInfo userInfo, ArrayList<C_PlanDetail> planDetail);
 }

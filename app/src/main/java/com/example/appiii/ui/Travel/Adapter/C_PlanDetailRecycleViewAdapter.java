@@ -1,33 +1,23 @@
-package com.example.appiii.ui.Travel;
+package com.example.appiii.ui.Travel.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.appiii.C_Dictionary;
-import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
+import com.example.appiii.ui.Travel.C_PlanDetail;
+import com.example.appiii.ui.Travel.C_UserInfo;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**  RecycleView Adapter : 主要是將兩個不同介面的裝置，透過Adapter做連接或傳送 **/
 public class C_PlanDetailRecycleViewAdapter extends RecyclerView.Adapter<C_PlanDetailRecycleViewAdapter.ViewHolder>{
