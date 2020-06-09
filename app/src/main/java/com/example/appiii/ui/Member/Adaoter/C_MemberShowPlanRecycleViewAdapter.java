@@ -70,13 +70,13 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
         holder.setIsRecyclable(false);
         holder.txt_Spot_Name.setText("第 "+(position+1)+" 個行程 :\n "+ planInfos.get(position).getpNodeName());
         Log.i(TAG, "onBindViewHolder: planInfos.get(position).getpNodeType() : "+planInfos.get(position).getpNodeType());
-        if (planInfos.get(position).getpNodeType().toString() == "SPOT_TYPE_HOTEL") {
+        if (planInfos.get(position).getpNodeType().equals(C_Dictionary.SPOT_TYPE_HOTEL)) {
             Log.i(TAG, "onBindViewHolder: ingetNodType : HOTEL ");
             Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into( holder.getItem_image);  // Gilde : 圖片 library
         }
-        if (planInfos.get(position).getpNodeType().toString() == C_Dictionary.SPOT_TYPE_VIEW) {
+        if (planInfos.get(position).getpNodeType().equals(C_Dictionary.SPOT_TYPE_VIEW)) {
             Log.i(TAG, "onBindViewHolder: ingetNodType : VIEW ");
-            Glide.with(mContext).asBitmap().load( R.drawable.tedros ).into( holder.getItem_image);  // Gilde : 圖片 library
+            Glide.with(mContext).asBitmap().load( R.drawable.holiday_128px ).into( holder.getItem_image);  // Gilde : 圖片 library
         }
 //        holder.txt_Plan_info.setText( String.valueOf(showSpotLatitude.get(position))+","+String.valueOf(showSpotLongitude.get(position)) );
 ////        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
