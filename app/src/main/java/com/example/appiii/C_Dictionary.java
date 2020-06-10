@@ -25,6 +25,7 @@ public class C_Dictionary {
     public final static String CITY_NAME_LIENCHIANG = "CITY_NAME_LIENCHIANG";  //連江
 
     public final static String SPOT_NAME = "SPOT_NAME";
+    public static final String SPOT_TYPE = "SPOT_TYPE";
     public final static String SPOT_TYPE_REQUEST = "SPOT_TYPE_REQUEST";
     public final static String SPOT_TYPE_HOTEL = "SPOT_TYPE_HOTEL";  //住宿
     public final static String SPOT_TYPE_VIEW = "SPOT_TYPE_VIEW";  //風景
@@ -97,5 +98,8 @@ public class C_Dictionary {
     public static final String USER_HEAD_IMG = "USER_HEAD_IMG";
     public static final String USER_LOCATION_LATITUDE = "USER_LOCATION_LATITUDE";
     public static final String USER_LOCATION_LONGITUDE = "USER_LOCATION_LONGITUDE";
-    public static final String SPOT_TYPE = "SPOT_TYPE";
+
+    //////////// URL
+    public static final String MY_SERVER_URL = "http://hhlc.ddnsking.com/";
+
 }

@@ -50,7 +50,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/getAndroid.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"getAndroid.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

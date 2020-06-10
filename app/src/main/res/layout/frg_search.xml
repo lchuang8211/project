@@ -25,27 +25,23 @@
             android:layout_marginLeft="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/edtxt_searchInput"
-            android:layout_centerVertical="true"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/spinner_spotType"
-            android:layout_marginLeft="5sp"
-            android:layout_width="80sp"
-            android:layout_height="wrap_content"/>
+
         <Button
             android:id="@+id/btn_searchDB"
             android:text="搜尋"
             android:textSize="12sp"
-            android:layout_width="50sp"
+            android:layout_width="80sp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10sp"/>
 
-
-
     </RelativeLayout>
+    <EditText
+        android:id="@+id/edtxt_searchInput"
+        android:layout_margin="10sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_search"
