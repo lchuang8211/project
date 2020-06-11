@@ -37,16 +37,10 @@
             android:layout_marginRight="10sp"/>
 
     </RelativeLayout>
-    <EditText
-        android:id="@+id/edtxt_searchInput"
-        android:layout_margin="10sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>

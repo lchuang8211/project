@@ -33,12 +33,25 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-//import com.google.android.libraries.places.api.model.Place;
-import com.google.android.gms.location.places.Place;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+//import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FrgGmap extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "FrgGmap";
@@ -174,23 +187,34 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     }
 
     PlaceAutocompleteFragment placeAutoComplete;
-
+    AutocompleteSupportFragment autocompleteFragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflatedView_Gmap = inflater.inflate(R.layout.frg_gmap,container,false);
-        placeAutoComplete = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete);
-        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
+        Places.initialize(getActivity(), String.valueOf(R.string.google_maps_key));
+        PlacesClient placesClient = Places.createClient(getActivity());
 
-                Log.d("Maps", "Place selected: " + place.getName());
-            }
-            @Override
-            public void onError(Status status) {
-                Log.d("Maps", "An error occurred: " + status);
-            }
-        });
+        inflatedView_Gmap = inflater.inflate(R.layout.frg_gmap,container,false);
+
+        autocompleteFragment = (AutocompleteSupportFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+// Specify the types of place data to return.
+//        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+// Set up a PlaceSelectionListener to handle the response.
+//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//
+//
+//            @Override
+//            public void onPlaceSelected(com.google.android.gms.location.places.Place place) {
+//
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//
+//            }
+//        });
 
         mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);

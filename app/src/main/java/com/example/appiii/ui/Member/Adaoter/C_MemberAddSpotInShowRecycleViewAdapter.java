@@ -83,7 +83,7 @@ public class C_MemberAddSpotInShowRecycleViewAdapter extends RecyclerView.Adapte
             Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
         }
 
-        if(spotType == C_Dictionary.SPOT_TYPE_HOTEL){
+        if(spotType.equals(C_Dictionary.SPOT_TYPE_HOTEL)){
             Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into(holder.getItem_image);
         }
 //        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library

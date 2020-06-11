@@ -38,11 +38,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
 
     View itemView;
     private static final  String TAG = "RecyclerViewAdapter";
-    private ArrayList<String> mySpotName = new ArrayList<>();
-    private ArrayList<String> mySpotAddress = new ArrayList<>();
-    private ArrayList<String> mySpotToldescribe = new ArrayList<>();
-    private ArrayList<Double> mySpotLatitude = new ArrayList<>();
-    private ArrayList<Double> mySpotLongitude = new ArrayList<>();
+
     private ArrayList<C_NodeInfo> searchInfos = new ArrayList<>();
     private Context mContext;
     File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\tedros.png");  // 開啟本地檔案

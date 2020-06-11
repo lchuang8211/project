@@ -164,6 +164,5 @@ public class FrgSearch extends Fragment {
         adapter = new C_SearchRecycleViewAdapter(getActivity(), searchInfos, spotType);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
-//        recyclerView.setOnItemClickListener();
     }
 }

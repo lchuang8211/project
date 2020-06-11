@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:com.github.ksoichiro="http://schemas.android.com/tools">
     <TextView
         android:id="@+id/txt_return"
         android:background="@color/colorWihte"
@@ -19,8 +20,9 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="250sp"
         android:layout_height="250sp"
+        android:layout_marginTop="10sp"
         android:id="@+id/myHeadShot"
-        android:src="@drawable/tedros"
+        android:src="@drawable/user_64px"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
     <TextView
@@ -32,6 +34,11 @@
         android:layout_height="wrap_content"
         android:text="customer"
         android:textSize="35sp"/>
+    <com.github.ksoichiro.android.observablescrollview.ObservableListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -54,9 +61,7 @@
             android:text="設定"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-
-
     </LinearLayout>
+
 </LinearLayout>
 </FrameLayout>
