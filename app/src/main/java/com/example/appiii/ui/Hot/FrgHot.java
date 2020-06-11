@@ -37,7 +37,7 @@ public class FrgHot extends Fragment {
     View inflatedView;
     private LocationManager lm;
     private Location location = null;;
-    private int MIN_TIME_BW_UPDATES = 5000, MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 判斷GPS更新的最小時間建閣與忽略距離
+    private int MIN_TIME_BW_UPDATES = 5*60*1000, MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 判斷GPS更新的最小時間建閣與忽略距離
     private String myLocation_horizontal, myLocation_latitude;  //記錄我的裝置的GPS位置
     private ArrayList<String> database_Name = new ArrayList<>();
     private ArrayList<String> database_address = new ArrayList<>();

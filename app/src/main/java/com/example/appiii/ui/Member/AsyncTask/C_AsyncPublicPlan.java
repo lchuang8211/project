@@ -102,7 +102,8 @@ public class C_AsyncPublicPlan extends AsyncTask<Bundle,Void,Void> {
                             setJsonObject2.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, cursor.getDouble(3));
                             setJsonObject2.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, cursor.getDouble(4));
                             setJsonObject2.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, URLEncoder.encode(cursor.getString(5), "UTF-8"));
-                            setJsonObject2.put(C_Dictionary.SPOT_TYPE, URLEncoder.encode(cursor.getString(6), "UTF-8"));
+                            setJsonObject2.put(C_Dictionary.SPOT_TYPE, URLEncoder.encode(cursor.getString(cursor.getColumnIndex(C_Dictionary.SPOT_TYPE)), "UTF-8"));
+
                             setJsonArray.put(setJsonObject2);
                         } catch (JSONException | UnsupportedEncodingException e) {
                             e.printStackTrace();

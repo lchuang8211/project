@@ -79,10 +79,6 @@ public class ActGps extends Activity {
     };
     // 位置監聽器
 
-
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

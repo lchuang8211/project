@@ -72,6 +72,7 @@
         <activity
             android:name=".ActGoogleMaps"
             android:label="google_maps" />
+        <activity android:name=".ui.Gmap.ActWebView"/>
         <activity android:name=".ActDBconect" />
         <activity android:name=".ActGps" />
         <activity android:name=".ActMain" />

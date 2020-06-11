@@ -55,10 +55,7 @@ public class FrgSearch extends Fragment {
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(edtxt_searchInput.getText().toString().matches("")){
-                bundle.putString("EDITTXT_SEARCH_INPUT","");
-            }else
-                bundle.putString("EDITTXT_SEARCH_INPUT",edtxt_searchInput.getText().toString());
+
             new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
@@ -90,8 +87,6 @@ public class FrgSearch extends Fragment {
 
         btn_searchDB = inflatedView_Search.findViewById(R.id.btn_searchDB);
         btn_searchDB.setOnClickListener(btn_searchDB_click);
-        edtxt_searchInput = inflatedView_Search.findViewById(R.id.edtxt_searchInput);
-
 
         InitialCitySpinner();
         InitialDatabase();
