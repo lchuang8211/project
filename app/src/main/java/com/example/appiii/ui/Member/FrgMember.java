@@ -179,7 +179,9 @@ public class FrgMember extends Fragment {
             btn_mySetting.setEnabled(false);
             btn_mySchedule.setEnabled(false);
             btn_myCollect.setEnabled(false);
-            userNickName.setText("vister");
+            userNickName.setText("Vister");
+            myHeadShot.setClickable(false);
+            Glide.with(getContext()).asBitmap().load(R.drawable.user_64px).into(myHeadShot);
         }
 
         return inflatedView_Member;
@@ -193,10 +195,10 @@ public class FrgMember extends Fragment {
         myHeadShot = inflatedView_Member.findViewById(R.id.myHeadShot);
         myHeadShot.setOnClickListener(myHeadShot_click);
         Log.i(TAG, "InitialComponent: 12333333 "+ sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"1"));
+
         switch(sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"1")){
             case "":
                 Glide.with(getContext()).asBitmap().load(R.drawable.user_64px).into(myHeadShot);
-
                 break;
             default:
                 Glide.with(getContext()).asBitmap().load("http://hhlc.ddnsking.com"+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"")).into(myHeadShot);

@@ -122,7 +122,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                 public void onClick(DialogInterface dialog, int which) {
                     whichPlanName = allPlan[which];
                     getActivity().setTitle(whichPlanName);
-                    if(!allPlan[0].equals("沒有行程"))
+                    if(!allPlan[0].equals("沒有行程") && sf.getInt(C_Dictionary.USER_STATUS,0)==1 )
                         btn_myShowDay.setEnabled(true);
                 }
             }).create().show();
@@ -223,7 +223,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                 }
             }
-            if(addressList.size()>=1)
+            if(addressList.size()>=1 && sf.getInt(C_Dictionary.USER_STATUS,0)==1 )
                 btn_addPrivateNode.setEnabled(true);
 
             return false;
@@ -391,6 +391,10 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
         mMapFragment.getMapAsync(this);
 //        mapFragment.getMapAsync(this);
         InitialComponent();
+        if (sf.getInt(C_Dictionary.USER_STATUS,0)==0){
+            btn_myPlan.setEnabled(false);
+            btn_myShowDay.setEnabled(false);
+        }
         return inflatedView_Gmap;
     }
 
@@ -400,8 +404,6 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
         UiSettings ui_set = mMap.getUiSettings();
         ui_set.setZoomControlsEnabled(true);
         ui_set.setCompassEnabled(true);
-
-
     }
     private void InitialComponent() {
         btn_myPlan = inflatedView_Gmap.findViewById(R.id.btn_myPlan);
@@ -417,7 +419,9 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
         btn_web.setOnClickListener(btn_web_click);
         if(addressList.size()==0)
             btn_addPrivateNode.setEnabled(false);
+        sf = getActivity().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
     }
+    SharedPreferences sf;
     Button btn_myPlan, btn_myShowDay, btn_addPrivateNode, btn_web;
     EditText edTxt_Spot, edTxt_EndSpot;
     TextView txt_getAttraction;
