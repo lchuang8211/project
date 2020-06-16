@@ -7,12 +7,14 @@ public class C_NodeInfo {
     private Double NodeLong;
     private String NodeDescribe;
 
+
     public C_NodeInfo(String nodeName, String nodeAddress, Double nodeLat, Double nodeLong, String nodeDescribe) {
-        NodeName = nodeName;
-        NodeAddress = nodeAddress;
-        NodeLat = nodeLat;
-        NodeLong = nodeLong;
-        NodeDescribe = nodeDescribe;
+        this.NodeName = nodeName;
+        this.NodeAddress = nodeAddress;
+        this.NodeLat = nodeLat;
+        this.NodeLong = nodeLong;
+        this.NodeDescribe = nodeDescribe;
+
     }
 
     public String getNodeName() {
@@ -34,4 +36,5 @@ public class C_NodeInfo {
     public String getNodeDescribe() {
         return NodeDescribe;
     }
+
 }

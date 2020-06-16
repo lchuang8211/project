@@ -42,6 +42,7 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
     private ArrayList<String> mySpotToldescribe = new ArrayList<>();
     private ArrayList<Double> mySpotLatitude = new ArrayList<>();
     private ArrayList<Double> mySpotLongitude = new ArrayList<>();
+    private ArrayList<String> database_NodeImg = new ArrayList<>();
     private Context mContext;
 //    File file = new File("D:\\Appiii_project\\app\\src\\main\\res\\drawable\\heart_64px.png");  // 開啟本地檔案
 //    File file_fill = new File(mContext.getFilesDir(), "heart_fill_64px.png");  // 開啟本地檔案
@@ -51,12 +52,13 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
     public void setAdapterClickFlag(boolean iptflag){
         this.AdapterClickFlag = iptflag;
     }
-    public C_HotRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude) {
+    public C_HotRecycleViewAdapter(Context context, ArrayList<String> mySpotName, ArrayList<String> mySpotAddress, ArrayList<String> mySpotToldescribe, ArrayList<Double> mySpotLatitude, ArrayList<Double> mySpotLongitude,  ArrayList<String> database_NodeImg) {
         this.mySpotName = mySpotName;
         this.mySpotAddress = mySpotAddress;
         this.mySpotToldescribe = mySpotToldescribe;
         this.mySpotLatitude = mySpotLatitude;
         this.mySpotLongitude = mySpotLongitude;
+        this.database_NodeImg = database_NodeImg;
         this.mContext = context;
     }
     ViewHolder holder;
@@ -87,7 +89,9 @@ public class C_HotRecycleViewAdapter extends RecyclerView.Adapter<C_HotRecycleVi
             Glide.with(mContext).asBitmap().load( R.drawable.heart_fill_64px ).into(holder.img_Collect);
         }
 
-//      Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
+        if(!database_NodeImg.get(position).equals("")) {
+            Glide.with(mContext).asBitmap().load( database_NodeImg.get(position) ).into(holder.getItem_image);  // Gilde : 圖片 library
+        }
         holder.txt_Name_Address.setText(mySpotName.get(position)+"\n"+mySpotAddress.get(position));
 //        Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
     }
@@ -122,6 +126,11 @@ public void setClickFlag(boolean iptflag){
             img_Collect = itemView.findViewById(R.id.img_Collect);
             btn_addTravel = itemView.findViewById(R.id.getbtn_addTravel);
             txt_Name_Address = itemView.findViewById(R.id.txt_Name_Address);
+            SharedPreferences sf = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
+            if(sf.getInt(C_Dictionary.USER_STATUS,0)==0) {
+                btn_addTravel.setEnabled(false);
+                img_Collect.setEnabled(false);
+            }
 //            btn_getItem = itemView.findViewById(R.id.btn_getItem);
 //            Log.i(TAG, "ViewHolder: in ClickFlag " + ClickFlag);
                 txt_Name_Address.setOnClickListener(new View.OnClickListener() {
@@ -169,14 +178,17 @@ public void setClickFlag(boolean iptflag){
                         Log.i(TAG, "onClick: inhot adapter btnclick");
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString( C_Dictionary.SEARCH_SPOT_INFO_COPY, mySpotName.get( getAdapterPosition() ) );
+                        SharedPreferences sh = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING, 0);
                         values = new ContentValues();  // insert 用
                         SQLite_helper = new C_MySQLite(mContext);  // helper
                         sqLiteDatabase = SQLite_helper.getReadableDatabase();
-                        cursor = sqLiteDatabase.rawQuery("select * from " + C_Dictionary.TRAVEL_LIST_Table_Name + ";", null);
+                        cursor = sqLiteDatabase.rawQuery("select * from " + C_Dictionary.TRAVEL_LIST_Table_Name
+                                                             + " WHERE "+C_Dictionary.USER_U_ID+"=?"
+                                                             , new String[]{sh.getString(C_Dictionary.USER_U_ID,"")});
 //                    Cursor cursor2 = sqLiteDatabase.rawQuery("select * from "+C_Dictionary.TRAVEL_Table_Name +";",null);
                         Log.i("getbtn_addTravel", "TRAVEL_LIST_Table_Name:" + cursor.getCount());
                         Log.i("getbtn_addTravel", "MY_Table_Name" + cursor.getCount());
-                        planName = new String[(int) DatabaseUtils.queryNumEntries(sqLiteDatabase, C_Dictionary.TRAVEL_LIST_Table_Name)];
+                        planName = new String[cursor.getCount()];
                         int count = 0;
                         while (cursor.moveToNext()) {
                             planName[count] = cursor.getString(cursor.getColumnIndex(C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME));
@@ -283,6 +295,7 @@ public void setClickFlag(boolean iptflag){
                             values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, mySpotToldescribe.get(getAdapterPosition()));
                             values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, mySpotLatitude.get(getAdapterPosition()));
                             values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, mySpotLongitude.get(getAdapterPosition()));
+                            values.put(C_Dictionary.SPOT_TYPE, "");
                             sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
                             Glide.with(mContext).asBitmap().load(R.drawable.heart_fill_64px).into(img_Collect);
                         }

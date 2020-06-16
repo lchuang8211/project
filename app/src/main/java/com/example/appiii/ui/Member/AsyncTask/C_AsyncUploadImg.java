@@ -37,7 +37,7 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/uploadImg.php");  //pushtoclound  getplanlist
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"uploadImg.php");  //pushtoclound  getplanlist
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

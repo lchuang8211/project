@@ -41,16 +41,6 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
 //    private ArrayList<URL> AL_HeadImgURL = new ArrayList<>();
     private String updateTime = String.valueOf(System.currentTimeMillis()); // 在需要重新获取更新的图片时调用
 
-    URL url;
-
-    {
-        try {
-            url = new URL("http://hhlc.ddnsking.com/getImg/u00004.jpeg");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Context mContext;
 
     private static final  String TAG = "TravelPlanList - RecyclerViewAdapter ";
@@ -93,8 +83,8 @@ public class C_TravelPlanListRecycleViewAdapter extends RecyclerView.Adapter<C_T
         if(AL_HeadImg.get(position).toString().trim().matches("")){
 
         }else{
-            Glide.with(mContext).asBitmap().load( "http://hhlc.ddnsking.com"+AL_HeadImg.get(position) )
-                .into(holder.getHeadImage);
+            Glide.with(mContext).asBitmap().load( C_Dictionary.MY_SERVER_URL+AL_HeadImg.get(position) )
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).into(holder.getHeadImage); //不要在硬碟儲存緩衝
             //  .skipMemoryCache(true)// 跳過記憶體緩衝
             //  .diskCacheStrategy(DiskCacheStrategy.NONE) //不要在硬碟儲存緩衝
         }

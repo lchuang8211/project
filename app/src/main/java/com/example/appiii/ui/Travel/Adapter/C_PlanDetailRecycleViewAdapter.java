@@ -35,16 +35,6 @@ public class C_PlanDetailRecycleViewAdapter extends RecyclerView.Adapter<C_PlanD
 //    private ArrayList<URL> AL_HeadImgURL = new ArrayList<>();
     private String updateTime = String.valueOf(System.currentTimeMillis()); // 在需要重新获取更新的图片时调用
 
-    URL url;
-
-    {
-        try {
-            url = new URL("http://hhlc.ddnsking.com/getImg/u00004.jpeg");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Context mContext;
 
     private static final  String TAG = "TravelPlanList - RecyclerViewAdapter ";

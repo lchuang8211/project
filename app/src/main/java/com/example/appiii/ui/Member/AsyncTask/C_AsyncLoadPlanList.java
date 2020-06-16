@@ -37,7 +37,7 @@ public class C_AsyncLoadPlanList extends AsyncTask<Bundle,Void,String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/LoadPersonalPlan.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"LoadPersonalPlan.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

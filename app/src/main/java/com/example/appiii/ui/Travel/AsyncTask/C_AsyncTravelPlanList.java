@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.appiii.C_Dictionary;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +27,7 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/getplanlist.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"getplanlist.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

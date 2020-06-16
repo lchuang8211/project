@@ -19,8 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appiii.C_AsyncTaskGetDataFromDatabase;
 import com.example.appiii.C_Dictionary;
-import com.example.appiii.C_GetDataFromDatabase;
 import com.example.appiii.C_NodeInfo;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
@@ -31,13 +31,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FrgSearch extends Fragment {
     View inflatedView_Search;
-    private ArrayList<Integer> database_ID = new ArrayList<>();
-    private ArrayList<String> database_Name = new ArrayList<>();
-    private ArrayList<String> database_address = new ArrayList<>();
-    private ArrayList<String> mySpotToldescribe = new ArrayList<>();
-    private ArrayList<Double> database_lat = new ArrayList<>();
-    private ArrayList<Double> database_long = new ArrayList<>();
-    private ArrayList<String> database_cityNumber = new ArrayList<>();
+
+    private ArrayList<String> database_NodeImg = new ArrayList<>();
     private String cityName = "" ;
     private int cityNameNumber = -1 ;
     private String spotType = "";
@@ -56,17 +51,18 @@ public class FrgSearch extends Fragment {
         @Override
         public void onClick(View v) {
 
-            new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
+            new C_AsyncTaskGetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
-                    public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
+                    public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long, String NodeImg){
                     searchInfos.add(new C_NodeInfo(Name.trim(), address.trim(), Lcation_lat, Lcation_long, Toldescribe.trim()));
+                    database_NodeImg.add(NodeImg);
                     InitRecyclerView();
                 }
             }).execute(bundle);
             if (searchInfos.size()>0 ){   // 如果有上一筆資料 即刪除
                 searchInfos.clear();
-
+                database_NodeImg.clear();
             }
         }
     };
@@ -156,7 +152,7 @@ public class FrgSearch extends Fragment {
     private void InitRecyclerView(){  // 資料載入後才呼叫 RecyclerView 的相關設定
         Log.i(TAG, "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = inflatedView_Search.findViewById(R.id.recycle_view_search);  // 放在這個 Acticity 的 XML 下的 RecyclerView.ID  recycle_view_search
-        adapter = new C_SearchRecycleViewAdapter(getActivity(), searchInfos, spotType);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
+        adapter = new C_SearchRecycleViewAdapter(getActivity(), searchInfos, database_NodeImg, spotType);  // 建立 Adapter 來載入資料  // 用 this CLASS 建立 Adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // recyclerView.setLayoutManager(LayoutManager layoutManager)  // ( Context context, int orientation, boolean reverseLayout)
     }

@@ -33,7 +33,7 @@ public class C_AsyncPublicPlan extends AsyncTask<Bundle,Void,Void> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/pushtoclound.php");  //pushtoclound  getplanlist
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"pushtoclound.php");  //pushtoclound  getplanlist
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

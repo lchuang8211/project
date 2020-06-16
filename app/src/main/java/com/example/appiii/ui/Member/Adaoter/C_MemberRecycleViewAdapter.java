@@ -73,7 +73,7 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
         Log.i(TAG, "onBindViewHolder: myPlanTotalDay :"+ myPlanTotalDay.size());
 
         holder.txt_Plan_Name.setText(myPlanName.get(position));
-
+        holder.txt_Plan_date.setText( myPlanDate.get(position));
         holder.cursorForBind = holder.sqLiteDatabase.rawQuery("select "+C_Dictionary.TRAVEL_SCHEMA_TABLE_VISIBILITY+" from "+C_Dictionary.TRAVEL_LIST_Table_Name
                 +" where "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+"='"+myPlanName.get(position)+"'",null);
 //        Log.i(TAG, "onBindViewHolder: "+ holder.cursor.getInt(0));
@@ -128,8 +128,8 @@ public class C_MemberRecycleViewAdapter extends RecyclerView.Adapter<C_MemberRec
             // RelativeLayout getParentLayout = itemView.findViewById(R.id.getSearchInfoForParent_Layout);
             // 把 RelativeLayout 當作 View 並用 findViewById(R.id.RelativeLayout_ID) 尋找 Layout 的 XML 排版
 
-            txt_Plan_date = itemView.findViewById(R.id.txt_Plan_info);
-            txt_Plan_Name = itemView.findViewById(R.id.txt_Spot_Name);
+            txt_Plan_date = itemView.findViewById(R.id.txt_PlanInfo);
+            txt_Plan_Name = itemView.findViewById(R.id.txt_PlanName);
             cbox_pushToCloud = itemView.findViewById(R.id.cbox_pushToCloud);
 
             layout = (LinearLayout) itemView.findViewById(R.id.layout_showPlan);

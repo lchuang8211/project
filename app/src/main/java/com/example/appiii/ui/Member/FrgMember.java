@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
@@ -54,11 +55,15 @@ public class FrgMember extends Fragment {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     switch(radioGroup_SignIn.getCheckedRadioButtonId()){
                         case R.id.rdb_notAgreeAutoSignIn:
-//                            txt_setting.setText("notAutoSignIn");
+                            w.putBoolean(C_Dictionary.AUTO_SIGN_IN_SETTING,false).commit();
+//                            txt_setting.setText("notAutoSignIn"); AutoSignInSetting
                             break;
                         case R.id.rdb_AgreeAutoSignIn:
+                            w.putBoolean(C_Dictionary.AUTO_SIGN_IN_SETTING,true).commit();
 //                            txt_setting.setText("AutoSignIn");
                             break;
+                        default:
+
                     }
                 }
             });
@@ -201,7 +206,8 @@ public class FrgMember extends Fragment {
                 Glide.with(getContext()).asBitmap().load(R.drawable.user_64px).into(myHeadShot);
                 break;
             default:
-                Glide.with(getContext()).asBitmap().load("http://hhlc.ddnsking.com"+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,"")).into(myHeadShot);
+                Glide.with(getContext()).asBitmap().load(C_Dictionary.MY_SERVER_URL+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,""))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE).into(myHeadShot);
                 break;
         }
 

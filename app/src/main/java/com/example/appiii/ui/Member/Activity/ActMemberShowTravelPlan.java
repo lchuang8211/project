@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -164,6 +165,7 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
                         }
 //                        Toast.makeText(ActMemberShowTravelPlan.this, Btn_changDate_list.get(getbuttonID).getText().toString(),Toast.LENGTH_SHORT).show();
 //                    }
+                    txt_showday.setText("第 "+ButtonID+" 天");
                 }
             });
             i++;
@@ -181,6 +183,7 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
         SQLite_helper = new C_MySQLite(this);  // helper
         sqLiteDatabase = SQLite_helper.getReadableDatabase();
         linearLayout = (LinearLayout)findViewById(R.id.linearlayout_showplan);
+        txt_showday = findViewById(R.id.txt_showday);
         btn_add_spot = findViewById(R.id.btn_add_spot);
         btn_add_spot.setOnClickListener(btn_add_spot_click);
 
@@ -202,7 +205,6 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
                         cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE)),
                         cursor.getString(cursor.getColumnIndex(C_Dictionary.SPOT_TYPE))
                 ));
-
             }
             ButtonID=1;  //只秀第一天
             InitRecyclerView();
@@ -210,7 +212,7 @@ public class ActMemberShowTravelPlan extends AppCompatActivity {
 
     }
     LinearLayout linearLayout;
-
+    TextView txt_showday;
     Cursor cursor;
     ContentValues values;
     Button btn_dayth;

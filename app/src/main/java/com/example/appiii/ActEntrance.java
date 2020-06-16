@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ActEntrance extends AppCompatActivity {
+public class ActEntrance extends Activity {
     static Boolean SignInAuto;
     static Boolean RemamberAccount;
     private View.OnClickListener btn_Visitors_Signin_click = new View.OnClickListener(){

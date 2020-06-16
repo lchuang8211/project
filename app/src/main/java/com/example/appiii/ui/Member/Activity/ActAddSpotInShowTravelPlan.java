@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appiii.C_Dictionary;
-import com.example.appiii.C_GetDataFromDatabase;
+import com.example.appiii.C_AsyncTaskGetDataFromDatabase;
 import com.example.appiii.C_NodeInfo;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
@@ -44,10 +44,10 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            new C_GetDataFromDatabase(new Interface_AsyncGetDBTask(){
+            new C_AsyncTaskGetDataFromDatabase(new Interface_AsyncGetDBTask(){
                 @Override
 //                public void GetDBTaskFinish(int ID, String Name, String cityNumber, String address, Double Lcation_lat, Double Lcation_long, int arraysize){
-                public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long){
+                public void GetDBTaskFinish(String Name, String address, String Toldescribe ,Double Lcation_lat, Double Lcation_long, String nodeimg){
                     searchInfos.add(new C_NodeInfo(Name.trim(), address.trim(), Lcation_lat, Lcation_long, Toldescribe.trim()));
                     InitRecyclerView();
                 }

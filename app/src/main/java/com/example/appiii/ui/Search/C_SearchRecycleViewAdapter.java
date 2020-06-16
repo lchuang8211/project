@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -45,9 +46,12 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
     Uri uri = Uri.fromFile(file);  //建立超連結
 
     private String Type;
+    private ArrayList<String> NodeImg = new ArrayList<>();
 
-    public C_SearchRecycleViewAdapter(Context context, ArrayList<C_NodeInfo> searchInfos, String Type) {
+
+    public C_SearchRecycleViewAdapter(Context context, ArrayList<C_NodeInfo> searchInfos, ArrayList<String> NodeImg, String Type) {
         this.Type=Type;
+        this.NodeImg=NodeImg;
         this.searchInfos = searchInfos;
         this.mContext = context;
     }
@@ -76,6 +80,8 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         if(Type==C_Dictionary.SPOT_TYPE_HOTEL){
             Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into(holder.getItem_image);
         }
+        if(!NodeImg.get(position).equals(""))
+            Glide.with(mContext).asBitmap().load( NodeImg.get(position)).into(holder.getItem_image);
         holder.txt_Name_Address.setText(searchInfos.get(position).getNodeName()+"\n"+searchInfos.get(position).getNodeAddress());
 //        Log.i(TAG, "onBindViewHolder: txt_Name_Address.get(position): " + mySpotName.get(position)+":"+mySpotAddress.get(position));
     }
@@ -202,7 +208,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                     C_MySQLite SQLite_helper = new C_MySQLite(mContext);
                     SQLiteDatabase sqLiteDatabase= SQLite_helper.getWritableDatabase();
                     Cursor cursor;
-                    cursor = sqLiteDatabase.rawQuery("select "+C_Dictionary.TABLE_SCHEMA_NODE_NAME
+                    cursor = sqLiteDatabase.rawQuery("select "+ C_Dictionary.TABLE_SCHEMA_NODE_NAME
                             +" from "+C_Dictionary.MY_COLLECTION_TABLE
                             +" WHERE "+C_Dictionary.TABLE_SCHEMA_NODE_NAME+" = '"+searchInfos.get(getAdapterPosition()).getNodeName() +"'"  ,null);
                     Log.i("cursor","cursor : "+cursor.getCount());
@@ -210,13 +216,15 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                         Boolean changed_collat = true;
                         ContentValues values = new ContentValues();
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, searchInfos.get( getAdapterPosition() ).getNodeName());
+                        Toast.makeText(mContext,"getNodeName"+searchInfos.get( getAdapterPosition() ).getNodeName(),Toast.LENGTH_SHORT).show();
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, searchInfos.get(getAdapterPosition()).getNodeDescribe());
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, searchInfos.get(getAdapterPosition()).getNodeLat());
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, searchInfos.get(getAdapterPosition()).getNodeLong());
+                        values.put(C_Dictionary.SPOT_TYPE, "");
                         sqLiteDatabase.insert(C_Dictionary.MY_COLLECTION_TABLE, null, values);
                         Glide.with(mContext).asBitmap().load(  R.drawable.heart_fill_64px ).into(img_Collect);
                     }
-                    if (cursor.getCount()==1){
+                    if (cursor.getCount()>=1){
                         sqLiteDatabase.delete(C_Dictionary.MY_COLLECTION_TABLE,C_Dictionary.TABLE_SCHEMA_NODE_NAME+"=?",new String[]{searchInfos.get( getAdapterPosition() ).getNodeName()});
                         Glide.with(mContext).asBitmap().load(  R.drawable.heart_64px ).into(img_Collect);
                         return;

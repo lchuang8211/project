@@ -39,8 +39,8 @@ public class ActMyCollect extends AppCompatActivity {
         SQLite_helper = new C_MySQLite(this);
         sqLiteDatabase = SQLite_helper.getWritableDatabase();
         cursor = sqLiteDatabase.rawQuery("select * from "+ C_Dictionary.MY_COLLECTION_TABLE,null);
-        if( CollectInfos.size()>0 || collectNodeName.size()>0 || collectNodeDescribe.size()>0 || collectNodeLatitude.size()>0 || collectNodeLongitude.size()>0 ){
-            CollectInfos.clear(); collectNodeName.clear(); collectNodeDescribe.clear(); collectNodeLatitude.clear(); collectNodeLongitude.clear();
+        if( CollectInfos.size()>0  ){
+            CollectInfos.clear();
         }
         if (cursor.getCount()>0){
             while(cursor.moveToNext()){
@@ -50,10 +50,6 @@ public class ActMyCollect extends AppCompatActivity {
                         cursor.getDouble(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE)),
                         cursor.getString(cursor.getColumnIndex(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE))
                         ));
-                collectNodeName.add(cursor.getString(0));
-                collectNodeDescribe.add(cursor.getString(1));
-                collectNodeLatitude.add(cursor.getDouble(2));
-                collectNodeLongitude.add(cursor.getDouble(3));
             }
         }else
             return;

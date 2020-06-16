@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
@@ -46,10 +47,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -112,7 +117,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                     allPlan[i-1]=cursor.getString(0);
                 }
             }  else{
-                allPlan = new String[] {"沒有行程"};
+                allPlan = new String[] {"尚未建立行程表，請前往會員中心建立"};
                 btn_myShowDay.setEnabled(false);
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -122,7 +127,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                 public void onClick(DialogInterface dialog, int which) {
                     whichPlanName = allPlan[which];
                     getActivity().setTitle(whichPlanName);
-                    if(!allPlan[0].equals("沒有行程") && sf.getInt(C_Dictionary.USER_STATUS,0)==1 )
+                    if(!allPlan[0].equals("尚未建立行程表，請前往會員中心建立") && sf.getInt(C_Dictionary.USER_STATUS,0)==1 )
                         btn_myShowDay.setEnabled(true);
                 }
             }).create().show();
@@ -191,13 +196,25 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     };
 
 
+
     private void showOneDay(int count) {
         mMap.clear();
+        LatLng[] drawline = new LatLng[count];
         for (int i=0; i<count;i++){
             Log.i(TAG, "onClick: showOneDay  :"+ NodeGps.get(i) );
             mMap.addMarker(new MarkerOptions().position(NodeGps.get(i)).title(showSpotName.get(i)));
+            drawline[i]=NodeGps.get(i);
+
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NodeGps.get(count-1),14));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NodeGps.get(count-1),12));
+
+        Polyline polyline1 = mMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add( drawline )
+                .color(Color.BLUE)
+                .width(3)
+        );
+
     }
 
     private ArrayList<Address> addressList = new ArrayList<>();
@@ -238,6 +255,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
     private View.OnClickListener btn_addPrivateNode_click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            sh = getContext().getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
             C_MySQLite sqlhelper = new C_MySQLite(getActivity());
             final SQLiteDatabase sqlDB = sqlhelper.getReadableDatabase();
             Cursor cursor;
@@ -277,7 +295,8 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
             cursor = sqlDB.rawQuery("select "+C_Dictionary.TRAVEL_LIST_SCHEMA_PLAN_NAME+C_Dictionary.VALUE_COMMA_SEP
                     +C_Dictionary.TABLE_SCHEMA_DATE_START+C_Dictionary.VALUE_COMMA_SEP
                     +C_Dictionary.TABLE_SCHEMA_DATE_END
-                    +" from "+ C_Dictionary.TRAVEL_LIST_Table_Name,null);
+                    +" from "+ C_Dictionary.TRAVEL_LIST_Table_Name
+                    +" WHERE "+C_Dictionary.USER_U_ID+"=?",new String[]{sh.getString(C_Dictionary.USER_U_ID,"")});
 
             final int[] days = new int[cursor.getCount()];
             String[] pName = new String[cursor.getCount()];
@@ -301,8 +320,12 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
 
                     pName[i-1] = cursor.getString(0);
                 }
-            }  else{
-                pName = new String[] {"------"};
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("尚未建立行程表，請前往會員中心建立");
+                builder.setPositiveButton("確定",null).create().show();
+                return;
+//                pName = new String[] {"------"};
             }
             ArrayAdapter<String> planlist = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, pName);
@@ -332,7 +355,6 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                     getDay[0] = getItemName;
                     Toast.makeText(getActivity(),"getDay[0] :" + getDay[0],Toast.LENGTH_SHORT).show();
                     }
-
                 @Override    public void onNothingSelected(AdapterView<?> parent) { }
 
             });
@@ -385,7 +407,6 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
         PlacesClient placesClient = Places.createClient(getActivity());
 
         inflatedView_Gmap = inflater.inflate(R.layout.frg_gmap,container,false);
-
 
         mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);

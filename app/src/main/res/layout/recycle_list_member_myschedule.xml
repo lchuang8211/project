@@ -30,7 +30,7 @@
             android:layout_toRightOf="@+id/getCirlceImage"
             android:padding="10sp">
             <TextView
-                android:id="@+id/txt_Spot_Name"
+                android:id="@+id/txt_PlanName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25sp" />
@@ -42,7 +42,7 @@
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5sp">
+            >
             <CheckBox
                 android:id="@+id/cbox_pushToCloud"
                 android:layout_toLeftOf="@+id/tttttttttt"
@@ -57,13 +57,15 @@
                 android:textSize="16sp"
                 android:layout_centerVertical="true"/>
             <TextView
+
                 android:layout_weight="1"
                 android:layout_toLeftOf="@+id/cbox_pushToCloud"
-                android:id="@+id/txt_Plan_info"
+                android:id="@+id/txt_PlanInfo"
+                android:layout_marginLeft="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textSize="18sp" />
+                android:textSize="11sp" />
 
         </RelativeLayout>
     </RelativeLayout>

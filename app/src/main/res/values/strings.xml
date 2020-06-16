@@ -5,7 +5,7 @@
     <string name="travel">行程表</string>
     <string name="search">景點導覽</string>
     <string name="hotspot">熱門</string>
-    <string name="gmap">導航</string>
+    <string name="gmap">地圖</string>
     <string name="member">會員中心</string>
     <string name="title_activity_main2">Main2Activity</string>
     <!-- Strings used for fragments for navigation -->

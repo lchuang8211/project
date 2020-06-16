@@ -20,12 +20,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
+public class C_AsyncTaskGetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
 
-    private static final String TAG = "C_GetDataFromDatabase";
+    private static final String TAG = "C_AsyncTaskGetDataFromDatabase";
     public Interface_AsyncGetDBTask getDBTaskCompleted = null;
 
-    public C_GetDataFromDatabase(Interface_AsyncGetDBTask task_Completed) {
+    public C_AsyncTaskGetDataFromDatabase(Interface_AsyncGetDBTask task_Completed) {
         this.getDBTaskCompleted = task_Completed;   //Assigning call back interfacethrough constructor
         Log.d("JSON","進來 C_dbconectTask(Interface_AsyncDBTask asyncResponse) taskCompleted  : "+ getDBTaskCompleted);
     }
@@ -46,7 +46,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
     private InputStream getinputStream = null;
     private OutputStream out = null;
     private DataOutputStream writer = null;
-    public C_GetDataFromDatabase(){};
+    public C_AsyncTaskGetDataFromDatabase(){};
     private URL urlAPI;
     {
         try {
@@ -76,7 +76,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
                 jsonfromPhone.put(C_Dictionary.USER_LOCATION_LATITUDE, postTophp_UserLatitude);
                 jsonfromPhone.put(C_Dictionary.USER_LOCATION_LONGITUDE, postTophp_UserLongitude);
             }
-            postTophp_SpotType = bundle.getString(C_Dictionary.SPOT_TYPE_REQUEST);
+//            postTophp_SpotType = bundle.getString(C_Dictionary.SPOT_TYPE_REQUEST);
             if(bundle.getString("EDITTXT_SEARCH_INPUT")!=null ){
                 postSearch_Input = bundle.getString("EDITTXT_SEARCH_INPUT");
                 Log.i(TAG, "doInBackground: postSearch_Input :"+postSearch_Input);
@@ -136,7 +136,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
-//            Log.i("JSON", "respone builder :" + builder.toString());
+            Log.i("JSON", "respone builder +++++++++++++++ :" + builder.toString());
             jsonArrayfromPHP = new JSONArray(builder.toString());
 //            Log.i("JSON", "jsonArrayfromPHP . toS : " + jsonArrayfromPHP.toString());
             reader.close();
@@ -152,7 +152,7 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
         return jsonArrayfromPHP.toString();
 //        return null;
     }
-    private String ctiyName, SpotAddress, SpotToldescribe, SpotLocation_latitude, SpotLocation_longitude;
+    private String ctiyName, SpotAddress, SpotToldescribe, SpotLocation_latitude, SpotLocation_longitude, NodeImg;
     private String DesKeyName = "Toldescribe";
     double re_lat, re_long;
     @Override
@@ -167,20 +167,19 @@ public class C_GetDataFromDatabase extends AsyncTask<Bundle , Integer, String> {
                 jsonfromPHP = jsonArrayfromPHP.getJSONObject(i);
 //                Boolean yesNo =jsonfromPHP.getBoolean("empty");
 //                if(yesNo != null){
-//                    Log.i("C_GetDataFromDatabase","empty 沒有資料 :"+jsonfromPHP.getBoolean("empty"));
+//                    Log.i("C_AsyncTaskGetDataFromDatabase","empty 沒有資料 :"+jsonfromPHP.getBoolean("empty"));
 //                    return;
 //                }
 //                    Log.i("JSON", "jsonfromPHP . toS : " + jsonfromPHP.toString());
                     ctiyName = jsonfromPHP.getString("Name");
                     SpotAddress = jsonfromPHP.getString("Add");
-
                     SpotToldescribe = jsonfromPHP.getString("Toldescribe");
                     SpotLocation_latitude = jsonfromPHP.getString("Py");
                     SpotLocation_longitude = jsonfromPHP.getString("Px");
 //                    Log.i("JSON", ctiyName + ":" + SpotAddress);
-
+                    NodeImg = jsonfromPHP.getString("Picture1");
                     getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(), SpotAddress.trim(), SpotToldescribe.trim(),
-                            Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()));   //Call function
+                            Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()), NodeImg.trim() );   //Call function
 //
             }
 //            re_name = jsonfromPHP.getString("name");
