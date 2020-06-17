@@ -33,7 +33,7 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL("http://hhlc.ddnsking.com/userMember.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"userMember.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

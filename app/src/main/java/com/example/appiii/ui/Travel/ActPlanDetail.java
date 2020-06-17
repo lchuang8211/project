@@ -46,7 +46,7 @@ public class ActPlanDetail extends AppCompatActivity {
             @Override
             public void GetPlanDetailFinish(C_UserInfo userInfo, ArrayList<C_PlanDetail> planDetail) {
                 setTitle(userInfo.getUserNickName()+"的"+userInfo.getUserPlan());
-                String headImg = "http://hhlc.ddnsking.com"+userInfo.getUserHeadImg();
+                String headImg = C_Dictionary.MY_SERVER_URL+userInfo.getUserHeadImg();
                 Log.i(TAG, "GetPlanDetailFinish: headImg : "+ headImg);
                 if(userInfo.getUserHeadImg().toString().trim().matches("")){
                 }else {

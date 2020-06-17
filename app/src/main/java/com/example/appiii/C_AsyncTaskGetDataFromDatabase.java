@@ -177,7 +177,11 @@ public class C_AsyncTaskGetDataFromDatabase extends AsyncTask<Bundle , Integer, 
                     SpotLocation_latitude = jsonfromPHP.getString("Py");
                     SpotLocation_longitude = jsonfromPHP.getString("Px");
 //                    Log.i("JSON", ctiyName + ":" + SpotAddress);
-                    NodeImg = jsonfromPHP.getString("Picture1");
+                    if(jsonfromPHP.getString("Picture1")!=null ){
+                         NodeImg = jsonfromPHP.getString("Picture1");
+                    }else {
+                        NodeImg="";
+                    }
                     getDBTaskCompleted.GetDBTaskFinish(ctiyName.trim(), SpotAddress.trim(), SpotToldescribe.trim(),
                             Double.parseDouble(SpotLocation_latitude.trim()), Double.parseDouble(SpotLocation_longitude.trim()), NodeImg.trim() );   //Call function
 //
