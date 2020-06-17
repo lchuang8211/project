@@ -100,6 +100,6 @@ public class C_Dictionary {
     public static final String USER_LOCATION_LONGITUDE = "USER_LOCATION_LONGITUDE";
 
     //////////// URL
-    public static final String MY_SERVER_URL = "http://hhlc.ddnsking.com/";   // http://104.199.138.60/   http://hhlc.ddnsking.com/  http://35.221.250.8/
+    public static final String MY_SERVER_URL = "http://35.221.250.8/";   // http://104.199.138.60/   http://hhlc.ddnsking.com/  http://35.221.250.8/
 
 }
