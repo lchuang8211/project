@@ -23,7 +23,7 @@ import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.C_PlanInfo;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.Adaoter.C_MemberShowPlanRecycleViewAdapter;
+import com.example.appiii.ui.Member.Adapter.C_MemberShowPlanRecycleViewAdapter;
 
 import java.text.ParseException;
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ import com.example.appiii.C_AsyncTaskGetDataFromDatabase;
 import com.example.appiii.C_NodeInfo;
 import com.example.appiii.Interface_AsyncGetDBTask;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.Adaoter.C_MemberAddSpotInShowRecycleViewAdapter;
+import com.example.appiii.ui.Member.Adapter.C_MemberAddSpotInShowRecycleViewAdapter;
 
 import java.util.ArrayList;
 

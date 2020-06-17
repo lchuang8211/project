@@ -13,7 +13,7 @@ import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.C_NodeInfo;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.Adaoter.C_MyCollectRecyclerViewAdapter;
+import com.example.appiii.ui.Member.Adapter.C_MyCollectRecyclerViewAdapter;
 
 import java.util.ArrayList;
 

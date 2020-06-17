@@ -158,7 +158,7 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
 
         } catch (IOException e) {
             e.printStackTrace();
-            if(retryTime < 3){
+            if(retryTime < 5){
                 retryTime++;
                 Log.i(TAG, "connecthttp: IOException : "+retryTime);
                 ConnectHTTP();

@@ -1,4 +1,4 @@
-package com.example.appiii.ui.Member.Adaoter;
+package com.example.appiii.ui.Member.Adapter;
 
 import android.app.Dialog;
 import android.content.ContentValues;

@@ -20,7 +20,7 @@ import android.widget.Button;
 import com.example.appiii.C_Dictionary;
 import com.example.appiii.C_MySQLite;
 import com.example.appiii.R;
-import com.example.appiii.ui.Member.Adaoter.C_MemberRecycleViewAdapter;
+import com.example.appiii.ui.Member.Adapter.C_MemberRecycleViewAdapter;
 import com.example.appiii.ui.Member.AsyncTask.C_AsyncLoadPlanList;
 import com.example.appiii.ui.Member.C_LoadPlanList;
 import com.example.appiii.ui.Member.AsyncTask.Interface_AsyncLoadPlanList;
