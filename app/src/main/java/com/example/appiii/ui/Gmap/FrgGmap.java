@@ -1,7 +1,6 @@
 package com.example.appiii.ui.Gmap;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -31,52 +29,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.appiii.C_Dictionary;
-import com.example.appiii.C_dbconectTask;
-import com.example.appiii.Interface_AsyncDBTask;
 import com.example.appiii.R;
 import com.example.appiii.C_MySQLite;
-import com.google.android.gms.common.api.Status;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
 //import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPhotoResponse;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceResponse;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 
 public class FrgGmap extends Fragment implements OnMapReadyCallback {
@@ -269,7 +247,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
             final RadioGroup rb_type_group = (RadioGroup) view.findViewById(R.id.rb_type_group);
             final RadioButton rb_NTypeView = (RadioButton) view.findViewById(R.id.rb_NTypeView);
             final RadioButton rb_NTypeHotel = (RadioButton) view.findViewById(R.id.rb_NTypeHotel);
-            final RadioButton rb_NTypeOther = (RadioButton) view.findViewById(R.id.rb_NTypeOther);
+            final RadioButton rb_NTypeOther = (RadioButton) view.findViewById(R.id.rb_NTypeEat);
             final String[] Type = {""};
             final String[] nodeType = {C_Dictionary.SPOT_TYPE_VIEW};
             rb_type_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -277,15 +255,15 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     if(checkedId ==  R.id.rb_NTypeView){
                         nodeType[0] = C_Dictionary.SPOT_TYPE_VIEW;
-                        Toast.makeText(getActivity(),"View",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(),"View",Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "onClick: nodeType[0] : "+ nodeType[0]);
                     }else if(checkedId == R.id.rb_NTypeHotel){
                         nodeType[0] = C_Dictionary.SPOT_TYPE_HOTEL;
-                        Toast.makeText(getActivity(),"Hotel",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(),"Hotel",Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "onClick: nodeType[0] : "+ nodeType[0]);
-                    }else if (checkedId ==  R.id.rb_NTypeOther){
-                        nodeType[0] ="Other";
-                        Toast.makeText(getActivity(),"Other",Toast.LENGTH_SHORT).show();
+                    }else if (checkedId ==  R.id.rb_NTypeEat){
+                        nodeType[0] =C_Dictionary.SPOT_TYPE_EAT;
+                        //Toast.makeText(getActivity(),"Other",Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "onClick: nodeType[0] : "+ nodeType[0]);
                     }
                     Type[0] = nodeType[0];
@@ -353,7 +331,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                    int getItemName = position+1;
                     getDay[0] = getItemName;
-                    Toast.makeText(getActivity(),"getDay[0] :" + getDay[0],Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(),"getDay[0] :" + getDay[0],Toast.LENGTH_SHORT).show();
                     }
                 @Override    public void onNothingSelected(AdapterView<?> parent) { }
 
@@ -391,7 +369,7 @@ public class FrgGmap extends Fragment implements OnMapReadyCallback {
                         cv.put(C_Dictionary.SPOT_TYPE, nodeType[0]);
                     }
                     sqlDB.insert(C_Dictionary.CREATE_TABLE_HEADER+inPname[0],null,cv);
-                    Toast.makeText(getActivity(),Nodename +" : "+ NodeDescribe+" : "+ nodeType[0],Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(),Nodename +" : "+ NodeDescribe+" : "+ nodeType[0],Toast.LENGTH_LONG).show();
                 }
             }).create().show();  // builder
         }  // onClick

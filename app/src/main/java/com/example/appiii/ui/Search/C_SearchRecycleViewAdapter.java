@@ -80,6 +80,9 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
         if(Type==C_Dictionary.SPOT_TYPE_HOTEL){
             Glide.with(mContext).asBitmap().load( R.drawable.hotel_128px ).into(holder.getItem_image);
         }
+        if(Type==C_Dictionary.SPOT_TYPE_EAT){
+            Glide.with(mContext).asBitmap().load( R.drawable.food_128px ).into(holder.getItem_image);
+        }
         if(!NodeImg.get(position).equals(""))
             Glide.with(mContext).asBitmap().load( NodeImg.get(position)).into(holder.getItem_image);
         holder.txt_Name_Address.setText(searchInfos.get(position).getNodeName()+"\n"+searchInfos.get(position).getNodeAddress());
@@ -194,6 +197,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                                     values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, searchInfos.get(getAdapterPosition()).getNodeDescribe());
                                     values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE,searchInfos.get(getAdapterPosition()).getNodeLat() );
                                     values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE,searchInfos.get(getAdapterPosition()).getNodeLong());
+                                    values.put(C_Dictionary.SPOT_TYPE, Type);
                                     sqLiteDatabase.insert( "["+C_Dictionary.CREATE_TABLE_HEADER+planName[whichplan]+"]" ,null,values);
                                 }
                             }).create().show(); //第二個
@@ -216,7 +220,7 @@ public class C_SearchRecycleViewAdapter extends RecyclerView.Adapter<C_SearchRec
                         Boolean changed_collat = true;
                         ContentValues values = new ContentValues();
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_NAME, searchInfos.get( getAdapterPosition() ).getNodeName());
-                        Toast.makeText(mContext,"getNodeName"+searchInfos.get( getAdapterPosition() ).getNodeName(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext,"getNodeName"+searchInfos.get( getAdapterPosition() ).getNodeName(),Toast.LENGTH_SHORT).show();
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_DESCRIBE, searchInfos.get(getAdapterPosition()).getNodeDescribe());
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_LATITUDE, searchInfos.get(getAdapterPosition()).getNodeLat());
                         values.put(C_Dictionary.TABLE_SCHEMA_NODE_LONGITUDE, searchInfos.get(getAdapterPosition()).getNodeLong());

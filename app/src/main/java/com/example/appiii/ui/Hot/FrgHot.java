@@ -74,8 +74,8 @@ public class FrgHot extends Fragment {
                 e.printStackTrace();
             }
         }
-        bundleToDb.putDouble(C_Dictionary.USER_LOCATION_LATITUDE,location.getLatitude());
-        bundleToDb.putDouble(C_Dictionary.USER_LOCATION_LONGITUDE,location.getLongitude());
+        bundleToDb.putDouble(C_Dictionary.USER_LOCATION_LATITUDE, location.getLatitude());    //23.009219, location.getLatitude()
+        bundleToDb.putDouble(C_Dictionary.USER_LOCATION_LONGITUDE, location.getLongitude() );  //120.270546 location.getLongitude()
         Log.i(TAG, "InitinalSearch: location.getLatitude():"+location.getLatitude());
         Log.i(TAG, "InitinalSearch: location.getLongitude():"+location.getLongitude());
         new C_AsyncTaskGetDataFromDatabase(new Interface_AsyncGetDBTask() {

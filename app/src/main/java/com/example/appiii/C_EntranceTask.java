@@ -33,7 +33,7 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"userMember.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+C_Dictionary.FOLDER_PATH+"userMember.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -102,7 +102,6 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
         }catch (IOException e) {
             e.printStackTrace();
         }
-
     return builder.toString().trim();
 
     }
@@ -112,7 +111,6 @@ public class C_EntranceTask extends AsyncTask<Bundle, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         try {
-
             JSONObject js = new JSONObject(result);
         switch (js.getInt("ENTRANCE_NUM")){
             case 1:

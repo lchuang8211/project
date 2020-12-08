@@ -44,7 +44,7 @@ public class FrgSearch extends Fragment {
             "澎湖縣","金門縣","連江縣"
     };
     static final String[] cityTypeArray={
-            "風景","住宿"
+            "風景","住宿","美食"
     };
     private ArrayList<C_NodeInfo> searchInfos = new ArrayList<>();
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
@@ -138,6 +138,10 @@ public class FrgSearch extends Fragment {
                 break;
             case "住宿":
                 spotType = C_Dictionary.SPOT_TYPE_HOTEL;
+                break;
+            case "美食":
+                spotType = C_Dictionary.SPOT_TYPE_EAT;
+                //spotType = C_Dictionary.SPOT_TYPE_EAT;
                 break;
         }
         return spotType;

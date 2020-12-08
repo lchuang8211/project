@@ -27,8 +27,9 @@ public class C_Dictionary {
     public final static String SPOT_NAME = "SPOT_NAME";
     public static final String SPOT_TYPE = "SPOT_TYPE";
     public final static String SPOT_TYPE_REQUEST = "SPOT_TYPE_REQUEST";
-    public final static String SPOT_TYPE_HOTEL = "SPOT_TYPE_HOTEL";  //住宿
-    public final static String SPOT_TYPE_VIEW = "SPOT_TYPE_VIEW";  //風景
+    public final static String SPOT_TYPE_HOTEL = "SPOT_TYPE_HOTEL"; // 住宿
+    public final static String SPOT_TYPE_VIEW = "SPOT_TYPE_VIEW";   // 風景
+    public static final String SPOT_TYPE_EAT = "SPOT_TYPE_EAT";     // 美食
     public final static String SPOT_TYPE_CULTURE = "SPOT_TYPE_CULTURE"; //文化
 
     public final static String USER_ACCOUNT = "USER_ACCOUNT";
@@ -99,7 +100,9 @@ public class C_Dictionary {
     public static final String USER_LOCATION_LATITUDE = "USER_LOCATION_LATITUDE";
     public static final String USER_LOCATION_LONGITUDE = "USER_LOCATION_LONGITUDE";
 
-    //////////// URL
-    public static final String MY_SERVER_URL = "http://hhlc.ddnsking.com/";   // http://104.199.138.60/   http://hhlc.ddnsking.com/  http://35.221.250.8/
+    //////////// URL ////////////
+    public static final String MY_SERVER_URL = "http://127.0.0.1/";   // http://52.140.240.127/   http://hhlc.ddnsking.com/  http://35.221.250.8/
+    public static final String FOLDER_PATH = "";   // android/
+
 
 }

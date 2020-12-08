@@ -73,18 +73,21 @@
                 android:id="@+id/rb_NTypeView"
                 android:text="風景"
                 android:checked="true"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
-                android:layout_marginLeft="1sp"
+
                 android:id="@+id/rb_NTypeHotel"
                 android:text="住宿"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
-                android:layout_marginLeft="1sp"
-                android:id="@+id/rb_NTypeOther"
-                android:text="其他"
+
+                android:id="@+id/rb_NTypeEat"
+                android:text="美食"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RadioGroup>

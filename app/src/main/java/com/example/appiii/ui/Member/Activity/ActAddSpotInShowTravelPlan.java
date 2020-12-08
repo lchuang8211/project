@@ -38,7 +38,7 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
             "澎湖縣","金門縣","連江縣"
     };
     static final String[] cityTypeArray={
-            "住宿","風景"
+            "住宿","風景","美食"
     };
 
     private View.OnClickListener btn_searchDB_click = new View.OnClickListener(){
@@ -127,6 +127,9 @@ public class ActAddSpotInShowTravelPlan extends AppCompatActivity {
                 break;
             case "風景":
                 spotType = C_Dictionary.SPOT_TYPE_VIEW;
+                break;
+            case "美食":
+                spotType = C_Dictionary.SPOT_TYPE_EAT;
                 break;
         }
         return spotType;

@@ -1,12 +1,16 @@
 package com.example.appiii.ui.Member.AsyncTask;
 
+import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -37,7 +41,7 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"uploadImg.php");  //pushtoclound  getplanlist
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+C_Dictionary.FOLDER_PATH+"uploadImg.php");  //pushtoclound  getplanlist
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -75,6 +79,16 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
         Log.i(TAG, "doInBackground: 222 boundary " + boundary);
         uri = uris[0];
         MimeType = getMimeType(uri);
+        String[] projection = { MediaStore.Images.Media._ID };
+        try {
+            ParcelFileDescriptor p = mContext.getContentResolver().openFileDescriptor(uri,"r");
+
+            Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
         Log.i(TAG, "doInBackground: 222 fileType " + MimeType);
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(C_Dictionary.ACCOUNT_SETTING,0);
@@ -119,7 +133,7 @@ public class C_AsyncUploadImg extends AsyncTask<Uri, Void, Void> {
 
 
             writer.writeBytes(twoHyphens + boundary + lineEnd);
-            writer.writeBytes("Content-Disposition: form-data; name=\"uploadHeadShot\"; filename=\""+ UserName + filetype +"\"" + lineEnd);
+            writer.writeBytes("Content-Disposition: form-data; name=\"uploadHeadShot\";filename=\""+ UserName + filetype +"\"" + lineEnd);
             writer.writeBytes("Content-Type: "+ MimeType + lineEnd);
             writer.writeBytes(lineEnd);
 

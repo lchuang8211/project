@@ -206,7 +206,7 @@ public class FrgMember extends Fragment {
                 Glide.with(getContext()).asBitmap().load(R.drawable.user_64px).into(myHeadShot);
                 break;
             default:
-                Glide.with(getContext()).asBitmap().load(C_Dictionary.MY_SERVER_URL+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,""))
+                Glide.with(getContext()).asBitmap().load(C_Dictionary.MY_SERVER_URL+"/"+sharedPreferences.getString(C_Dictionary.USER_HEAD_IMG,""))
                         .diskCacheStrategy(DiskCacheStrategy.NONE).into(myHeadShot);
                 break;
         }

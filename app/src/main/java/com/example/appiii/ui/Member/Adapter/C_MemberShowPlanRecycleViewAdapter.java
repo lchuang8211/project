@@ -78,6 +78,12 @@ public class C_MemberShowPlanRecycleViewAdapter extends RecyclerView.Adapter<C_M
             Log.i(TAG, "onBindViewHolder: ingetNodType : VIEW ");
             Glide.with(mContext).asBitmap().load( R.drawable.holiday_128px ).into( holder.getItem_image);  // Gilde : 圖片 library
         }
+        if (planInfos.get(position).getpNodeType().equals(C_Dictionary.SPOT_TYPE_EAT)) {
+            Log.i(TAG, "onBindViewHolder: ingetNodType : VIEW ");
+            Glide.with(mContext).asBitmap().load( R.drawable.food_128px ).into( holder.getItem_image);  // Gilde : 圖片 library
+        }
+
+
 //        holder.txt_Plan_info.setText( String.valueOf(showSpotLatitude.get(position))+","+String.valueOf(showSpotLongitude.get(position)) );
 ////        Glide.with(mContext).asBitmap().load( uri ).into(holder.getItem_image);  // Gilde : 圖片 library
 

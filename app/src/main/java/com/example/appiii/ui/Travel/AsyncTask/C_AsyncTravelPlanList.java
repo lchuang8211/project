@@ -27,7 +27,7 @@ public class C_AsyncTravelPlanList extends AsyncTask<Bundle,Void,String> {
     private URL urlAPI;
     {
         try {
-            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+"getplanlist.php");
+            urlAPI = new URL(C_Dictionary.MY_SERVER_URL+C_Dictionary.FOLDER_PATH+"getplanlist.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
